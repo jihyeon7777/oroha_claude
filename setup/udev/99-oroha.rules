@@ -1,0 +1,8 @@
+# OROHA stable device names. Serial numbers verified on the Pi 5, 2026-09-22
+# (/dev/serial/by-id/). Group dialout matches the user's membership.
+# MD400 x2 RS485 bus: FTDI FT232R adapter, serial BG043HTG
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="BG043HTG", SYMLINK+="oroha_md400", MODE="0660", GROUP="dialout"
+# Raspberry Pi Pico (MicroPython USB CDC), serial e6616408435d4437; keep ModemManager off it
+SUBSYSTEM=="tty", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="0005", ATTRS{serial}=="e6616408435d4437", SYMLINK+="oroha_pico", MODE="0660", GROUP="dialout", ENV{ID_MM_DEVICE_IGNORE}="1"
+# UM7 IMU via Silicon Labs CP2102 USB-UART (serial "0001" is not unique; add ATTRS{serial} if a second CP2102 appears)
+SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="oroha_um7", MODE="0660", GROUP="dialout", ENV{ID_MM_DEVICE_IGNORE}="1"

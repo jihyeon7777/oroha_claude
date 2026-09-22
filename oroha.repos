@@ -1,0 +1,12 @@
+# External sources pinned by commit. Import with:
+#   vcs import src/external < oroha.repos
+# Record actual SHAs after import with `vcs export --exact src/external`.
+repositories:
+  mdrobot_motor_driver:
+    type: git
+    url: https://github.com/TaesuYim/mdrobot_motor_driver.git
+    version: c5c1f3f5613bd72a607d0724e8bc58902497b720   # tag v1.4.0, 2026-08-22
+  um7_driver:
+    type: git
+    url: https://github.com/jihyeon7777/um7_driver.git
+    version: 9a342584bf985d9e5af265d99aa64bb3eb47f29f   # main as of 2026-09-22

@@ -1,0 +1,28 @@
+# colcon
+/build/
+/install/
+/log/
+
+# external sources are pinned in oroha.repos, never committed
+/src/external/
+
+# large run artifacts (meta/events/versions in each run dir ARE committed)
+/data/runs/*/bag/
+/data/runs/*/csv/
+
+# paper bundles are generated on request
+/paper_export/
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
