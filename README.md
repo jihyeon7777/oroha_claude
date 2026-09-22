@@ -13,10 +13,11 @@ source setup/env.sh
 
 oroha_preflight                        # 런치 전 장치 점검 (RS485 포트를 독점하므로 런치 전에)
 ros2 launch oroha_bringup robot.launch.py            # 실물. use_mock_hardware:=true 면 장치 없이
-ros2 launch oroha_bringup teleop.launch.py           # 키보드 주행 (별도 터미널)
-oroha_exp run --path straight --length 2.0 --v 0.2  # 논문 실험 실행·기록
-oroha_export_csv data/runs/<RUN_ID>                  # bag → CSV
-oroha_paper_export --runs usable --out paper_export/$(date +%Y%m%d_%H%M%S)
+ros2 run oroha_teleop deadman_teleop                 # 키보드 주행(데드맨, 별도 터미널)
+ros2 run oroha_experiment runner                     # 실험 실행기(별도 터미널)
+oroha_exp run --path straight --length 2.0 --v 0.2  # 논문 실험 실행·기록 (조건 입력 → Enter 시작)
+oroha_export_csv data/runs/<RUN_ID> && oroha_ledger  # bag → CSV, 실행 목록 갱신
+oroha_paper_export --runs usable                     # paper_export/<ts>/ + CHECK.md (검증 포함)
 ```
 
 ## 구성

@@ -78,6 +78,11 @@ oroha_preflight [--sec 15]               # 런치 전 읽기 전용 점검 → r
 ros2 launch oroha_bringup robot.launch.py [use_mock_hardware:=true] [power:=false] [imu:=true] [rviz:=true]
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel -p stamped:=true -p frame_id:=base_link -p speed:=0.2 -p turn:=0.5
 ros2 run oroha_power power_node --ros-args -p simulate:=true          # 장치 없이
+ros2 run oroha_teleop deadman_teleop                                  # 데드맨 키보드 주행(실물 미검증)
+ros2 run oroha_experiment runner [--ros-args -p require_*:=false]     # 실험 실행기; mock 시험은 검사 비활성
+oroha_exp run --path square --side 1.0 --v 0.2 [--repeats 3] [--yes]  # 실험 실행 → data/runs/<RUN_ID>/
+oroha_export_csv data/runs/<RUN_ID>; oroha_ledger --check             # CSV 추출, 실행·시험 목록 점검
+oroha_paper_export --runs usable; oroha_verify_export paper_export/<ts>
 ros2 run oroha_tools oroha_direction_check --id 1                     # 바퀴 띄우고, 모터 돈다
 oroha_profile square --side 1.0 --v 0.2 [--csv out.csv]              # 프로파일 확인
 oroha_versions [--out <dir>]             # 버전·미커밋 diff 스냅샷
@@ -89,4 +94,5 @@ oroha_versions [--out <dir>]             # 버전·미커밋 diff 스냅샷
 - 속도 명령 전에 `enable()`(`PID_UI_COM(78)=1` + `PID_START_STOP(100)=1`)이 없으면 명령은 echo되지만 모터는 0에 머문다(플러그인은 `auto_enable`로 처리).
 - `use_limit_sw`는 0 고정. 1이면 음수 명령이 차단돼 왼쪽(reverse) 바퀴가 무알람으로 서 버린다.
 - ID·좌우·부호는 `oroha_direction_check`로 실물 대조하고 [하드웨어_확인표.md](하드웨어_확인표.md) §2·§5에 시험 ID와 함께 적는다. 계측 상수와 기각된 옛 값은 §3·§6과 `records/calibration/`이 단일 출처다.
+- 시험 명령에서 노드는 `(setsid ros2 run … > log 2>&1 &)`로 띄우고, 정리는 `for p in $(pgrep -f '^/usr/bin/python3 .*[p]attern'); do kill $p; done`처럼 셸 자신의 명령줄과 일치하지 않는 패턴으로만 한다(`pkill -f`는 셸을 죽이고, `source … && … &`는 체인 전체를 서브셸로 보낸다). 시험 전 `ros2 node list`로 중복 노드가 없는지 본다.
 - 시험 하나가 끝나면 `records/tests/tests.csv`에 행을 더하고 `records/tests/T<날짜>-<NN>.md`에 목적·조건·절차·관측·판정·로그·버전을 남긴다. 상태 어휘: 통과/실패/중단/미검증, 종결/열림/다시 열림/재현 실패/미수렴.

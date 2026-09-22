@@ -18,3 +18,5 @@
 - 실험 실행기(`oroha_experiment/runner_node.py`)·CLI(`oroha_exp`)·bag→CSV 추출(`oroha_export_csv`) 1차 구현. mock 파이프라인 T20260922-06 통과. 실물 Pico 단독 T20260922-05 통과(열림: overrun 4 %, 영점 직후 편차).
 - 교훈: 시험 명령에서 `source … && … &`는 체인 전체를 백그라운드 서브셸로 보내고, `pkill -f`/`pgrep -f`는 셸 자신의 명령줄과 일치할 수 있다 → 노드는 `(setsid … &)`로 띄우고 `pgrep -f '^/usr/bin/python3 .*[p]attern'`으로만 정리한다. 중복 노드는 서비스 응답을 뒤섞는다(`ros2 node list`로 확인).
 - T-05b: 영점 후 정지 전류 −0.2 LSB, overrun 0.6 %(3.9 s 주기) → T20260922-05 종결. `oroha_ledger`·`oroha_paper_export`·`oroha_verify_export` 작성, docs/(frames·time_sync·operation) 초안.
+- T20260922-07: 논문 묶음 생성·검증 통과(음성 시험 포함). `oroha_teleop/deadman_teleop`(load_manual 데드맨 포팅) 작성·빌드, 실물 미검증.
+- **대기 중**: `sudo bash setup/install_system.sh`(ros2_control·xacro·chrony·udev·Asia/Seoul) — 0단계 빌드 관문·1단계 모터 시험이 여기에 막혀 있음.
