@@ -31,7 +31,7 @@ from oroha_tools.ws import records_dir
 
 MD_PORT = "/dev/oroha_md400"
 PICO_PORT = "/dev/oroha_pico"
-EXPECTED_FW = "oroha-bench-1.1"
+EXPECTED_FW = "oroha-bench-1.2"
 VOLT_GAP = 0.600       # id2 - id1 internal voltmeter offset, reproduced over 6 sessions [V]
 # powered-rest raw band, 2026-08-28 (four observations); true 0 A drifts +-2 LSB/day
 REST_REF = {"gp27": (2042.2, 2043.3), "gp28": (2039.6, 2040.7)}

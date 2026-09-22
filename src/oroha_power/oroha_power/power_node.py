@@ -41,7 +41,7 @@ from oroha_msgs.msg import PowerSample
 from oroha_power.protocol import (FLAG_BAD_MASK, FLAG_ZERO_VALID, Calibration, Frame,
                                   OffsetFilter, convert, flag_names, parse_data_line, parse_kv)
 
-EXPECTED_FW = "oroha-bench-1.1"
+EXPECTED_FW = "oroha-bench-1.2"
 
 
 class SimulatedPico:
@@ -299,7 +299,13 @@ class OrohaPowerNode(Node):
             batch = list(self.q)
             self.q.clear()
         for rx_ns, f in batch:
-            self.publish(rx_ns, f)
+            try:
+                self.publish(rx_ns, f)
+            except (OverflowError, AssertionError, ValueError) as e:
+                # one malformed frame must not take the node down; count it and go on
+                self.n_bad += 1
+                if self.n_bad <= 5 or self.n_bad % 100 == 0:
+                    self.get_logger().warn("frame seq %d rejected (%s): %s" % (f.seq, type(e).__name__, e))
 
     def publish(self, rx_ns: int, f: Frame):
         if self.last_seq is not None and f.seq > self.last_seq + 1:
@@ -320,7 +326,7 @@ class OrohaPowerNode(Node):
         m.header.stamp = Time(nanoseconds=rx_ns).to_msg()
         m.header.frame_id = self.frame_id
         m.device_stamp = Time(nanoseconds=dev_ns).to_msg()
-        m.seq, m.t_us, m.n_rounds = f.seq, f.t_us, f.n
+        m.seq, m.t_us, m.n_rounds = max(0, f.seq), f.t_us, max(0, min(65535, f.n))
         m.gp26_mean, m.gp26_min, m.gp26_max = f.v, f.v_lo, f.v_hi
         m.gp27_mean, m.gp27_min, m.gp27_max = f.gp27, f.gp27_lo, f.gp27_hi
         m.gp28_mean, m.gp28_min, m.gp28_max = f.gp28, f.gp28_lo, f.gp28_hi

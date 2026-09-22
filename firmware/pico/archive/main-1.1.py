@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-1.2 (2026-09-22): mono_us() is now also called in the idle loop. Before, a stream
-    stopped for > 537 s (2^29 us) made ticks_diff() wrap on the next D line and
-    t_us went negative/backwards (seen on the host as a crashing uint64). No change
-    to sampling, protocol or constants.
-
 OROHA 전류·전압 계측 — Raspberry Pi Pico 벤치 펌웨어 (MicroPython)
 
   대상 : Raspberry Pi Pico / Pico 2   (⚠ Pico W 아님 — GP23 용도가 다름)
@@ -42,7 +37,7 @@ import select
 import time
 from machine import ADC, Pin
 
-FW_VERSION = "oroha-bench-1.2"
+FW_VERSION = "oroha-bench-1.1"
 
 # ══════════════════════════════════════════════════════════════════
 #  as-built 상수  (설계 문서 §13.0 — 실측값)
@@ -463,7 +458,6 @@ while True:
         led.value((time.ticks_ms() >> 9) & 1)      # 대기: 느린 깜빡임
         time.sleep_ms(2)
         next_t = time.ticks_add(time.ticks_us(), period_us)
-        mono_us()   # 1.2: keep the monotonic accumulator fresh while idle (ticks_diff wraps after 2^29 us)
         continue
 
     # 창 안쪽에 라운드를 고르게 퍼뜨린다 (창의 80 % 사용, 20 % 는 전송 여유)

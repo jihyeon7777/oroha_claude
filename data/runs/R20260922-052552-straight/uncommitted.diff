@@ -1,0 +1,153 @@
+diff --git a/firmware/pico/main.py b/firmware/pico/main.py
+index 2f696f9..9405e8c 100644
+--- a/firmware/pico/main.py
++++ b/firmware/pico/main.py
+@@ -1,5 +1,10 @@
+ # -*- coding: utf-8 -*-
+ """
++1.2 (2026-09-22): mono_us() is now also called in the idle loop. Before, a stream
++    stopped for > 537 s (2^29 us) made ticks_diff() wrap on the next D line and
++    t_us went negative/backwards (seen on the host as a crashing uint64). No change
++    to sampling, protocol or constants.
++
+ OROHA 전류·전압 계측 — Raspberry Pi Pico 벤치 펌웨어 (MicroPython)
+ 
+   대상 : Raspberry Pi Pico / Pico 2   (⚠ Pico W 아님 — GP23 용도가 다름)
+@@ -37,7 +42,7 @@ import select
+ import time
+ from machine import ADC, Pin
+ 
+-FW_VERSION = "oroha-bench-1.1"
++FW_VERSION = "oroha-bench-1.2"
+ 
+ # ══════════════════════════════════════════════════════════════════
+ #  as-built 상수  (설계 문서 §13.0 — 실측값)
+@@ -458,6 +463,7 @@ while True:
+         led.value((time.ticks_ms() >> 9) & 1)      # 대기: 느린 깜빡임
+         time.sleep_ms(2)
+         next_t = time.ticks_add(time.ticks_us(), period_us)
++        mono_us()   # 1.2: keep the monotonic accumulator fresh while idle (ticks_diff wraps after 2^29 us)
+         continue
+ 
+     # 창 안쪽에 라운드를 고르게 퍼뜨린다 (창의 80 % 사용, 20 % 는 전송 여유)
+diff --git a/firmware/pico/main.py.sha256 b/firmware/pico/main.py.sha256
+index 05dd782..5ab211a 100644
+--- a/firmware/pico/main.py.sha256
++++ b/firmware/pico/main.py.sha256
+@@ -1 +1 @@
+-9ce752a9e261ffb5fab8a847393c02dd9f7aa0ce291ec714582f2051a30d2a2b  firmware/pico/main.py
++bace95054b5498fcc5d8acb95ff797909c4857f53977f9990579aca3b7884483  main.py
+diff --git a/records/changes.md b/records/changes.md
+index 778bb67..a5dedbe 100644
+--- a/records/changes.md
++++ b/records/changes.md
+@@ -14,3 +14,4 @@
+ - 미해결(사용자 실행 대기): `sudo bash setup/install_system.sh` — ros2_control·xacro·chrony·udev·시간대.
+ - 빌드·시험: T20260922-01(빌드·단위테스트 통과), T20260922-02(`oroha_power` simulate 통과), T20260922-03(**실물 preflight 22/22 통과** — MD400 v8.6 ×2, Pico oroha-bench-1.1 50 Hz). 커밋 `7fab197`.
+ - `setup/env.sh`가 ament_python 콘솔 스크립트(`oroha_preflight`, `oroha_exp` 등)를 PATH에 올리도록 함.
++- **결함·수정**: 실물 Pico에서 `oroha_power`가 `t_us` 음수로 사망(T20260922-04). 펌웨어 `mono_us()` 유휴 누적 누락 → **oroha-bench-1.2**로 플래시(sha `bace9505…`, 1.1은 archive 보관). `PowerSample.t_us` int64·min/max int16, 노드 프레임 방어.
+diff --git a/records/tests/tests.csv b/records/tests/tests.csv
+index ccbac9b..1779ddd 100644
+--- a/records/tests/tests.csv
++++ b/records/tests/tests.csv
+@@ -2,3 +2,4 @@ test_id,date_utc,tz,phase,title,rig_state,status,verdict,code_version,external_v
+ T20260922-01,2026-09-22T08:50Z,America/New_York,0,colcon 빌드·단위테스트(ros2_control 제외 5개 패키지),bench,통과,종결,7fab197,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,9ce752a9,sensing-20260828,,log/latest_build,,,mdrobot 134·profiles 11·protocol 4 통과
+ T20260922-02,2026-09-22T08:56Z,America/New_York,0,oroha_power simulate 모드 발행·진단·영점 서비스,mock,통과,종결,7fab197,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,9ce752a9,sensing-20260828,,tests/T20260922-02.md,,,50.04 Hz·diag OK·zero 비블로킹
+ T20260922-03,2026-09-22T09:09Z,America/New_York,1,실물 preflight — MD400×2·Pico 읽기 전용 점검,bench,통과,종결,7fab197,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,9ce752a9,sensing-20260828,,records/preflight/20260922T090946Z.json,,,22/22 GO; id1 26.30 V id2 27.00 V gap +0.70; GP26 27.33 V; overrun 0.8 %
++T20260922-04,2026-09-22T09:40Z,America/New_York,2,Pico 펌웨어 1.2 플래시·식별 (유휴 시 mono_us 갱신),bench,통과,열림,7bcf2c5+dirty,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,bace9505,sensing-20260828,,tests/T20260922-04.md,,,537 s 유휴 후 t_us 연속성은 미검증
+diff --git a/src/oroha_experiment/package.xml b/src/oroha_experiment/package.xml
+index 74c2c7e..4ce1183 100644
+--- a/src/oroha_experiment/package.xml
++++ b/src/oroha_experiment/package.xml
+@@ -14,6 +14,8 @@
+   <depend>std_srvs</depend>
+   <depend>diagnostic_msgs</depend>
+   <depend>oroha_msgs</depend>
++  <exec_depend>controller_manager_msgs</exec_depend>
++  <exec_depend>oroha_tools</exec_depend>
+   <exec_depend>python3-yaml</exec_depend>
+   <exec_depend>ros2bag</exec_depend>
+   <exec_depend>rosbag2_storage_mcap</exec_depend>
+diff --git a/src/oroha_msgs/msg/PowerSample.msg b/src/oroha_msgs/msg/PowerSample.msg
+index 5840459..2847c72 100644
+--- a/src/oroha_msgs/msg/PowerSample.msg
++++ b/src/oroha_msgs/msg/PowerSample.msg
+@@ -5,19 +5,20 @@
+ std_msgs/Header header                 # stamp = host receive time (ROS clock); frame_id = "oroha_power"
+ builtin_interfaces/Time device_stamp   # firmware t_us mapped onto the ROS clock (min-filter offset)
+ uint32 seq                             # firmware sample counter (restarts on 'S' / reboot)
+-uint64 t_us                            # firmware monotonic microseconds (wrap already unwrapped)
++int64  t_us                            # firmware monotonic microseconds as sent (can go backwards/negative after a long idle: firmware ticks_diff wrap)
+ uint16 n_rounds                        # ADC rounds averaged in this window
+ 
+-# raw 12-bit ADC: window mean / min / max
++# raw 12-bit ADC: window mean / min / max. int16 on purpose: the firmware can
++# emit -1 / out-of-range sentinels for a window that collected no samples.
+ float32 gp26_mean                      # bus-voltage divider, GP26 / ADC0
+-uint16  gp26_min
+-uint16  gp26_max
++int16   gp26_min
++int16   gp26_max
+ float32 gp27_mean                      # current sensor #2 = slave id 2 = LEFT wheels, GP27 / ADC1
+-uint16  gp27_min
+-uint16  gp27_max
++int16   gp27_min
++int16   gp27_max
+ float32 gp28_mean                      # current sensor #1 = slave id 1 = RIGHT wheels, GP28 / ADC2
+-uint16  gp28_min
+-uint16  gp28_max
++int16   gp28_min
++int16   gp28_max
+ uint8   flags                          # b0-2 low rail (V/GP27/GP28), b3-5 high rail, b6 zero_valid, b7 overrun
+ bool    zero_valid
+ bool    overrun
+diff --git a/src/oroha_power/oroha_power/power_node.py b/src/oroha_power/oroha_power/power_node.py
+index a4bbdca..3681cbd 100644
+--- a/src/oroha_power/oroha_power/power_node.py
++++ b/src/oroha_power/oroha_power/power_node.py
+@@ -41,7 +41,7 @@ from oroha_msgs.msg import PowerSample
+ from oroha_power.protocol import (FLAG_BAD_MASK, FLAG_ZERO_VALID, Calibration, Frame,
+                                   OffsetFilter, convert, flag_names, parse_data_line, parse_kv)
+ 
+-EXPECTED_FW = "oroha-bench-1.1"
++EXPECTED_FW = "oroha-bench-1.2"
+ 
+ 
+ class SimulatedPico:
+@@ -299,7 +299,13 @@ class OrohaPowerNode(Node):
+             batch = list(self.q)
+             self.q.clear()
+         for rx_ns, f in batch:
+-            self.publish(rx_ns, f)
++            try:
++                self.publish(rx_ns, f)
++            except (OverflowError, AssertionError, ValueError) as e:
++                # one malformed frame must not take the node down; count it and go on
++                self.n_bad += 1
++                if self.n_bad <= 5 or self.n_bad % 100 == 0:
++                    self.get_logger().warn("frame seq %d rejected (%s): %s" % (f.seq, type(e).__name__, e))
+ 
+     def publish(self, rx_ns: int, f: Frame):
+         if self.last_seq is not None and f.seq > self.last_seq + 1:
+@@ -320,7 +326,7 @@ class OrohaPowerNode(Node):
+         m.header.stamp = Time(nanoseconds=rx_ns).to_msg()
+         m.header.frame_id = self.frame_id
+         m.device_stamp = Time(nanoseconds=dev_ns).to_msg()
+-        m.seq, m.t_us, m.n_rounds = f.seq, f.t_us, f.n
++        m.seq, m.t_us, m.n_rounds = max(0, f.seq), f.t_us, max(0, min(65535, f.n))
+         m.gp26_mean, m.gp26_min, m.gp26_max = f.v, f.v_lo, f.v_hi
+         m.gp27_mean, m.gp27_min, m.gp27_max = f.gp27, f.gp27_lo, f.gp27_hi
+         m.gp28_mean, m.gp28_min, m.gp28_max = f.gp28, f.gp28_lo, f.gp28_hi
+diff --git a/src/oroha_tools/oroha_tools/preflight.py b/src/oroha_tools/oroha_tools/preflight.py
+index 6bbd629..3520853 100644
+--- a/src/oroha_tools/oroha_tools/preflight.py
++++ b/src/oroha_tools/oroha_tools/preflight.py
+@@ -31,7 +31,7 @@ from oroha_tools.ws import records_dir
+ 
+ MD_PORT = "/dev/oroha_md400"
+ PICO_PORT = "/dev/oroha_pico"
+-EXPECTED_FW = "oroha-bench-1.1"
++EXPECTED_FW = "oroha-bench-1.2"
+ VOLT_GAP = 0.600       # id2 - id1 internal voltmeter offset, reproduced over 6 sessions [V]
+ # powered-rest raw band, 2026-08-28 (four observations); true 0 A drifts +-2 LSB/day
+ REST_REF = {"gp27": (2042.2, 2043.3), "gp28": (2039.6, 2040.7)}

@@ -1,0 +1,15 @@
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1790069156.212623518] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1790069156.212628389] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1790069156.220620103] [rosbag2_recorder]: Starting recording to '/home/oroha/oroha_claude/data/runs/R20260922-052552-straight/bag'
+[INFO] [1790069156.224195355] [rosbag2_recorder]: Subscribed to topic '/rosout'
+[INFO] [1790069156.224471783] [rosbag2_recorder]: Listening for topics...
+[INFO] [1790069156.224525598] [rosbag2_recorder]: Recording...
+[INFO] [1790069156.224498024] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1790069156.652193564] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/status'
+[INFO] [1790069156.656068059] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel'
+[INFO] [1790069156.658112576] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/event'
+[INFO] [1790069162.523386117] [rosbag2_recorder]: Topics discovery stopped.
+[INFO] [1790069162.523665341] [rosbag2_recorder]: Pausing recording.
+[INFO] [1790069162.523777139] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1790069162.530464009] [rosbag2_recorder]: Recording stopped
+[INFO] [1790069162.531955836] [rosbag2_recorder]: Event publisher thread: Exited

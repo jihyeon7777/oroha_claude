@@ -5,19 +5,20 @@
 std_msgs/Header header                 # stamp = host receive time (ROS clock); frame_id = "oroha_power"
 builtin_interfaces/Time device_stamp   # firmware t_us mapped onto the ROS clock (min-filter offset)
 uint32 seq                             # firmware sample counter (restarts on 'S' / reboot)
-uint64 t_us                            # firmware monotonic microseconds (wrap already unwrapped)
+int64  t_us                            # firmware monotonic microseconds as sent (can go backwards/negative after a long idle: firmware ticks_diff wrap)
 uint16 n_rounds                        # ADC rounds averaged in this window
 
-# raw 12-bit ADC: window mean / min / max
+# raw 12-bit ADC: window mean / min / max. int16 on purpose: the firmware can
+# emit -1 / out-of-range sentinels for a window that collected no samples.
 float32 gp26_mean                      # bus-voltage divider, GP26 / ADC0
-uint16  gp26_min
-uint16  gp26_max
+int16   gp26_min
+int16   gp26_max
 float32 gp27_mean                      # current sensor #2 = slave id 2 = LEFT wheels, GP27 / ADC1
-uint16  gp27_min
-uint16  gp27_max
+int16   gp27_min
+int16   gp27_max
 float32 gp28_mean                      # current sensor #1 = slave id 1 = RIGHT wheels, GP28 / ADC2
-uint16  gp28_min
-uint16  gp28_max
+int16   gp28_min
+int16   gp28_max
 uint8   flags                          # b0-2 low rail (V/GP27/GP28), b3-5 high rail, b6 zero_valid, b7 overrun
 bool    zero_valid
 bool    overrun
