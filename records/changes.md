@@ -20,3 +20,4 @@
 - T-05b: 영점 후 정지 전류 −0.2 LSB, overrun 0.6 %(3.9 s 주기) → T20260922-05 종결. `oroha_ledger`·`oroha_paper_export`·`oroha_verify_export` 작성, docs/(frames·time_sync·operation) 초안.
 - T20260922-07: 논문 묶음 생성·검증 통과(음성 시험 포함). `oroha_teleop/deadman_teleop`(load_manual 데드맨 포팅) 작성·빌드, 실물 미검증.
 - **대기 중**: `sudo bash setup/install_system.sh`(ros2_control·xacro·chrony·udev·Asia/Seoul) — 0단계 빌드 관문·1단계 모터 시험이 여기에 막혀 있음.
+- T-04b: 펌웨어 1.2, 560 s 유휴 후 `t_us` 연속(간격 560.3 s, 단조) → T20260922-04 종결.
