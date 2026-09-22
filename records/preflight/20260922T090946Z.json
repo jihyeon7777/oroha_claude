@@ -1,0 +1,226 @@
+{
+ "timestamp_utc": "2026-09-22T09:09:26Z",
+ "timezone": "EDT",
+ "args": {
+  "md_port": "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_BG043HTG-if00-port0",
+  "pico_port": "/dev/serial/by-id/usb-MicroPython_Board_in_FS_mode_e6616408435d4437-if00",
+  "sec": 15.0,
+  "polls": 10,
+  "rate": 50,
+  "no_zero": false,
+  "skip_md400": false,
+  "skip_pico": false,
+  "out_dir": "/home/oroha/oroha_claude/records/preflight"
+ },
+ "md400": {
+  "1": {
+   "n": 10,
+   "volt": [
+    26.3,
+    26.3,
+    26.3,
+    26.3,
+    26.3,
+    26.3,
+    26.3,
+    26.3,
+    26.3,
+    26.3
+   ],
+   "rpm": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "alarm": 0,
+   "pos": 0,
+   "ver": 86,
+   "err": "",
+   "status": [],
+   "v": 26.3
+  },
+  "2": {
+   "n": 10,
+   "volt": [
+    27.0,
+    27.0,
+    27.0,
+    27.0,
+    27.0,
+    27.0,
+    27.0,
+    27.0,
+    27.0,
+    27.0
+   ],
+   "rpm": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "alarm": 0,
+   "pos": 0,
+   "ver": 86,
+   "err": "",
+   "status": [],
+   "v": 27.0
+  }
+ },
+ "calib_id": "sensing-20260828",
+ "pico": {
+  "fw": "oroha-bench-1.1",
+  "zero": "#ZERO gp28=2037.424 gp27=2039.459 rail=3.2938 rail_corr=1.001561 n=1024",
+  "samples": 754,
+  "dt_ms": 19.99799070385128,
+  "seq_gaps": 0,
+  "overrun_pct": 0.7957559681697612,
+  "stats": {
+   "gp26": {
+    "mean": 3047.5609151193635,
+    "sd": 1.6932632427478334,
+    "min": 3037.19,
+    "max": 3050.13,
+    "v_bus": 27.329583536458887
+   },
+   "gp27": {
+    "mean": 2038.9737665782493,
+    "sd": 1.5600198525048443,
+    "min": 2029.34,
+    "max": 2042.66
+   },
+   "gp28": {
+    "mean": 2037.152625994695,
+    "sd": 1.5581831563440167,
+    "min": 2027.44,
+    "max": 2040.28
+   }
+  }
+ },
+ "checks": [
+  {
+   "ok": true,
+   "msg": "MD400: /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_BG043HTG-if00-port0 -> /dev/ttyUSB0 writable",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "Pico: /dev/serial/by-id/usb-MicroPython_Board_in_FS_mode_e6616408435d4437-if00 -> /dev/ttyACM0 writable",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1 (RIGHT): answered 10/10, fw v86, 26.300 V, pos=0",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: status alarms 0",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: at rest (max |rpm| 0)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: bus voltage in range (26.300 V)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2 (LEFT): answered 10/10, fw v86, 27.000 V, pos=0",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: status alarms 0",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: at rest (max |rpm| 0)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: bus voltage in range (27.000 V)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "controller voltmeter gap id2-id1 +0.700 V (reference +0.600 V, measurement offset)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "firmware oroha-bench-1.1 (expected oroha-bench-1.1)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "sample interval 19.998 ms (rate 50 Hz)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "seq gaps 0 / 754 samples",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "overrun 6/754 (0.80 %)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "all channels inside the linear range (raw 410..3686)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "zero_valid set",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "GP26 bus voltage 27.330 V in range",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "gp27 rest raw 2038.97 within 2042.2..2043.3 (+3.2 LSB)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "gp27 noise 17.8 mA (target < 30 mA)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "gp28 rest raw 2037.15 within 2039.6..2040.7 (+2.4 LSB)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "gp28 noise 17.8 mA (target < 30 mA)",
+   "blocking": false
+  }
+ ],
+ "ok": true
+}

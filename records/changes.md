@@ -12,3 +12,5 @@
 - Pi 시간대 Asia/Seoul로 변경하기로 결정(`setup/install_system.sh`, 사용자 실행 필요). 기록은 UTC + 시간대.
 - `oroha_power` 2.0.0: 기존 1.3.1 노드를 `oroha_msgs/PowerSample`(raw+환산+calib_id)로 포팅. 시간 기준을 노드 시계 하나로 통일, 스테일 감지, 영점 서비스 비블로킹, launch bool 파라미터 타입 버그 수정, `simulate` 모드 추가.
 - 미해결(사용자 실행 대기): `sudo bash setup/install_system.sh` — ros2_control·xacro·chrony·udev·시간대.
+- 빌드·시험: T20260922-01(빌드·단위테스트 통과), T20260922-02(`oroha_power` simulate 통과), T20260922-03(**실물 preflight 22/22 통과** — MD400 v8.6 ×2, Pico oroha-bench-1.1 50 Hz). 커밋 `7fab197`.
+- `setup/env.sh`가 ament_python 콘솔 스크립트(`oroha_preflight`, `oroha_exp` 등)를 PATH에 올리도록 함.

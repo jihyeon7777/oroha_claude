@@ -37,58 +37,56 @@ OROHA는 HardwareX 논문으로 공개할 4륜 skid-steer 연구 플랫폼이다
 
 이 인계 시점의 산출물은 문서 네 파일이다. 로봇 소프트웨어와 내보내기 도구의 구현·실물 검증은 Pi 5에서 진행할 작업이다. 이후 구현 사실과 시험 결과는 개발 저장소에서 갱신한다.
 
-## 시작 상태 (2026-09-22 실제 확인)
+## 워크스페이스 상태 (2026-09-22)
 
-- 호스트는 Raspberry Pi 5 / Ubuntu 24.04.4 LTS / ROS 2 Jazzy(`/opt/ros/jazzy`, `ros-jazzy-desktop` 설치)다. `colcon`·`rosdep`·`vcs`·`cmake`·pyserial 3.5 사용 가능.
-- **미설치: `ros-jazzy-ros2-control`, `ros-jazzy-ros2-controllers`, `ros-jazzy-xacro`.** ros2_control 런치 전에 설치가 필요하다. Pico 업로드용 `mpremote`·`picotool`도 없다.
-- 연결 장치: `/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_BG043HTG-if00-port0` → `ttyUSB0` (MD400 RS485), `usb-MicroPython_Board_in_FS_mode_e6616408435d4437-if00` → `ttyACM0` (Pico, MicroPython 상주 중). **UM7은 현재 열거되지 않는다** — 연결과 포트를 먼저 확인한다.
-- 이 디렉터리(`/home/oroha/oroha_claude`)는 git 저장소가 아니며 문서 4편만 있다. 코드 작업공간은 아직 만들어지지 않았다.
+이 폴더는 **colcon 워크스페이스 겸 개발 기록 저장소**(git, `main`)다. 승인된 단계별 계획은 `/home/oroha/.claude/plans/agile-enchanting-shell.md`, 변경·결정·시험 기록은 [records/](records/)에 있다.
 
-## 기존 작업물 (이 디렉터리 밖, `/home/oroha/oroha/`)
-
-| 위치 | 내용 |
-|---|---|
-| `mdrobot_motor_driver/` | colcon 워크스페이스 clone. 브랜치 `test/hardware-bringup-20260809`, 커밋 `0aec730`(2026-09-10). **자체 `CLAUDE.md`에 계층 구조·twin 모드·단위 정책·검증된 구동 시퀀스가 있으므로 모터 코드를 만지기 전에 그 파일을 읽는다.** |
-| `mdrobot_motor_driver/oroha_fw/` | Pico MicroPython 펌웨어(`pico/main.py`, 50 Hz raw ADC CSV) + `oroha_power` ROS 2 패키지 + 벤치 도구. colcon `src/`에 포함되지 않는 별도 서브프로젝트 |
-| `mdrobot_motor_driver/test/` | 유닛 테스트가 아니라 **실물 브링업 스크립트 모음** — 실행하면 모터가 실제로 돈다 |
-| `oroha_handoff_20260910/` | 08-28 이후 확정 상수·세션 보고서 7편·원시 로그 201편·`MANIFEST.sha256`. `paper_export/` 묶음 구성의 선례로 쓸 수 있다 |
-
-`개발_개요.md`는 모터 저장소를 `TaesuYim/mdrobot_motor_driver`로 적었으나 위 clone의 remote는 `jihyeon7777/mdrobot_motor_driver`다. 어느 쪽을 기준으로 할지 사용자에게 확인한다. UM7 드라이버(`jihyeon7777/um7_driver`)는 아직 clone되어 있지 않다.
-
-## 자주 쓰는 명령 (기존 워크스페이스 기준)
-
-```bash
-source /opt/ros/jazzy/setup.bash
-colcon build
-colcon build --packages-select mdrobot_cpp mdrobot_ros2_control
-colcon test --packages-select mdrobot mdrobot_cpp mdrobot_ros2_control && colcon test-result --verbose
+```
+oroha.repos            외부 소스 고정: TaesuYim/mdrobot_motor_driver v1.4.0 (c5c1f3f), jihyeon7777/um7_driver (9a34258)
+src/external/          위 checkout — 커밋하지 않음, 직접 수정 금지(patches/ 로만)
+src/oroha_msgs         PowerSample·ExperimentEvent/Status·ArmExperiment/AddNote
+src/oroha_description  4륜(조인트 motor_L/motor_R 2개) xacro, use_mock_hardware 스위치
+src/oroha_bringup      robot.launch.py, config/oroha_controllers.yaml(실측값), power.yaml, um7.yaml
+src/oroha_power        Pico 계측 노드(2.0.0), config/calibration/sensing-20260828.yaml(교정 단일 출처)
+src/oroha_experiment   profiles.py(시간 기반 경로), runner/cli(3단계)
+src/oroha_tools        oroha_preflight·oroha_versions·oroha_direction_check·oroha_wheel_push·export/ledger/paper_export(4단계)
+firmware/pico/         MicroPython main.py (oroha-bench-1.1, sha256 9ce752a9…)
+records/               changes.md · decisions.md · tests/tests.csv + T*.md · calibration/ · preflight/
+data/runs/<RUN_ID>/    실험 실행(meta·events·versions 커밋, bag·csv 미커밋)
+setup/                 install_system.sh(sudo) · bootstrap.sh · env.sh · udev · chrony
 ```
 
-하드웨어 없는 유닛 테스트 — 워크스페이스 루트에 `pytest.ini`가 없어 `PYTHONPATH` 없이 루트에서 실행하면 수집 단계에서 깨진다:
+- 장치: `/dev/oroha_md400`(FTDI RS485, MD400 id1=우 id2=좌, 둘 다 fw v8.6), `/dev/oroha_pico`(MicroPython, `oroha-bench-1.1` 상주). udev 적용 전에는 `/dev/serial/by-id/…` 경로를 `--md-port`/`--pico-port`/`port:=`로 넘긴다. **UM7 미연결.**
+- 시스템 설치(`sudo bash setup/install_system.sh`: ros2_control·xacro·chrony·udev·Asia/Seoul)는 사용자가 터미널에서 실행한다. 설치 전에는 `mdrobot_ros2_control`·`oroha_description`·`oroha_bringup` 빌드가 불가.
+- 이전 팀 작업물은 `/home/oroha/oroha/`에 그대로 있다: `mdrobot_motor_driver/`(jihyeon7777 bringup 브랜치 `0aec730` — 실측 yaml·`oroha_fw/`·`test/` 실물 스크립트·`docs/hardware_test_*.md`)와 `oroha_handoff_20260910/`(확정 상수·보고서 7편·원시 로그·MANIFEST). 값·근거를 옮길 때만 참조한다.
+
+## 자주 쓰는 명령
 
 ```bash
-PYTHONPATH=src/mdrobot python3 -m pytest src/mdrobot/test -q
-PYTHONPATH=src/mdrobot python3 -m pytest src/mdrobot/test/test_frame.py -q   # 단일 파일
-PYTHONPATH=src/mdrobot python3 -m pytest src/mdrobot/test -k crc -q          # 이름으로 선별
-colcon test --packages-select mdrobot_cpp --ctest-args -R test_frame         # 단일 gtest
+source setup/env.sh                      # ROS + install + ROS_DOMAIN_ID=42 + 도구 PATH
+bash setup/bootstrap.sh                  # vcs import(고정 커밋) + patches + rosdep
+colcon build --symlink-install --packages-up-to oroha_bringup oroha_experiment oroha_tools
+colcon build --symlink-install --packages-up-to oroha_power oroha_experiment oroha_tools   # ros2_control 없이 가능한 부분
+colcon test --packages-select oroha_experiment oroha_power oroha_tools && colcon test-result --verbose
+
+# ROS 없는 단위테스트 (빠름)
+(cd src/oroha_experiment && python3 -m pytest -q)         # 경로 프로파일 기하
+(cd src/oroha_power && python3 -m pytest -q)              # Pico 프로토콜·환산
+(cd src/external/mdrobot_motor_driver && python3 -m pytest -q)   # v1.4.0은 루트 pytest.ini 보유
+
+oroha_preflight [--sec 15]               # 런치 전 읽기 전용 점검 → records/preflight/*.json (RS485 포트 독점)
+ros2 launch oroha_bringup robot.launch.py [use_mock_hardware:=true] [power:=false] [imu:=true] [rviz:=true]
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel -p stamped:=true -p frame_id:=base_link -p speed:=0.2 -p turn:=0.5
+ros2 run oroha_power power_node --ros-args -p simulate:=true          # 장치 없이
+ros2 run oroha_tools oroha_direction_check --id 1                     # 바퀴 띄우고, 모터 돈다
+oroha_profile square --side 1.0 --v 0.2 [--csv out.csv]              # 프로파일 확인
+oroha_versions [--out <dir>]             # 버전·미커밋 diff 스냅샷
 ```
-
-실행·계측:
-
-```bash
-ros2 launch mdrobot_ros2_control bringup.launch.py device_type:=twin   # OROHA는 twin (단채널 2대)
-ros2 launch mdrobot_diffbot_example diffbot.launch.py                  # mock_components, 하드웨어 없이 확인
-
-pip install mpremote
-mpremote connect /dev/ttyACM0 fs cp oroha_fw/pico/main.py :main.py && mpremote connect /dev/ttyACM0 reset
-mpremote connect /dev/ttyACM0 repl   # S 시작 / X 정지 / Z 영점 / C 설정 / G 통계, Ctrl-] 로 나감
-```
-
-포트·모터 ID·`reverse_*`·`counts_per_rev`·`update_rate`는 URDF가 아니라 `config/<device_type>_controllers.yaml`의 `mdrobot_hardware: ros__parameters` 섹션에서 바꾼다.
 
 ## 실물 시험 전 확인
 
-- MD400에는 통신 워치독이 없다. 호스트가 멈추면 물리 E-stop만 남으므로 호스트 측 `cmd_vel_timeout`이 필수다.
-- 속도 명령 전에 `enable()`(`PID_UI_COM(78)=1` + `PID_START_STOP(100)=1`)이 없으면 명령은 정상 echo되지만 모터는 0에 머문다.
-- 첫 구동은 바퀴를 띄우고 한 대씩. ID·좌우·부호는 [하드웨어_확인표.md](하드웨어_확인표.md) §5의 방법으로 실물 대조한다.
-- 계측 상수와 기각된 옛 값은 [하드웨어_확인표.md](하드웨어_확인표.md) §3·§6이 단일 출처다.
+- MD400에는 통신 워치독이 없다. 정지는 `diff_cont`의 `cmd_vel_timeout 0.5`와 물리 E-stop뿐이므로, 모터 시험은 **바퀴를 띄운 상태**에서 먼저 하고 E-stop을 손에 둔다.
+- 속도 명령 전에 `enable()`(`PID_UI_COM(78)=1` + `PID_START_STOP(100)=1`)이 없으면 명령은 echo되지만 모터는 0에 머문다(플러그인은 `auto_enable`로 처리).
+- `use_limit_sw`는 0 고정. 1이면 음수 명령이 차단돼 왼쪽(reverse) 바퀴가 무알람으로 서 버린다.
+- ID·좌우·부호는 `oroha_direction_check`로 실물 대조하고 [하드웨어_확인표.md](하드웨어_확인표.md) §2·§5에 시험 ID와 함께 적는다. 계측 상수와 기각된 옛 값은 §3·§6과 `records/calibration/`이 단일 출처다.
+- 시험 하나가 끝나면 `records/tests/tests.csv`에 행을 더하고 `records/tests/T<날짜>-<NN>.md`에 목적·조건·절차·관측·판정·로그·버전을 남긴다. 상태 어휘: 통과/실패/중단/미검증, 종결/열림/다시 열림/재현 실패/미수렴.
