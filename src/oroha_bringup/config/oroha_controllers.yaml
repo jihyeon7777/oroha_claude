@@ -1,0 +1,74 @@
+# OROHA base: two single-channel MD400 (twin) on one RS485 bus, diff-drive.
+#
+# `mdrobot_hardware` is NOT a node: robot.launch.py reads it and injects each key
+# into the URDF as a xacro arg (controller_manager ignores the section). The
+# values are the ones measured on this robot in the 2026-08/09 bringup campaign;
+# see 하드웨어_확인표.md §1-§2 before changing anything.
+mdrobot_hardware:
+  ros__parameters:
+    port: /dev/oroha_md400          # udev symlink -> FTDI FT232R serial BG043HTG (setup/udev/99-oroha.rules)
+    baudrate: 19200
+    motor_id_L: 2                   # slave id 2 = LEFT wheels; mirrored mount, +rpm drives backward
+    motor_id_R: 1                   # slave id 1 = RIGHT wheels; +rpm drives forward
+    reverse_L: true
+    reverse_R: false
+    counts_per_rev_L: 30.0          # hall counts per MOTOR-SHAFT revolution (measured 29.97 +- 0.05, n=144)
+    counts_per_rev_R: 30.0
+    use_limit_sw: 0                 # MUST stay 0: 1 blocks every negative VEL_CMD -> left wheel dead, no alarm
+    auto_enable: true
+
+controller_manager:
+  ros__parameters:
+    # twin = 4 serial round-trips per cycle at 19200 baud (~68-78 ms). 10 Hz is the
+    # measured safe rate; raise only after timing read()+write() on the bench.
+    update_rate: 10
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    diff_cont:
+      type: diff_drive_controller/DiffDriveController
+    # per-wheel velocity for id/direction checks; spawned inactive, switch with
+    #   ros2 control switch_controllers --deactivate diff_cont --activate wheel_vel_cont
+    wheel_vel_cont:
+      type: forward_command_controller/ForwardCommandController
+
+diff_cont:
+  ros__parameters:
+    left_wheel_names: ["motor_L"]
+    right_wheel_names: ["motor_R"]
+
+    # EFFECTIVE radius at the motor shaft, not the tyre: 0.7613 mm/count (6.000 m
+    # torque-off hand push, 2026-09-05) x 30 counts/rev / 2pi. Physical rolling
+    # radius is 0.1258 m; total drivetrain ratio 34.615 (gearbox 30:1 x belt 26T:30T).
+    # Re-measure after re-inflating tyres or changing payload.
+    wheel_radius: 0.003635
+    wheel_separation: 0.451         # tape, 2026-09-05. 4-wheel skid-steer: effective track for yaw may be larger
+    base_frame_id: base_link
+    odom_frame_id: odom
+    enable_odom_tf: true
+    open_loop: false
+    position_feedback: true
+    publish_rate: 20.0
+
+    # host-side stop: the MD400 has no communication watchdog, so a stalled
+    # publisher must be caught here (and by the physical E-stop).
+    cmd_vel_timeout: 0.5
+    # Jazzy: geometry_msgs/TwistStamped on /diff_cont/cmd_vel
+
+    linear:
+      x:
+        max_velocity: 0.8           # m/s (3000 rpm = 1.14 m/s; keep margin)
+        min_velocity: -0.8
+        max_acceleration: 1.0
+        min_acceleration: -1.0
+    angular:
+      z:
+        max_velocity: 2.0
+        min_velocity: -2.0
+        max_acceleration: 3.0
+        min_acceleration: -3.0
+
+wheel_vel_cont:
+  ros__parameters:
+    joints: ["motor_L", "motor_R"]
+    interface_name: velocity

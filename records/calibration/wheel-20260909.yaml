@@ -1,0 +1,19 @@
+# Drivetrain / wheel constants. Source: bringup reports 2026-09-05 (6.000 m torque-off push)
+# and 2026-09-09 (3-revolution push, counts/motor-rev from controller rpm vs counts, n=144).
+# Re-measure after re-inflating tyres or changing payload (rolling diameter depends on both).
+calib_id: wheel-20260909
+status: initial-value  # confirm on the robot in Phase 1 (oroha_wheel_push), then set "confirmed"
+counts_per_motor_rev: 30.0          # measured 29.97 +- 0.05
+gear_ratio: 30.0                    # K10H30BU
+belt_ratio: 1.153846                # 30 T (wheel) / 26 T (motor)
+total_ratio: 34.615
+counts_per_wheel_rev: 1038.46
+m_per_count: 0.0007613              # 6.000 m push, no payload
+rolling_circumference_m: 0.7906
+rolling_diameter_m: 0.2516
+wheel_separation_m: 0.451           # tape 2026-09-05
+diff_drive_wheel_radius_effective: 0.003635   # m_per_count * 30 / 2pi (motor-shaft counts)
+uncertainty: "counts/rev ±0.2 %, m/count ±0.4 % (2 pushes), track ±2 mm"
+rejected_old_values:
+  - "belt 22T:17T (transcription error), 900 counts/wheel rev, wheel_radius 0.004233 / 0.00307"
+conditions_unknown: [robot_mass_kg, payload_kg, tyre_pressure_kpa, floor_slope_deg]

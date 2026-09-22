@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!-- ros2_control block for OROHA.
+     use_mock_hardware:=true  -> mock_components/GenericSystem (no device; RViz / runner tests)
+     use_mock_hardware:=false -> mdrobot_ros2_control/MdrobotSystemHardware, device_type=twin
+                                 (two single-channel MD400 on one RS485 bus)
+     Per-joint motor_id / reverse / counts_per_rev come from
+     oroha_bringup/config/oroha_controllers.yaml via robot.launch.py. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="oroha_ros2_control"
+               params="name use_mock_hardware port baudrate motor_id_L motor_id_R
+                       reverse_L reverse_R counts_per_rev_L counts_per_rev_R
+                       use_limit_sw auto_enable">
+    <ros2_control name="${name}" type="system">
+      <hardware>
+        <xacro:if value="${use_mock_hardware}">
+          <plugin>mock_components/GenericSystem</plugin>
+          <!-- integrate velocity -> position so wheels spin / odom moves -->
+          <param name="calculate_dynamics">true</param>
+        </xacro:if>
+        <xacro:unless value="${use_mock_hardware}">
+          <plugin>mdrobot_ros2_control/MdrobotSystemHardware</plugin>
+          <param name="device_type">twin</param>
+          <param name="port">${port}</param>
+          <param name="baudrate">${baudrate}</param>
+          <!-- MUST be 0 on OROHA: 1 blocks negative VEL_CMD and silently kills the
+               reversed (left) wheel; see docs/ctrl-stop-input-blocks-reverse.md of the
+               bringup campaign -->
+          <param name="use_limit_sw">${use_limit_sw}</param>
+          <param name="auto_enable">${auto_enable}</param>
+          <param name="position_max_rpm">100</param>
+        </xacro:unless>
+      </hardware>
+
+      <joint name="motor_L">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>   <!-- MD400 internal current, A, unsigned -->
+        <param name="motor_id">${motor_id_L}</param>
+        <param name="reverse">${reverse_L}</param>
+        <param name="counts_per_rev">${counts_per_rev_L}</param>
+      </joint>
+      <joint name="motor_R">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+        <param name="motor_id">${motor_id_R}</param>
+        <param name="reverse">${reverse_R}</param>
+        <param name="counts_per_rev">${counts_per_rev_R}</param>
+      </joint>
+    </ros2_control>
+  </xacro:macro>
+</robot>

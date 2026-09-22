@@ -1,0 +1,36 @@
+# ACS37030 current + bus-voltage calibration, confirmed 2026-08-28 by DMM series
+# absolute calibration on the Raspberry Pi host (bringup branch docs/sensing_constants.md,
+# commit 0aec730). Loaded by oroha_power; every PowerSample carries calib_id.
+# Re-measure (new calib_id) after any wiring, host or sensor change.
+calib_id: sensing-20260828
+source: "mdrobot_motor_driver test/hardware-bringup-20260809 @ 0aec730: docs/sensing_constants.md, reports 20260828_calib"
+host: "Raspberry Pi 5 (ground offset Δ 15.0 mV; a laptop host measured 2.1 mV — constants are host-specific)"
+sensor: "ACS37030LLZATR-020B3 x2, non-ratiometric, 3.3 V, nominal 66 mV/A, effective 70.0 mV/A"
+channels:
+  gp26: "bus voltage divider D=11.130"
+  gp27: "sensor #2 = slave id 2 = LEFT wheels"
+  gp28: "sensor #1 = slave id 1 = RIGHT wheels"
+current:
+  a_per_lsb: 12.133e-3         # A/LSB nominal: 0.800781 mV / 66 mV/A
+  scale_gp27: 0.94289          # effective gain 11.44 mA/LSB, both channels (per-channel fits differ 0.42 %, within sweep spread)
+  scale_gp28: 0.94289
+  sign_gp27: 1                 # discharge raises raw on both channels (IP mis-wiring on #2 fixed 08-15..08-21)
+  sign_gp28: 1
+  zero_gp27: 2035.257          # raw at TRUE 0 A (regression intercept, motor switch off)
+  zero_gp28: 2033.974
+  quiet_a: 0.080               # controller quiescent current per channel at powered rest (7.0 LSB)
+  valid_range_a: [0.0, 1.2]    # calibrated range (lifted wheels up to 3000 rpm); above is extrapolation
+  uncertainty: "gain ±1.5 %, run-to-run ±2-3 %, zero ±2 LSB/day; differences < 4 % are not decidable from n=1"
+voltage:
+  v_per_lsb: 8.913e-3          # V/LSB = 0.800781 mV x D 11.130 (VREF 3.280 V measured)
+  gp26_b_lsb: -18.7            # ground-offset intercept (Δ 15.0 mV / LSB); Pi host wiring
+  scale_v: 1.0
+  uncertainty: "±0.08 %"
+rail:
+  vref_v: 3.280                # pin 35 (DMM)
+  vzero_v: 1.634               # sensor no-current output (nominal 1.650)
+  note: "non-ratiometric sensor: firmware back-estimates the rail from the zero and reports rail_corr; applied to I and V"
+rejected_old_values:
+  - "gains 12.03 / 11.65 mA/LSB (08-14)"
+  - "intercept -19.6 LSB, 8.9160 mV/LSB (08-26 interim)"
+  - "sign_gp27 = -1 (cancelled total current until 08-28; launch file kept it until 2026-09-10)"

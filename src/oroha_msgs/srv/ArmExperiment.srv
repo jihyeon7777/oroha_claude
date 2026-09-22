@@ -1,0 +1,9 @@
+# Prepare a run: checks, run directory, metadata, bag recording. Motion starts
+# only with the separate ~/start Trigger.
+string run_config_yaml    # path to (or inline) YAML: path, params, repeats, series_id
+string conditions_yaml    # path to the conditions YAML (surface, slope, mass, ...)
+---
+bool ok
+string run_id
+string run_dir
+string message

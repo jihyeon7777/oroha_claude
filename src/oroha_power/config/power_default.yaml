@@ -1,0 +1,13 @@
+# Standalone defaults for oroha_power (oroha_bringup/config/power.yaml overrides in the robot launch).
+oroha_power:
+  ros__parameters:
+    port: "/dev/oroha_pico"
+    baud: 115200
+    rate: 50
+    auto_start: true
+    zero_on_start: false
+    calibration_file: ""
+    stale_timeout: 0.5
+    sync_window: 500
+    legacy_topics: false
+    simulate: false

@@ -1,0 +1,13 @@
+# UM7 IMU on OROHA (um7_driver parameters).
+# NED body -> ENU conversion and zero_gyros were hardware-verified by the driver
+# author on 2026-07-02; the MOUNTING pose (base_link -> imu_link) is still to be
+# determined on the robot (Phase 2) and lives in oroha_description.
+/**:
+  ros__parameters:
+    port: "/dev/oroha_um7"        # udev symlink -> Silicon Labs CP2102 (setup/udev/99-oroha.rules)
+    baud: 115200
+    frame_id: "imu_link"
+    frame_convention: "enu"
+    publish_tf: false             # robot_state_publisher owns base_link->imu_link
+    publish_health: true
+    publish_diagnostics: true

@@ -1,0 +1,16 @@
+# oroha_power node (Pico current/voltage measurement) runtime parameters.
+# Calibration constants are NOT here: they come from the calibration YAML named
+# by calibration_file (default: the package's sensing-20260828.yaml), and every
+# PowerSample carries the calib_id that was applied.
+oroha_power:
+  ros__parameters:
+    port: "/dev/oroha_pico"       # udev symlink -> Pico USB CDC (setup/udev/99-oroha.rules)
+    baud: 115200
+    rate: 50                      # Hz requested from firmware (50 is the firmware ceiling)
+    auto_start: true              # send 'S' on connect
+    zero_on_start: false          # send 'Z' on connect — only when the motors are known to be at rest
+    calibration_file: ""          # "" -> package default
+    stale_timeout: 0.5            # s without a frame -> diagnostics ERROR, battery not published
+    sync_window: 500              # samples in the min-filter time-offset window (~10 s)
+    legacy_topics: false          # also publish ~/measured ~/raw ~/power (Vector3Stamped, old layout)
+    simulate: false               # synthetic 50 Hz frames, no device (pipeline tests)

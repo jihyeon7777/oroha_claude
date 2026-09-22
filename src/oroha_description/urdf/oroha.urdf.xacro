@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<!-- OROHA: 4-wheel skid-steer base. Each side's two wheels are belt-locked to one
+     motor, so the model has TWO driven joints (motor_L / motor_R) and each wheel
+     link carries two cylinder visuals. Geometry that diff_drive_controller uses
+     (wheel_separation, effective wheel_radius) lives in
+     oroha_bringup/config/oroha_controllers.yaml, not here; the values below are
+     for visualization/TF only.
+
+     TODO (Phase 1, measure on the robot and fix): wheelbase, body box, IMU and
+     marker mount offsets. Values marked PLACEHOLDER are guesses. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="oroha">
+
+  <!-- connection args; oroha_bringup/robot.launch.py injects the mdrobot_hardware
+       section of the controllers yaml as key:=value, so the defaults here only
+       matter when xacro is run by hand -->
+  <xacro:arg name="use_mock_hardware" default="false"/>
+  <xacro:arg name="port" default="/dev/oroha_md400"/>
+  <xacro:arg name="baudrate" default="19200"/>
+  <xacro:arg name="motor_id_L" default="2"/>
+  <xacro:arg name="motor_id_R" default="1"/>
+  <xacro:arg name="reverse_L" default="true"/>
+  <xacro:arg name="reverse_R" default="false"/>
+  <xacro:arg name="counts_per_rev_L" default="30.0"/>
+  <xacro:arg name="counts_per_rev_R" default="30.0"/>
+  <xacro:arg name="use_limit_sw" default="0"/>
+  <xacro:arg name="auto_enable" default="true"/>
+
+  <!-- measured (2026-09) -->
+  <xacro:property name="track" value="0.451"/>          <!-- wheel-center to wheel-center -->
+  <xacro:property name="wheel_radius" value="0.1258"/>  <!-- rolling diameter 251.6 mm under load -->
+  <xacro:property name="wheel_width" value="0.080"/>    <!-- 3.00-4 pneumatic tyre -->
+  <!-- PLACEHOLDER until measured -->
+  <xacro:property name="wheelbase" value="0.400"/>      <!-- front-to-rear axle distance -->
+  <xacro:property name="body_len" value="0.600"/>
+  <xacro:property name="body_wid" value="0.350"/>
+  <xacro:property name="body_hei" value="0.200"/>
+  <xacro:property name="body_z" value="0.10"/>          <!-- body center above axle height -->
+
+  <material name="oroha_body"><color rgba="0.85 0.45 0.10 1.0"/></material>
+  <material name="oroha_tyre"><color rgba="0.12 0.12 0.12 1.0"/></material>
+
+  <xacro:macro name="box_inertial" params="m x y z">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(y*y+z*z)/12}" iyy="${m*(x*x+z*z)/12}" izz="${m*(x*x+y*y)/12}"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- ground projection: origin = center of the four contact points, x forward, z up -->
+  <link name="base_footprint"/>
+
+  <!-- body frame at axle height (diff_cont base_frame_id) -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 ${body_z}"/>
+      <geometry><box size="${body_len} ${body_wid} ${body_hei}"/></geometry>
+      <material name="oroha_body"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${body_z}"/>
+      <geometry><box size="${body_len} ${body_wid} ${body_hei}"/></geometry>
+    </collision>
+    <xacro:box_inertial m="20.0" x="${body_len}" y="${body_wid}" z="${body_hei}"/>
+  </link>
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- one link per side, two tyres each; joint rolls about +y -->
+  <xacro:macro name="wheel_pair" params="name y">
+    <link name="${name}">
+      <visual>
+        <origin xyz="${wheelbase/2} 0 0" rpy="${pi/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="oroha_tyre"/>
+      </visual>
+      <visual>
+        <origin xyz="${-wheelbase/2} 0 0" rpy="${pi/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="oroha_tyre"/>
+      </visual>
+      <collision>
+        <origin xyz="${wheelbase/2} 0 0" rpy="${pi/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <collision>
+        <origin xyz="${-wheelbase/2} 0 0" rpy="${pi/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="2.0"/>
+        <inertia ixx="0.02" iyy="0.02" izz="0.02" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+  <xacro:wheel_pair name="left_wheels" y="${track/2}"/>
+  <xacro:wheel_pair name="right_wheels" y="${-track/2}"/>
+
+  <!-- joint names are the ros2_control joint names used in oroha_controllers.yaml -->
+  <joint name="motor_L" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheels"/>
+    <origin xyz="0 ${track/2} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  <joint name="motor_R" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheels"/>
+    <origin xyz="0 ${-track/2} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- UM7 IMU: PLACEHOLDER pose, fixed after mounting (Phase 2) -->
+  <link name="imu_link"/>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 ${body_z + body_hei/2}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- GT marker mount: PLACEHOLDER, defined together with the GT program -->
+  <link name="marker_link"/>
+  <joint name="marker_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="marker_link"/>
+    <origin xyz="0 0 ${body_z + body_hei/2 + 0.05}" rpy="0 0 0"/>
+  </joint>
+
+  <xacro:include filename="$(find oroha_description)/urdf/oroha.ros2_control.xacro"/>
+  <xacro:oroha_ros2_control
+      name="oroha_base"
+      use_mock_hardware="$(arg use_mock_hardware)"
+      port="$(arg port)"
+      baudrate="$(arg baudrate)"
+      motor_id_L="$(arg motor_id_L)"
+      motor_id_R="$(arg motor_id_R)"
+      reverse_L="$(arg reverse_L)"
+      reverse_R="$(arg reverse_R)"
+      counts_per_rev_L="$(arg counts_per_rev_L)"
+      counts_per_rev_R="$(arg counts_per_rev_R)"
+      use_limit_sw="$(arg use_limit_sw)"
+      auto_enable="$(arg auto_enable)"/>
+</robot>
