@@ -17,3 +17,4 @@
 - **결함·수정**: 실물 Pico에서 `oroha_power`가 `t_us` 음수로 사망(T20260922-04). 펌웨어 `mono_us()` 유휴 누적 누락 → **oroha-bench-1.2**로 플래시(sha `bace9505…`, 1.1은 archive 보관). `PowerSample.t_us` int64·min/max int16, 노드 프레임 방어.
 - 실험 실행기(`oroha_experiment/runner_node.py`)·CLI(`oroha_exp`)·bag→CSV 추출(`oroha_export_csv`) 1차 구현. mock 파이프라인 T20260922-06 통과. 실물 Pico 단독 T20260922-05 통과(열림: overrun 4 %, 영점 직후 편차).
 - 교훈: 시험 명령에서 `source … && … &`는 체인 전체를 백그라운드 서브셸로 보내고, `pkill -f`/`pgrep -f`는 셸 자신의 명령줄과 일치할 수 있다 → 노드는 `(setsid … &)`로 띄우고 `pgrep -f '^/usr/bin/python3 .*[p]attern'`으로만 정리한다. 중복 노드는 서비스 응답을 뒤섞는다(`ros2 node list`로 확인).
+- T-05b: 영점 후 정지 전류 −0.2 LSB, overrun 0.6 %(3.9 s 주기) → T20260922-05 종결. `oroha_ledger`·`oroha_paper_export`·`oroha_verify_export` 작성, docs/(frames·time_sync·operation) 초안.

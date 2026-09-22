@@ -1,0 +1,2 @@
+run_id,series_id,repeat_index,path,params,status,armed_utc,start_utc,end_utc,t_run_end,timezone,rig_state,surface,floor_slope_deg,robot_mass_kg,payload_kg,tyre_pressure_kpa,ambient_c,ws_describe,ws_dirty,fw_sha256,calib_ids,bag_bytes,csv_exported,test_id,usable,exclude_reason,note
+R20260922-052552-straight,S20260922-052551,0,straight,"{length: 0.5, post_rest: 1.0, pre_rest: 1.0, v: 0.2}",DONE,2026-09-22T09:25:55Z,2026-09-22T09:25:56Z,2026-09-22T09:26:02Z,6.504,EDT,,,,,,,,7bcf2c5-dirty,True,bace95054b54,sensing-20260828;wheel-20260909,52339,True,,yes,,
