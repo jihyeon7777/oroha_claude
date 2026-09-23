@@ -56,8 +56,8 @@ data/runs/<RUN_ID>/    실험 실행(meta·events·versions 커밋, bag·csv 미
 setup/                 install_system.sh(sudo) · bootstrap.sh · env.sh · udev · chrony
 ```
 
-- 장치: `/dev/oroha_md400`(FTDI RS485, MD400 id1=우 id2=좌, 둘 다 fw v8.6), `/dev/oroha_pico`(MicroPython, `oroha-bench-1.1` 상주). udev 적용 전에는 `/dev/serial/by-id/…` 경로를 `--md-port`/`--pico-port`/`port:=`로 넘긴다. **UM7 미연결.**
-- 시스템 설치(`sudo bash setup/install_system.sh`: ros2_control·xacro·chrony·udev·Asia/Seoul)는 사용자가 터미널에서 실행한다. 설치 전에는 `mdrobot_ros2_control`·`oroha_description`·`oroha_bringup` 빌드가 불가.
+- 장치(udev 적용됨, 2026-09-23): `/dev/oroha_md400`(FTDI RS485, MD400 id1=우 id2=좌, 둘 다 fw v8.6), `/dev/oroha_pico`(MicroPython `oroha-bench-1.2` 상주, 검증됨), `/dev/oroha_um7`(CP2102, UM7 연결됨·**섀시 미고정**·드라이버 미실행).
+- 시스템 설치 완료(2026-09-23): ros2_control 4.48.0·ros2_controllers 4.42.1·xacro·chrony(활성)·Asia/Seoul. **`mdrobot_ros2_control`·`oroha_description`·`oroha_bringup`은 아직 미빌드** — 다음 세션 첫 작업. 세션 시작점과 순서는 [records/next_session.md](records/next_session.md).
 - 이전 팀 작업물은 `/home/oroha/oroha/`에 그대로 있다: `mdrobot_motor_driver/`(jihyeon7777 bringup 브랜치 `0aec730` — 실측 yaml·`oroha_fw/`·`test/` 실물 스크립트·`docs/hardware_test_*.md`)와 `oroha_handoff_20260910/`(확정 상수·보고서 7편·원시 로그·MANIFEST). 값·근거를 옮길 때만 참조한다.
 
 ## 자주 쓰는 명령

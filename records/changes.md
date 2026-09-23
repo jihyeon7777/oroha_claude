@@ -21,3 +21,8 @@
 - T20260922-07: 논문 묶음 생성·검증 통과(음성 시험 포함). `oroha_teleop/deadman_teleop`(load_manual 데드맨 포팅) 작성·빌드, 실물 미검증.
 - **대기 중**: `sudo bash setup/install_system.sh`(ros2_control·xacro·chrony·udev·Asia/Seoul) — 0단계 빌드 관문·1단계 모터 시험이 여기에 막혀 있음.
 - T-04b: 펌웨어 1.2, 560 s 유휴 후 `t_us` 연속(간격 560.3 s, 단조) → T20260922-04 종결.
+
+## 2026-09-23 (KST; 시간대 변경 후)
+
+- 사용자가 `setup/install_system.sh` 실행: ros2_control 4.48.0·ros2_controllers 4.42.1·xacro·chrony·udev(`/dev/oroha_*` 3개)·Asia/Seoul 확인. UM7 USB 연결(CP2102→`/dev/oroha_um7`), 섀시 미고정. 모터 시험 준비(바퀴 띄움·E-stop)됨.
+- 배터리 충전을 위해 Pi 종료. 빌드·시험은 하지 않고 [next_session.md](next_session.md)에 시작점·순서를 정리. 미빌드: `mdrobot_ros2_control`·`oroha_description`·`oroha_bringup`.
