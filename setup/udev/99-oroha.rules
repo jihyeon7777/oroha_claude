@@ -6,3 +6,7 @@ SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{seria
 SUBSYSTEM=="tty", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="0005", ATTRS{serial}=="e6616408435d4437", SYMLINK+="oroha_pico", MODE="0660", GROUP="dialout", ENV{ID_MM_DEVICE_IGNORE}="1"
 # UM7 IMU via Silicon Labs CP2102 USB-UART (serial "0001" is not unique; add ATTRS{serial} if a second CP2102 appears)
 SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="oroha_um7", MODE="0660", GROUP="dialout", ENV{ID_MM_DEVICE_IGNORE}="1"
+# FTDI latency timer 16 ms -> 1 ms. A twin Modbus cycle (2 reads + 2 writes at 19200 baud)
+# takes ~96 ms at 16 ms and ~66 ms at 1 ms (mdrobot manual/ros2_control.md), i.e. 4 ms vs
+# 33 ms of headroom at update_rate 10 Hz. Added 2026-09-28 (plan review C4).
+ACTION=="add", SUBSYSTEM=="usb-serial", DRIVER=="ftdi_sio", ATTR{latency_timer}="1"
