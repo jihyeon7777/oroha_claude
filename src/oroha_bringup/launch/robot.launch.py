@@ -18,8 +18,10 @@ import os
 import yaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
+from launch.actions import (DeclareLaunchArgument, IncludeLaunchDescription, LogInfo,
+                            OpaqueFunction, RegisterEventHandler)
 from launch.conditions import IfCondition
+from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration
 from launch_ros.actions import Node
@@ -62,13 +64,17 @@ def launch_setup(context, *args, **kwargs):
 
     bringup_share = FindPackageShare("oroha_bringup").perform(context)
 
+    # controller_manager (4.48) takes the robot description from the robot_description
+    # topic published by robot_state_publisher; it does not need the parameter.
+    control_node = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[controllers],
+        remappings=[("~/robot_description", "/robot_description")],
+        output="screen",
+    )
     nodes = [
-        Node(
-            package="controller_manager",
-            executable="ros2_control_node",
-            parameters=[robot_description, controllers],
-            output="screen",
-        ),
+        control_node,
         Node(
             package="robot_state_publisher",
             executable="robot_state_publisher",
@@ -84,15 +90,30 @@ def launch_setup(context, *args, **kwargs):
             arguments=["diff_cont", "-c", "/controller_manager"],
         ),
         Node(
-            package="controller_manager", executable="spawner",
-            arguments=["wheel_vel_cont", "-c", "/controller_manager", "--inactive"],
-        ),
-        Node(
             package="rviz2", executable="rviz2", name="rviz2", output="log",
             arguments=["-d", os.path.join(bringup_share, "rviz", "oroha.rviz")],
             condition=IfCondition(LaunchConfiguration("rviz")),
         ),
     ]
+
+    # Safety net (plan review C3): the MD400 has no communication watchdog and the
+    # v1.4.0 plugin does not stop the motors on shutdown, so whenever
+    # ros2_control_node exits — launch Ctrl-C or a crash — send VEL_CMD 0 / stop /
+    # torque off to both controllers from this launch process. OpaqueFunction runs
+    # in-process, so it also runs while launch is shutting down (new processes don't).
+    if not use_mock and _truthy(LaunchConfiguration("safety_stop").perform(context)):
+        port = str(hw.get("port", "/dev/oroha_md400"))
+
+        def _safety_stop(ctx, *args, **kwargs):
+            from oroha_tools.md_stop import stop_all
+            lines = []
+            res = stop_all(port, log=lines.append)
+            return [LogInfo(msg="[oroha safety] ros2_control_node exited -> MD400 stop: "
+                                + "; ".join(lines) + ("" if all(v == "ok" for v in res.values())
+                                                      else "  !! NOT ALL STOPPED — use the E-stop"))]
+
+        nodes.append(RegisterEventHandler(OnProcessExit(
+            target_action=control_node, on_exit=[OpaqueFunction(function=_safety_stop)])))
 
     if _truthy(LaunchConfiguration("power").perform(context)):
         power_share = FindPackageShare("oroha_power").perform(context)
@@ -132,5 +153,7 @@ def generate_launch_description():
                               description="launch um7_driver"),
         DeclareLaunchArgument("rviz", default_value="false",
                               description="launch RViz with rviz/oroha.rviz"),
+        DeclareLaunchArgument("safety_stop", default_value="true",
+                              description="real hardware: stop both MD400 when ros2_control_node exits"),
         OpaqueFunction(function=launch_setup),
     ])

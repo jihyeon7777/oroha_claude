@@ -31,7 +31,7 @@ from oroha_tools.ws import records_dir
 
 MD_PORT = "/dev/oroha_md400"
 PICO_PORT = "/dev/oroha_pico"
-EXPECTED_FW = "oroha-bench-1.2"
+EXPECTED_FW = "oroha-bench-1.2"   # firmware/pico/main.py, sha256 bace9505…
 VOLT_GAP = 0.600       # id2 - id1 internal voltmeter offset, reproduced over 6 sessions [V]
 # powered-rest raw band, 2026-08-28 (four observations); true 0 A drifts +-2 LSB/day
 REST_REF = {"gp27": (2042.2, 2043.3), "gp28": (2039.6, 2040.7)}
@@ -75,6 +75,36 @@ def check_ports(r: Report, md_port: str, pico_port: str) -> None:
         real = os.path.realpath(path)
         writable = os.access(real, os.R_OK | os.W_OK)
         r.ok(writable, f"{name}: {path} -> {real} {'writable' if writable else 'no permission (dialout?)'}")
+        from oroha_power.port_guard import describe, port_holders
+        holders = port_holders(path)
+        r.ok(not holders, f"{name}: not open by another process" if not holders else
+             f"{name}: already open by {describe(holders)} — stop the launch/tool first (run preflight BEFORE robot.launch.py)")
+
+
+def check_host(r: Report, md_port: str) -> dict:
+    """Clock sync (records carry wall time) and the FTDI latency timer (twin cycle budget)."""
+    import subprocess
+    print("\n[0] host")
+    out = {}
+    try:
+        sync = subprocess.run(["timedatectl", "show", "-p", "NTPSynchronized", "--value"],
+                              capture_output=True, text=True, timeout=5).stdout.strip()
+        tz = subprocess.run(["timedatectl", "show", "-p", "Timezone", "--value"],
+                            capture_output=True, text=True, timeout=5).stdout.strip()
+    except Exception:  # noqa: BLE001
+        sync, tz = "?", "?"
+    out.update(ntp_synchronized=sync, timezone=tz)
+    r.ok(sync == "yes", f"clock NTP-synchronized: {sync} (timezone {tz})", blocking=False)
+    tty = os.path.basename(os.path.realpath(md_port))
+    lat_path = f"/sys/class/tty/{tty}/device/latency_timer"
+    try:
+        lat = int(open(lat_path).read().strip())
+    except (OSError, ValueError):
+        lat = None
+    out["ftdi_latency_timer_ms"] = lat
+    r.ok(lat == 1, f"FTDI latency_timer {lat} ms (want 1: twin cycle ~66 ms instead of ~96 ms at 10 Hz)",
+         blocking=False)
+    return out
 
 
 def check_md400(r: Report, md_port: str, polls: int) -> dict:
@@ -88,7 +118,10 @@ def check_md400(r: Report, md_port: str, polls: int) -> dict:
                "status": []}
         try:
             with SingleMotorDriver.open(md_port, slave_id=sid, timeout=0.3) as d:
+                from mdrobot import registers as reg
                 rec["ver"] = d.get_version()
+                rec["use_limit_sw"] = d.client.read_register(reg.PID_USE_LIMIT_SW)
+                rec["enc_ppr"] = d.client.read_register(reg.PID_ENC_PPR)
                 for _ in range(polls):
                     try:
                         m = d.read_monitor()
@@ -117,6 +150,9 @@ def check_md400(r: Report, md_port: str, polls: int) -> dict:
         r.ok(all(x == 0 for x in rec["rpm"]),
              f"id={sid}: at rest (max |rpm| {max(abs(x) for x in rec['rpm'])})")
         r.ok(20.0 < v < 30.0, f"id={sid}: bus voltage in range ({v:.3f} V)")
+        r.ok(rec.get("enc_ppr") == 0, f"id={sid}: ENC_PPR {rec.get('enc_ppr')} "
+             f"({'hall mode, counts_per_rev 30 valid' if rec.get('enc_ppr') == 0 else 'ENCODER MODE — counts_per_rev 30 and wheel_radius invalid'})")
+        print(f"      id={sid}: USE_LIMIT_SW {rec.get('use_limit_sw')} (plugin and direction_check write 0 before driving)")
     if all("v" in out[s] for s in (1, 2)):
         gap = out[2]["v"] - out[1]["v"]
         r.ok(abs(gap - VOLT_GAP) < 0.25,
@@ -231,6 +267,7 @@ def main(argv=None) -> int:
     r = Report()
     result = {"timestamp_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
               "timezone": time.strftime("%Z"), "args": vars(a)}
+    result["host"] = check_host(r, a.md_port)
     check_ports(r, a.md_port, a.pico_port)
     if not a.skip_md400:
         try:

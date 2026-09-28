@@ -130,17 +130,5 @@
   </joint>
 
   <xacro:include filename="$(find oroha_description)/urdf/oroha.ros2_control.xacro"/>
-  <xacro:oroha_ros2_control
-      name="oroha_base"
-      use_mock_hardware="$(arg use_mock_hardware)"
-      port="$(arg port)"
-      baudrate="$(arg baudrate)"
-      motor_id_L="$(arg motor_id_L)"
-      motor_id_R="$(arg motor_id_R)"
-      reverse_L="$(arg reverse_L)"
-      reverse_R="$(arg reverse_R)"
-      counts_per_rev_L="$(arg counts_per_rev_L)"
-      counts_per_rev_R="$(arg counts_per_rev_R)"
-      use_limit_sw="$(arg use_limit_sw)"
-      auto_enable="$(arg auto_enable)"/>
+  <xacro:oroha_ros2_control name="oroha_base"/>
 </robot>

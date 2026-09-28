@@ -21,6 +21,7 @@ setup(
         "console_scripts": [
             "oroha_preflight = oroha_tools.preflight:main",
             "oroha_versions = oroha_tools.versions:main",
+            "oroha_md_stop = oroha_tools.md_stop:main",
             "oroha_direction_check = oroha_tools.direction_check:main",
             "oroha_wheel_push = oroha_tools.wheel_push:main",
             "oroha_export_csv = oroha_tools.export_csv:main",

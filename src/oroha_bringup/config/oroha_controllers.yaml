@@ -19,18 +19,20 @@ mdrobot_hardware:
 
 controller_manager:
   ros__parameters:
-    # twin = 4 serial round-trips per cycle at 19200 baud (~68-78 ms). 10 Hz is the
-    # measured safe rate; raise only after timing read()+write() on the bench.
+    # twin = 4 serial round-trips per cycle at 19200 baud: ~66 ms with the FTDI
+    # latency_timer at 1 ms (udev rule), ~96 ms at the factory 16 ms. 10 Hz is the
+    # safe rate; raise only after reading hardware_components.execution_time in
+    # /diagnostics on the real bus.
     update_rate: 10
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
     diff_cont:
       type: diff_drive_controller/DiffDriveController
-    # per-wheel velocity for id/direction checks; spawned inactive, switch with
-    #   ros2 control switch_controllers --deactivate diff_cont --activate wheel_vel_cont
-    wheel_vel_cont:
-      type: forward_command_controller/ForwardCommandController
+    # No forward_command_controller on purpose: it has no command timeout, so one
+    # published value keeps a wheel turning. Per-wheel checks use diff_cont
+    # combinations (v=0.05, w=+-0.2217 -> one side 0.10 m/s, the other 0) or
+    # oroha_direction_check (direct Modbus, bounded).
 
 diff_cont:
   ros__parameters:
@@ -43,12 +45,13 @@ diff_cont:
     # Re-measure after re-inflating tyres or changing payload.
     wheel_radius: 0.003635
     wheel_separation: 0.451         # tape, 2026-09-05. 4-wheel skid-steer: effective track for yaw may be larger
-    base_frame_id: base_link
+    base_frame_id: base_footprint   # URDF root; odom -> base_footprint -> base_link (single TF parent)
     odom_frame_id: odom
     enable_odom_tf: true
     open_loop: false
     position_feedback: true
-    publish_rate: 20.0
+    publish_rate: 10.0              # odom/TF cannot be faster than update_rate
+    publish_limited_velocity: true  # ~/cmd_vel_out: the command actually sent after limits (recorded)
 
     # host-side stop: the MD400 has no communication watchdog, so a stalled
     # publisher must be caught here (and by the physical E-stop).
@@ -57,18 +60,14 @@ diff_cont:
 
     linear:
       x:
-        max_velocity: 0.8           # m/s (3000 rpm = 1.14 m/s; keep margin)
+        max_velocity: 0.8           # m/s hard cap (3000 rpm = 1.14 m/s); runner/teleop use lower limits
         min_velocity: -0.8
-        max_acceleration: 1.0
-        min_acceleration: -1.0
+        max_acceleration: 1.0       # m/s^2
+        max_deceleration: -1.0      # m/s^2, <= 0 (min_acceleration is deprecated in 4.42)
     angular:
       z:
         max_velocity: 2.0
         min_velocity: -2.0
         max_acceleration: 3.0
-        min_acceleration: -3.0
+        max_deceleration: -3.0
 
-wheel_vel_cont:
-  ros__parameters:
-    joints: ["motor_L", "motor_R"]
-    interface_name: velocity

@@ -3,30 +3,31 @@
      use_mock_hardware:=true  -> mock_components/GenericSystem (no device; RViz / runner tests)
      use_mock_hardware:=false -> mdrobot_ros2_control/MdrobotSystemHardware, device_type=twin
                                  (two single-channel MD400 on one RS485 bus)
-     Per-joint motor_id / reverse / counts_per_rev come from
-     oroha_bringup/config/oroha_controllers.yaml via robot.launch.py. -->
+
+     Hardware values come from the xacro args declared in oroha.urdf.xacro, which
+     oroha_bringup/robot.launch.py fills from config/oroha_controllers.yaml.
+     They are inserted with $(arg ...) on purpose, NOT ${...}: xacro evaluates
+     ${reverse_L} to a Python bool and prints "True", while the plugin compares
+     `reverse == "true"` case-sensitively (mdrobot_system.cpp:157) — the left wheel
+     would silently not be reversed. test/test_xacro.py guards this. -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:macro name="oroha_ros2_control"
-               params="name use_mock_hardware port baudrate motor_id_L motor_id_R
-                       reverse_L reverse_R counts_per_rev_L counts_per_rev_R
-                       use_limit_sw auto_enable">
+  <xacro:macro name="oroha_ros2_control" params="name">
     <ros2_control name="${name}" type="system">
       <hardware>
-        <xacro:if value="${use_mock_hardware}">
+        <xacro:if value="$(arg use_mock_hardware)">
           <plugin>mock_components/GenericSystem</plugin>
           <!-- integrate velocity -> position so wheels spin / odom moves -->
           <param name="calculate_dynamics">true</param>
         </xacro:if>
-        <xacro:unless value="${use_mock_hardware}">
+        <xacro:unless value="$(arg use_mock_hardware)">
           <plugin>mdrobot_ros2_control/MdrobotSystemHardware</plugin>
           <param name="device_type">twin</param>
-          <param name="port">${port}</param>
-          <param name="baudrate">${baudrate}</param>
+          <param name="port">$(arg port)</param>
+          <param name="baudrate">$(arg baudrate)</param>
           <!-- MUST be 0 on OROHA: 1 blocks negative VEL_CMD and silently kills the
-               reversed (left) wheel; see docs/ctrl-stop-input-blocks-reverse.md of the
-               bringup campaign -->
-          <param name="use_limit_sw">${use_limit_sw}</param>
-          <param name="auto_enable">${auto_enable}</param>
+               reversed (left) wheel (bringup field report ctrl-stop-input-blocks-reverse) -->
+          <param name="use_limit_sw">$(arg use_limit_sw)</param>
+          <param name="auto_enable">$(arg auto_enable)</param>
           <param name="position_max_rpm">100</param>
         </xacro:unless>
       </hardware>
@@ -35,19 +36,19 @@
         <command_interface name="velocity"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
-        <state_interface name="effort"/>   <!-- MD400 internal current, A, unsigned -->
-        <param name="motor_id">${motor_id_L}</param>
-        <param name="reverse">${reverse_L}</param>
-        <param name="counts_per_rev">${counts_per_rev_L}</param>
+        <state_interface name="effort"/>   <!-- MD400 internal current, A, unsigned, 0.1 A steps -->
+        <param name="motor_id">$(arg motor_id_L)</param>
+        <param name="reverse">$(arg reverse_L)</param>
+        <param name="counts_per_rev">$(arg counts_per_rev_L)</param>
       </joint>
       <joint name="motor_R">
         <command_interface name="velocity"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
         <state_interface name="effort"/>
-        <param name="motor_id">${motor_id_R}</param>
-        <param name="reverse">${reverse_R}</param>
-        <param name="counts_per_rev">${counts_per_rev_R}</param>
+        <param name="motor_id">$(arg motor_id_R)</param>
+        <param name="reverse">$(arg reverse_R)</param>
+        <param name="counts_per_rev">$(arg counts_per_rev_R)</param>
       </joint>
     </ros2_control>
   </xacro:macro>
