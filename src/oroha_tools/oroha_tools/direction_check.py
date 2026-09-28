@@ -4,6 +4,7 @@
   oroha_direction_check --id 2 --yes                     # expected: LEFT wheels backward (+rpm, mirrored)
   oroha_direction_check --id 1 --sec 10 --yes --test-id T20260928-06    # E-stop characterisation (E1)
   oroha_direction_check --id 1 --sec 10 --resend --yes   # E1 with the command re-sent every poll (as ros2_control does)
+  oroha_direction_check --id 2 --rpm -500 --use-limit-sw 1 --yes   # negative (CW) command with the CTRL stop gates active
 
 Preconditions: wheels lifted, E-stop in the operator's hand, nobody near the belts.
 From a non-interactive shell pass --yes only after the operator said "go"; the operator's
@@ -33,7 +34,14 @@ from oroha_tools.ws import records_dir
 MD_PORT = "/dev/oroha_md400"
 RPM_CAP = 600         # motor rpm; lifted visual checks (500 rpm = 14 wheel rpm, 0.19 m/s)
 SEC_CAP = 10.0
-EXPECTED = {1: ("right", "forward"), 2: ("left", "backward")}
+EXPECTED = {1: ("right", "forward"), 2: ("left", "backward")}   # for a POSITIVE rpm command
+
+
+def expected(sid: int, rpm: int):
+    side, direction = EXPECTED[sid]
+    if rpm < 0:
+        direction = "backward" if direction == "forward" else "forward"
+    return side, direction
 STOP_RPM = 5          # |rpm| below this while commanded = "not turning"
 
 
@@ -67,8 +75,8 @@ def run_one(port: str, sid: int, rpm: int, sec: float, resend: bool, use_limit_s
     from mdrobot import SingleMotorDriver
     from mdrobot import registers as reg
 
-    exp_side, exp_dir = EXPECTED[sid]
-    print(f"\n=== id {sid}: expected {exp_side.upper()} wheels, +{rpm} rpm -> {exp_dir} "
+    exp_side, exp_dir = expected(sid, rpm)
+    print(f"\n=== id {sid}: expected {exp_side.upper()} wheels, {rpm:+d} rpm -> {exp_dir} "
           f"({sec:.0f} s{', re-sent every poll' if resend else ''}) ===")
     if confirm:
         input("Wheels lifted, E-stop in hand, hands clear? [Enter = spin, Ctrl-C = abort] ")
@@ -141,8 +149,8 @@ def main(argv=None) -> int:
     ap.add_argument("--note", default="")
     ap.add_argument("--force", action="store_true", help="ignore that the port is open elsewhere")
     a = ap.parse_args(argv)
-    if not 0 < a.rpm <= RPM_CAP or not 0 < a.sec <= SEC_CAP:
-        print(f"rpm must be 1..{RPM_CAP}, sec 0..{SEC_CAP:.0f}")
+    if not 0 < abs(a.rpm) <= RPM_CAP or not 0 < a.sec <= SEC_CAP:
+        print(f"|rpm| must be 1..{RPM_CAP} (negative = CW), sec 0..{SEC_CAP:.0f}")
         return 2
     if not a.yes and not sys.stdin.isatty():
         print("no terminal: pass --yes once the operator has confirmed wheels lifted + E-stop in hand")
@@ -165,7 +173,7 @@ def main(argv=None) -> int:
                 direction = direction or input("   Which way did the wheels roll? [forward/backward] ").strip().lower()
             rec["observed_side"], rec["observed_dir"] = side, direction
             if side and direction:
-                exp = EXPECTED[sid]
+                exp = expected(sid, a.rpm)
                 rec["matches_expected"] = (side, direction) == exp
                 print(f"   observed {side}/{direction}, expected {exp[0]}/{exp[1]}: "
                       f"{'MATCH' if rec['matches_expected'] else 'MISMATCH — fix motor_id_L/R or reverse_* in oroha_controllers.yaml'}")
