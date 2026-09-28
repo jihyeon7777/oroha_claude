@@ -35,3 +35,4 @@
 - T20260928-02 mock bringup 통과(10 Hz, 단일 TF 루트, diff_cont 구독 QoS BEST_EFFORT 확인, 명령 0.68 m 예측 일치). 런치를 Claude 셸에서 띄우면 SIGINT 무시·SIGTERM 시 자식 미정리 → `setup/bg.sh` 추가, 규칙 문서화.
 - T20260928-03 실행기 mock: bag 녹화기 늦은 구독(3.15 s)·transient_local 캐시 이벤트로 추출 t=0이 틀리던 결함 수정(녹화기 구독 대기, run_id의 START header stamp 사용). SIGINT·Ctrl-C 정리 경로, CLI "RUNNER LOST", cmd_vel_out 추출 추가. env.sh에서 사용 중단된 ROS_LOCALHOST_ONLY 제거.
 - T20260928-05 방향 점검 통과: id1 오른쪽 전진·id2 왼쪽 후진(사용자 관측, 500 rpm). 100 rpm은 바퀴 2.9 rpm이라 육안 판별 불가 → direction_check rpm 상한 600.
+- **T20260928-06 실패(치명)**: USE_LIMIT_SW 0에서 E-stop을 눌러도 모터가 계속 돎(500 rpm, 10 s). 모든 모터 작업 중단. E-stop 결선·방식 결정 필요.
