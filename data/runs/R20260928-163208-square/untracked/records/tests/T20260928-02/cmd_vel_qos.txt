@@ -1,0 +1,6 @@
+Node name: diff_cont
+Node namespace: /
+Endpoint type: SUBSCRIPTION
+  Reliability: BEST_EFFORT
+  History (Depth): UNKNOWN
+  Durability: VOLATILE

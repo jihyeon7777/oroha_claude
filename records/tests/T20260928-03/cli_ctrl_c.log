@@ -1,0 +1,11 @@
+[WARN] [1790581021.400950443] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[WARN] [1790581021.401037683] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+straight {'length': 2.0, 'v': 0.2, 'pre_rest': 1.0, 'post_rest': 1.0}: 12.7 s, path 2.00 m, ideal end x=2.00 y=0.00 yaw=0 deg
+
+[1/1] armed R20260928-163702-straight -> /home/oroha/oroha_claude/data/runs/R20260928-163702-straight
+   armed: 12.7 s profile, 3 segments; room check not applied (mock)
+   RUNNING     0.0/ 12.7 s [ 0] rest_pre   v=+0.00 w=+0.00 bag=on      RUNNING     0.5/ 12.7 s [ 0] rest_pre   v=+0.00 w=+0.00 bag=on      RUNNING     0.9/ 12.7 s [ 0] rest_pre   v=+0.00 w=+0.00 bag=on      RUNNING     1.5/ 12.7 s [ 1] straight   v=+0.16 w=+0.00 bag=on      RUNNING     1.9/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     2.5/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     3.1/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     3.5/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     4.1/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     4.5/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     5.1/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     5.7/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     6.1/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on   
+   Ctrl-C -> ABORT
+
+series S20260928-163701
+  R20260928-163702-straight  ABORTED (Ctrl-C)

@@ -1,0 +1,12 @@
+[WARN] [1790580483.110899379] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[WARN] [1790580483.110921508] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+Hardware Component 1
+	name: oroha_base
+	type: system
+	plugin name: mock_components/GenericSystem
+	state: id=3 label=active
+	read/write rate: 10 Hz
+	is_async: False
+	command interfaces
+		motor_R/velocity [available] [claimed]
+		motor_L/velocity [available] [claimed]

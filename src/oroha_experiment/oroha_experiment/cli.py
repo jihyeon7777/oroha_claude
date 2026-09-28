@@ -93,6 +93,7 @@ class Client(Node):
     def __init__(self):
         super().__init__("oroha_exp_cli")
         self.status: ExperimentStatus | None = None
+        self.status_t = 0.0
         self.create_subscription(ExperimentStatus, "/oroha_experiment/status", self._on_status, 10)
         self.cli_arm = self.create_client(ArmExperiment, "/oroha_experiment/arm")
         self.cli_start = self.create_client(Trigger, "/oroha_experiment/start")
@@ -101,6 +102,7 @@ class Client(Node):
 
     def _on_status(self, m):
         self.status = m
+        self.status_t = time.monotonic()
 
     def call(self, cli, req, timeout=20.0):
         if not cli.wait_for_service(timeout_sec=3.0):
@@ -235,10 +237,15 @@ def monitor(node: Client) -> str:
     """Spin until the runner returns to IDLE; keys: space/Esc abort, n note."""
     last_print = 0.0
     final = "?"
+    t_enter = time.monotonic()
     with KeyReader() as keys:
         while rclpy.ok():
             rclpy.spin_once(node, timeout_sec=0.05)
             st = node.status
+            now = time.monotonic()
+            if now - max(node.status_t, t_enter) > 3.0:
+                print("\n   no runner status for 3 s — runner stopped or crashed (check its log / meta.yaml)")
+                return "RUNNER LOST"
             if st is None:
                 continue
             if st.state in ("DONE", "ABORTED", "FAILED"):

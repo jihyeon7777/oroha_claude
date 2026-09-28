@@ -31,3 +31,6 @@
 
 - **계획 재검토**(설치 패키지·v1.4.0 소스·이전 보고서 대조, xacro 메모리 렌더, 교차 검토): 첫 주행 전 필수 5건(C1 xacro `reverse`가 `True`로 렌더링돼 왼쪽 reverse 미적용, C2 E-stop 해제 거동 미확인, C3 명령 잔류—on_shutdown 없음·RS485 분리·SIGTERM, C4 FTDI latency 16 ms, C5 3 m 방 접지 경로 안전)과 H1~H10을 찾아 세션 A/B/C로 재편. 사용자 결정 D-08(3 m×3 m), D-09(patches/).
 - A0 코드 수정: xacro `$(arg)` + URDF·설정 테스트(수정 전 xacro에서 실패 확인), `oroha_md_stop`·런치 안전망, direction_check(SIGTERM 정지, USE_LIMIT_SW 0, ENC_PPR, 타임라인·정지/재출발 판정, --resend), wheel_push `--phase`, preflight(시간 동기·latency·포트·레지스터), port_guard, 컨트롤러 설정(max_deceleration·publish_rate 10·publish_limited_velocity·base_footprint·wheel_vel_cont 제거), runner/power/teleop/cli 신호 처리·RELIABLE QoS, 실행기 한계 0.35/1.2·방 크기 검사·spot·`--rig-state`·Ctrl-C 중단·`gt`, 원장 usable 규칙(mock 실행 제외), 오도메트리 비교(시작 자세 기준·yaw 연속). setup: FTDI latency udev·rviz_imu_plugin.
+- T20260928-01 빌드·테스트 관문 통과(11 패키지 56.5 s 경고 0, 테스트 316 실패 0 — 패치 없는 v1.4.0이 ros2_control 4.48에서 그대로 동작).
+- T20260928-02 mock bringup 통과(10 Hz, 단일 TF 루트, diff_cont 구독 QoS BEST_EFFORT 확인, 명령 0.68 m 예측 일치). 런치를 Claude 셸에서 띄우면 SIGINT 무시·SIGTERM 시 자식 미정리 → `setup/bg.sh` 추가, 규칙 문서화.
+- T20260928-03 실행기 mock: bag 녹화기 늦은 구독(3.15 s)·transient_local 캐시 이벤트로 추출 t=0이 틀리던 결함 수정(녹화기 구독 대기, run_id의 START header stamp 사용). SIGINT·Ctrl-C 정리 경로, CLI "RUNNER LOST", cmd_vel_out 추출 추가. env.sh에서 사용 중단된 ROS_LOCALHOST_ONLY 제거.

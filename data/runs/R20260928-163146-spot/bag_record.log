@@ -1,0 +1,27 @@
+[WARN] [1790580710.559938461] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[WARN] [1790580710.560019294] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1790580710.585875516] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1790580710.585886497] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1790580710.592990315] [rosbag2_recorder]: Starting recording to '/home/oroha/oroha_claude/data/runs/R20260928-163146-spot/bag'
+[INFO] [1790580710.597204899] [rosbag2_recorder]: Subscribed to topic '/rosout'
+[INFO] [1790580710.597484528] [rosbag2_recorder]: Listening for topics...
+[INFO] [1790580710.597539139] [rosbag2_recorder]: Recording...
+[INFO] [1790580710.597585620] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1790580710.689618625] [rosbag2_recorder]: Subscribed to topic '/diagnostics'
+[INFO] [1790580710.694569651] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel_out'
+[INFO] [1790580710.699259974] [rosbag2_recorder]: Subscribed to topic '/diff_cont/odom'
+[INFO] [1790580710.703491261] [rosbag2_recorder]: Subscribed to topic '/tf'
+[INFO] [1790580710.710706912] [rosbag2_recorder]: Subscribed to topic '/dynamic_joint_states'
+[INFO] [1790580710.713200629] [rosbag2_recorder]: Subscribed to topic '/joint_states'
+[WARN] [1790580712.357939901] [rosbag2_recorder]: A new publisher for subscribed topic /tf was found offering RMW_QOS_POLICY_DURABILITY_VOLATILE, but rosbag2 already subscribed requesting RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL. Messages from this new publisher will not be recorded.
+[WARN] [1790580712.357965568] [rosbag2_recorder]: New publisher discovered on topic '/tf', offering incompatible QoS. No messages will be sent to it. Last incompatible policy: DURABILITY_QOS_POLICY
+[INFO] [1790580712.362255873] [rosbag2_recorder]: Subscribed to topic '/robot_description'
+[INFO] [1790580712.364048203] [rosbag2_recorder]: Subscribed to topic '/tf_static'
+[INFO] [1790580713.750076461] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/status'
+[INFO] [1790580713.752372456] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel'
+[INFO] [1790580713.754568617] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/event'
+[INFO] [1790580726.772013097] [rosbag2_recorder]: Topics discovery stopped.
+[INFO] [1790580726.772468873] [rosbag2_recorder]: Pausing recording.
+[INFO] [1790580726.772601281] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1790580726.788284117] [rosbag2_recorder]: Recording stopped
+[INFO] [1790580726.789840799] [rosbag2_recorder]: Event publisher thread: Exited

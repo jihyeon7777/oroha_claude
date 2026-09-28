@@ -1,0 +1,27 @@
+[WARN] [1790581026.388980964] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[WARN] [1790581026.389059760] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1790581026.423258110] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1790581026.423276536] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1790581026.434538881] [rosbag2_recorder]: Starting recording to '/home/oroha/oroha_claude/data/runs/R20260928-163702-straight/bag'
+[INFO] [1790581026.438641094] [rosbag2_recorder]: Subscribed to topic '/rosout'
+[INFO] [1790581026.439003574] [rosbag2_recorder]: Listening for topics...
+[INFO] [1790581026.439080019] [rosbag2_recorder]: Recording...
+[INFO] [1790581026.439144870] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1790581026.859027003] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel'
+[INFO] [1790581026.862434273] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/event'
+[INFO] [1790581026.865871099] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/status'
+[INFO] [1790581026.870578144] [rosbag2_recorder]: Subscribed to topic '/diagnostics'
+[INFO] [1790581026.975821334] [rosbag2_recorder]: Subscribed to topic '/joint_states'
+[INFO] [1790581026.979463937] [rosbag2_recorder]: Subscribed to topic '/robot_description'
+[INFO] [1790581026.986004367] [rosbag2_recorder]: Subscribed to topic '/tf_static'
+[WARN] [1790581026.986803550] [rosbag2_storage]: Some, but not all, publishers on topic "/tf" are offering RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL. Falling back to RMW_QOS_POLICY_DURABILITY_VOLATILE as it will connect to all publishers. Previously-published latched messages will not be retrieved.
+[INFO] [1790581026.989200804] [rosbag2_recorder]: Subscribed to topic '/tf'
+[INFO] [1790581026.993044203] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel_out'
+[INFO] [1790581026.999095893] [rosbag2_recorder]: Subscribed to topic '/diff_cont/odom'
+[INFO] [1790581027.004926954] [rosbag2_recorder]: Subscribed to topic '/dynamic_joint_states'
+[INFO] [1790581034.522834193] [rosbag2_recorder]: Topics discovery stopped.
+[INFO] [1790581034.523134396] [rosbag2_recorder]: Pausing recording.
+[INFO] [1790581034.523224970] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1790581034.536933661] [rosbag2_recorder]: Recording stopped
+[WARN] [1790581034.537026513] [rosbag2_recorder]: Number of messages lost on the transport layer: 1
+[INFO] [1790581034.538719269] [rosbag2_recorder]: Event publisher thread: Exited

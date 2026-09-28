@@ -1,0 +1,8 @@
+stamp_ns,t_run,event,segment_index,detail
+1790580986985973260,-1.0,ARMED,-1,"straight {'length': 2.0, 'post_rest': 1.0, 'pre_rest': 1.0, 'v': 0.2}"
+1790580987997818102,-1.0,BAG_STARTED,-1,/home/oroha/oroha_claude/data/runs/R20260928-163623-straight/bag
+1790580988011089480,0.0062,START,-1,t_total=12.67
+1790580988017916465,0.013,SEGMENT,0,rest_pre
+1790580989018080982,1.0132,SEGMENT,1,straight
+1790580994169325156,6.1644,ABORT,1,runner stopped (SIGINT/SIGTERM)
+1790580994435633078,6.4307,BAG_STOPPED,-1,rc=0

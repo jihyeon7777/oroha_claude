@@ -1,0 +1,90 @@
+diff --git a/records/conditions_latest.yaml b/records/conditions_latest.yaml
+index 7a370c3..36978f8 100644
+--- a/records/conditions_latest.yaml
++++ b/records/conditions_latest.yaml
+@@ -1 +1,3 @@
+-updated_utc: '2026-09-22T09:23:20Z'
++updated_utc: '2026-09-28T07:31:46Z'
++rig_state: mock
++surface: mock
+diff --git a/records/tests/tests.csv b/records/tests/tests.csv
+index 4b3f183..f5acc72 100644
+--- a/records/tests/tests.csv
++++ b/records/tests/tests.csv
+@@ -1,8 +1,9 @@
+ test_id,date_utc,tz,phase,title,rig_state,status,verdict,code_version,external_versions,fw_sha,calib_ids,config_hash,log_paths,retest_of,superseded_by,note
+-T20260922-01,2026-09-22T08:50Z,America/New_York,0,colcon 빌드·단위테스트(ros2_control 제외 5개 패키지),bench,통과,종결,7fab197,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,9ce752a9,sensing-20260828,,log/latest_build,,,mdrobot 134·profiles 11·protocol 4 통과
++T20260922-01,2026-09-22T08:50Z,America/New_York,0,colcon 빌드·단위테스트(ros2_control 제외 5개 패키지),bench,통과,종결,7fab197,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,9ce752a9,sensing-20260828,,log/build_2026-09-22_05-06-53 (로컬 전용),,,mdrobot 134·profiles 11·protocol 4 통과
+ T20260922-02,2026-09-22T08:56Z,America/New_York,0,oroha_power simulate 모드 발행·진단·영점 서비스,mock,통과,종결,7fab197,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,9ce752a9,sensing-20260828,,tests/T20260922-02.md,,,50.04 Hz·diag OK·zero 비블로킹
+ T20260922-03,2026-09-22T09:09Z,America/New_York,1,실물 preflight — MD400×2·Pico 읽기 전용 점검,bench,통과,종결,7fab197,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,9ce752a9,sensing-20260828,,records/preflight/20260922T090946Z.json,,,22/22 GO; id1 26.30 V id2 27.00 V gap +0.70; GP26 27.33 V; overrun 0.8 %
+ T20260922-04,2026-09-22T09:40Z,America/New_York,2,Pico 펌웨어 1.2 플래시·식별 (유휴 시 mono_us 갱신),bench,통과,종결,f1fd5df,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,bace9505,sensing-20260828,,tests/T20260922-04.md,,,T-04b: 560 s 유휴 후 t_us 간격 560.3 s·단조 — 수정 확인
+ T20260922-05,2026-09-22T09:32Z,America/New_York,2,oroha_power 실물 Pico 단독 (펌웨어 1.2),bench,통과,종결,f1fd5df,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,bace9505,sensing-20260828,,tests/T20260922-05.md,,,T-05b: 영점 후 20 s 정지 −0.2 LSB·overrun 0.6 %(3.9 s 주기) — 정상
+ T20260922-06,2026-09-22T09:26Z,America/New_York,3,실험 파이프라인 mock (runner+CLI+bag+export),mock,통과,종결,7bcf2c5+dirty,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,bace9505,sensing-20260828,,data/runs/R20260922-052552-straight,,,장치 없음 → odom/power/imu null
+ T20260922-07,2026-09-22T09:31Z,America/New_York,4,"논문 묶음 생성·검증 (paper_export·verify_export, 음성 시험 포함)",bench,통과,종결,46956ef,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,bace9505,sensing-20260828,,tests/T20260922-07.md,,,62 파일 OK; 파일 삭제 시 검증 실패 지목
++T20260928-01,2026-09-28T07:20Z,Asia/Seoul,0,전체 빌드·테스트 관문 (패치 없는 v1.4.0),bench,통과,종결,61455b3,mdrobot_motor_driver c5c1f3f;um7_driver 9a34258,bace9505,sensing-20260828;wheel-20260909,,records/tests/T20260928-01/,,,11 패키지 56.5 s 경고 0; 테스트 316 실패 0
+diff --git a/src/oroha_experiment/oroha_experiment/cli.py b/src/oroha_experiment/oroha_experiment/cli.py
+index 2efdb47..85ae8a9 100644
+--- a/src/oroha_experiment/oroha_experiment/cli.py
++++ b/src/oroha_experiment/oroha_experiment/cli.py
+@@ -93,6 +93,7 @@ class Client(Node):
+     def __init__(self):
+         super().__init__("oroha_exp_cli")
+         self.status: ExperimentStatus | None = None
++        self.status_t = 0.0
+         self.create_subscription(ExperimentStatus, "/oroha_experiment/status", self._on_status, 10)
+         self.cli_arm = self.create_client(ArmExperiment, "/oroha_experiment/arm")
+         self.cli_start = self.create_client(Trigger, "/oroha_experiment/start")
+@@ -101,6 +102,7 @@ class Client(Node):
+ 
+     def _on_status(self, m):
+         self.status = m
++        self.status_t = time.monotonic()
+ 
+     def call(self, cli, req, timeout=20.0):
+         if not cli.wait_for_service(timeout_sec=3.0):
+@@ -235,10 +237,15 @@ def monitor(node: Client) -> str:
+     """Spin until the runner returns to IDLE; keys: space/Esc abort, n note."""
+     last_print = 0.0
+     final = "?"
++    t_enter = time.monotonic()
+     with KeyReader() as keys:
+         while rclpy.ok():
+             rclpy.spin_once(node, timeout_sec=0.05)
+             st = node.status
++            now = time.monotonic()
++            if now - max(node.status_t, t_enter) > 3.0:
++                print("\n   no runner status for 3 s — runner stopped or crashed (check its log / meta.yaml)")
++                return "RUNNER LOST"
+             if st is None:
+                 continue
+             if st.state in ("DONE", "ABORTED", "FAILED"):
+diff --git a/src/oroha_tools/oroha_tools/export_csv.py b/src/oroha_tools/oroha_tools/export_csv.py
+index 286091b..5261ad0 100644
+--- a/src/oroha_tools/oroha_tools/export_csv.py
++++ b/src/oroha_tools/oroha_tools/export_csv.py
+@@ -23,7 +23,7 @@ from pathlib import Path
+ import yaml
+ 
+ TOPIC_FILES = {
+-    "/diff_cont/cmd_vel": "cmd_vel", "/diff_cont/odom": "odom", "/joint_states": "joint_states",
++    "/diff_cont/cmd_vel": "cmd_vel", "/diff_cont/cmd_vel_out": "cmd_vel_out", "/diff_cont/odom": "odom", "/joint_states": "joint_states",
+     "/oroha_power/sample": "power", "/oroha_power/battery": "battery", "/imu/data": "imu",
+     "/imu/mag": "mag", "/imu/temperature": "temperature", "/oroha_experiment/event": "events",
+     "/oroha_experiment/status": "status", "/diagnostics": "diagnostics",
+@@ -172,7 +172,7 @@ def export(run_dir: Path, out: Path) -> dict:
+         name = TOPIC_FILES.get(topic)
+         if name is None:
+             continue
+-        if name == "cmd_vel":
++        if name in ("cmd_vel", "cmd_vel_out"):
+             w.row(name, {**base, "v": msg.twist.linear.x, "w": msg.twist.angular.z})
+         elif name == "odom":
+             p = msg.pose.pose.position
+@@ -304,6 +304,7 @@ oroha_power the host receive time, for um7 the receive time, for controllers the
+ | file | columns | units / notes |
+ |---|---|---|
+ | cmd_vel.csv | v, w | m/s, rad/s commanded body velocity (TwistStamped on /diff_cont/cmd_vel) |
++| cmd_vel_out.csv | v, w | m/s, rad/s command actually applied by diff_cont after its speed/acceleration limits |
+ | odom.csv | x, y, yaw, vx, wz | m, m, rad (odom frame), m/s, rad/s — wheel odometry, no-slip assumption |
+ | joint_states.csv | <joint>_pos, _vel, _eff | rad, rad/s at the MOTOR SHAFT (34.615:1 to the wheel), A (MD400 internal, unsigned) |
+ | power.csv | device_stamp_ns, seq, t_us, n_rounds, gp2x_mean/min/max, flags, zero_valid, overrun | Pico window (20 ms): raw 12-bit ADC; t_us = device monotonic us; device_stamp_ns = t_us mapped to ROS time |

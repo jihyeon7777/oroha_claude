@@ -1,0 +1,4 @@
+[WARN] [1790580481.549210816] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[WARN] [1790580481.549234723] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+joint_state_broadcaster joint_state_broadcaster/JointStateBroadcaster  active
+diff_cont               diff_drive_controller/DiffDriveController      active

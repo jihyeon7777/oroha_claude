@@ -1,0 +1,12 @@
+[WARN] [1790580667.784587122] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[WARN] [1790580667.784663252] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+[INFO] [1790580667.995618832] [oroha_experiment]: experiment runner ready; runs -> /home/oroha/oroha_claude/data/runs
+[INFO] [1790580672.573250512] [oroha_experiment]: [R20260928-163109-straight] ARMED straight {'length': 1.0, 'post_rest': 1.0, 'pre_rest': 1.0, 'v': 0.2}
+[INFO] [1790580673.377354308] [oroha_experiment]: [R20260928-163109-straight] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260928-163109-straight/bag
+[INFO] [1790580673.434042371] [oroha_experiment]: [R20260928-163109-straight] START t_total=7.67
+[INFO] [1790580673.435653441] [oroha_experiment]: [R20260928-163109-straight] SEGMENT rest_pre
+[INFO] [1790580674.423170710] [oroha_experiment]: [R20260928-163109-straight] SEGMENT straight
+[INFO] [1790580680.073313605] [oroha_experiment]: [R20260928-163109-straight] SEGMENT rest_post
+[INFO] [1790580681.073683347] [oroha_experiment]: [R20260928-163109-straight] END profile complete
+[INFO] [1790580682.387184965] [oroha_experiment]: [R20260928-163109-straight] BAG_STOPPED rc=0
+[INFO] [1790580682.393618396] [oroha_experiment]: run R20260928-163109-straight finished: DONE

@@ -1,0 +1,79 @@
+[INFO] [launch]: All log files can be found below /home/oroha/.ros/log/2026-09-28-16-39-55-197188-pi-35087
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [ros2_control_node-1]: process started with pid [35116]
+[INFO] [robot_state_publisher-2]: process started with pid [35117]
+[INFO] [spawner-3]: process started with pid [35118]
+[INFO] [spawner-4]: process started with pid [35119]
+[robot_state_publisher-2] [WARN] [1790581195.588539435] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[robot_state_publisher-2] [WARN] [1790581195.588614454] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+[ros2_control_node-1] [WARN] [1790581195.610799589] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[ros2_control_node-1] [WARN] [1790581195.611449403] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+[robot_state_publisher-2] [INFO] [1790581195.671170158] [robot_state_publisher]: Robot initialized
+[ros2_control_node-1] [INFO] [1790581195.681113117] [controller_manager]: Using Steady (Monotonic) clock for triggering controller manager cycles.
+[ros2_control_node-1] [INFO] [1790581195.698838540] [controller_manager]: Subscribing to '/robot_description' topic for robot description.
+[ros2_control_node-1] [INFO] [1790581195.699397113] [controller_manager]: update rate is 10 Hz
+[ros2_control_node-1] [INFO] [1790581195.699449835] [controller_manager]: Overruns handling is : enabled
+[ros2_control_node-1] [INFO] [1790581195.699472057] [controller_manager]: Spawning controller_manager RT thread with scheduler priority: 50
+[ros2_control_node-1] [WARN] [1790581195.699863927] [controller_manager]: Could not enable FIFO RT scheduling policy: with error number <1>(Operation not permitted). See [https://control.ros.org/master/doc/ros2_control/controller_manager/doc/userdoc.html] for details on how to enable realtime scheduling.
+[ros2_control_node-1] [INFO] [1790581195.895846580] [controller_manager]: Received robot description from topic.
+[ros2_control_node-1] [INFO] [1790581195.895952432] [controller_manager]: Enforcing command limits is disabled. Command limits from URDF will be ignored.
+[ros2_control_node-1] [INFO] [1790581195.900430051] [controller_manager]: Loading hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790581195.901918455] [controller_manager]: Loaded hardware 'oroha_base' from plugin 'mock_components/GenericSystem'
+[ros2_control_node-1] [INFO] [1790581195.902115214] [controller_manager]: Initialize hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790581195.938046485] [controller_manager]: Successful initialization of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790581195.938436670] [controller_manager]: Activating component 'oroha_base'.
+[ros2_control_node-1] [INFO] [1790581195.938483632] [resource_manager]: 'configure' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790581195.938513244] [resource_manager]: Successful 'configure' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790581195.938539373] [resource_manager]: 'activate' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790581195.938577169] [resource_manager]: Successful 'activate' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790581195.938843928] [controller_manager]: Registering statistics for : oroha_base
+[ros2_control_node-1] [INFO] [1790581195.939097372] [controller_manager]: Resource Manager has been successfully initialized. Starting Controller Manager services...
+[spawner-3] [WARN] [1790581196.314249327] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[spawner-3] [WARN] [1790581196.314294438] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+[spawner-4] [WARN] [1790581196.383611875] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[spawner-4] [WARN] [1790581196.383646116] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+[spawner-3] [INFO] [1790581196.462676754] [spawner_joint_state_broadcaster]: waiting for service /controller_manager/list_controllers to become available...
+[ros2_control_node-1] [INFO] [1790581199.717661235] [controller_manager]: Loading controller : 'joint_state_broadcaster' of type 'joint_state_broadcaster/JointStateBroadcaster'
+[ros2_control_node-1] [INFO] [1790581199.717747679] [controller_manager]: Loading controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1790581199.724072942] [controller_manager]: Controller 'joint_state_broadcaster' node arguments: --ros-args --params-file /home/oroha/oroha_claude/install/oroha_bringup/share/oroha_bringup/config/oroha_controllers.yaml 
+[spawner-3] [INFO] [1790581199.804517077] [spawner_joint_state_broadcaster]: Loaded joint_state_broadcaster
+[ros2_control_node-1] [INFO] [1790581199.806945738] [controller_manager]: Configuring controller: 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1790581199.807203589] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published
+[ros2_control_node-1] [INFO] [1790581199.905180777] [controller_manager]: Activating controllers: [ joint_state_broadcaster ]
+[ros2_control_node-1] [INFO] [1790581200.001977634] [controller_manager]: Successfully switched controllers!
+[spawner-3] [INFO] [1790581200.104498830] [spawner_joint_state_broadcaster]: Configured and activated joint_state_broadcaster
+[INFO] [spawner-3]: process has finished cleanly [pid 35118]
+[ros2_control_node-1] [INFO] [1790581200.494935399] [controller_manager]: Loading controller : 'diff_cont' of type 'diff_drive_controller/DiffDriveController'
+[ros2_control_node-1] [INFO] [1790581200.495019122] [controller_manager]: Loading controller 'diff_cont'
+[ros2_control_node-1] [INFO] [1790581200.498606169] [controller_manager]: Controller 'diff_cont' node arguments: --ros-args --params-file /home/oroha/oroha_claude/install/oroha_bringup/share/oroha_bringup/config/oroha_controllers.yaml 
+[spawner-4] [INFO] [1790581200.622494262] [spawner_diff_cont]: Loaded diff_cont
+[ros2_control_node-1] [INFO] [1790581200.625574384] [controller_manager]: Configuring controller: 'diff_cont'
+[ros2_control_node-1] [INFO] [1790581200.705502076] [controller_manager]: Activating controllers: [ diff_cont ]
+[ros2_control_node-1] [INFO] [1790581200.801924915] [controller_manager]: Successfully switched controllers!
+[spawner-4] [INFO] [1790581200.904028964] [spawner_diff_cont]: Configured and activated diff_cont
+[INFO] [spawner-4]: process has finished cleanly [pid 35119]
+[ros2_control_node-1] [WARN] [1790581201.204761771] [diff_cont]: Velocity command timed out. Braking.
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [robot_state_publisher-2]: sending signal 'SIGINT' to process[robot_state_publisher-2]
+[INFO] [ros2_control_node-1]: sending signal 'SIGINT' to process[ros2_control_node-1]
+[ros2_control_node-1] [INFO] [1790581201.881541439] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[robot_state_publisher-2] [INFO] [1790581201.881612365] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-1] [INFO] [1790581201.881681402] [controller_manager]: Shutdown request received....
+[ros2_control_node-1] [INFO] [1790581201.881774031] [controller_manager]: Shutting down all controllers in the controller manager.
+[ros2_control_node-1] [INFO] [1790581201.881818235] [controller_manager]: Deactivating controller 'diff_cont'
+[ros2_control_node-1] [INFO] [1790581201.881966290] [controller_manager]: Shutting down controller 'diff_cont'
+[ros2_control_node-1] [INFO] [1790581201.882179345] [controller_manager]: Deactivating controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1790581201.882241678] [controller_manager]: Shutting down controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1790581201.882331937] [resource_manager]: 'deactivate' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790581201.882366585] [resource_manager]: Successful 'deactivate' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790581201.882375197] [resource_manager]: 'shutdown' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790581201.882382363] [resource_manager]: Successful 'shutdown' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790581201.882435659] [controller_manager]: Shutting down the controller manager.
+[ros2_control_node-1] [ERROR] [1790581201.882657714] [controller_manager.pal_statistics]: Exception in publisher thread: context cannot be slept with because it's invalid!. Aborting!
+[ros2_control_node-1] [ERROR] [1790581201.884121230] [controller_manager.pal_statistics]: Exception in publisher thread: context cannot be slept with because it's invalid!. Aborting!
+[ros2_control_node-1] [INFO] [1790581201.901844783] [controller_manager.pal_statistics]: Async messages lost 0
+[ros2_control_node-1] [INFO] [1790581201.901870801] [controller_manager.pal_statistics]: publish_async_failures_ 0
+[ros2_control_node-1] [INFO] [1790581201.903384001] [controller_manager.pal_statistics]: Async messages lost 0
+[ros2_control_node-1] [INFO] [1790581201.903403149] [controller_manager.pal_statistics]: publish_async_failures_ 0
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 35117]
+[INFO] [ros2_control_node-1]: process has finished cleanly [pid 35116]

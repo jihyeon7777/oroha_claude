@@ -1,0 +1,56 @@
+captured_utc: '2026-09-28T07:37:02Z'
+captured_local: 2026-09-28 16:37:02 KST
+timezone: Asia/Seoul
+chrony_tracking:
+- 'Reference ID    : 0327B041 (ec2-3-39-176-65.ap-northeast-2.compute.amazonaws.com)'
+- 'Stratum         : 3'
+- 'Ref time (UTC)  : Mon Sep 28 07:34:10 2026'
+- 'System time     : 0.000060303 seconds slow of NTP time'
+- 'Last offset     : +0.000157878 seconds'
+- 'RMS offset      : 0.000809321 seconds'
+host:
+  hostname: pi
+  os: Linux-6.8.0-1064-raspi-aarch64-with-glibc2.39
+  kernel: 6.8.0-1064-raspi
+  python: 3.12.3
+workspace:
+  path: /home/oroha/oroha_claude
+  head: 61455b33849a00f4f38e7e8c472be1fae04b1844
+  describe: 61455b3-dirty
+  branch: main
+  dirty: true
+external:
+  mdrobot_motor_driver:
+    head: c5c1f3f5613bd72a607d0724e8bc58902497b720
+    describe: v1.4.0
+    branch: HEAD
+    dirty: false
+  um7_driver:
+    head: 9a342584bf985d9e5af265d99aa64bb3eb47f29f
+    describe: 9a34258
+    branch: HEAD
+    dirty: false
+patches_applied: []
+firmware:
+  file: firmware/pico/main.py
+  sha256: bace95054b5498fcc5d8acb95ff797909c4857f53977f9990579aca3b7884483
+calibration:
+  sensing-20260828.yaml: sensing-20260828
+  wheel-20260909.yaml: wheel-20260909
+config_sha256:
+  src/oroha_bringup/config/oroha_controllers.yaml: b5fdbd197ce95ceaa3b968b278b39757807ad3984591266b0690f73d717b68b8
+  src/oroha_bringup/config/power.yaml: d57d7cc647e19552b1e21cce296b0066147026eaf9350d85ba8ed6a8863e2963
+  src/oroha_bringup/config/um7.yaml: a52d09b120afe871938d2413dcdddc004ea479c7da145280c2c449f9563e945e
+  src/oroha_description/urdf/oroha.urdf.xacro: f8b28509dde09192c041a190871b497769302f74c180adfa2e6e1a3d2ab78b83
+  src/oroha_description/urdf/oroha.ros2_control.xacro: b47be3c105e696da90b8e1f77e9313bd2654f05cdf98bb5e6f1a680bb12eb11a
+ros_packages:
+  ros2_control: 4.48.0
+  ros2_controllers: 4.42.1
+  diff_drive_controller: 4.42.1
+  hardware_interface: 4.48.0
+  controller_manager: 4.48.0
+  rosbag2: 0.26.11
+  xacro: 2.1.1
+ros_distro: jazzy
+ros_domain_id: '42'
+rmw: rmw_fastrtps_cpp (default)

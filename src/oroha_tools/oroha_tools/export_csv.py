@@ -23,7 +23,7 @@ from pathlib import Path
 import yaml
 
 TOPIC_FILES = {
-    "/diff_cont/cmd_vel": "cmd_vel", "/diff_cont/odom": "odom", "/joint_states": "joint_states",
+    "/diff_cont/cmd_vel": "cmd_vel", "/diff_cont/cmd_vel_out": "cmd_vel_out", "/diff_cont/odom": "odom", "/joint_states": "joint_states",
     "/oroha_power/sample": "power", "/oroha_power/battery": "battery", "/imu/data": "imu",
     "/imu/mag": "mag", "/imu/temperature": "temperature", "/oroha_experiment/event": "events",
     "/oroha_experiment/status": "status", "/diagnostics": "diagnostics",
@@ -138,15 +138,21 @@ def export(run_dir: Path, out: Path) -> dict:
     meta = yaml.safe_load(open(run_dir / "meta.yaml")) if (run_dir / "meta.yaml").exists() else {}
     out.mkdir(parents=True, exist_ok=True)
 
-    # pass 1: find START (bag receive time) so t is run-relative
+    # pass 1: t = 0 at THIS run's START, taken from the event's header stamp (publish
+    # time). The event topic is transient_local, so a late-joining recorder receives
+    # older runs' events and receives START late — its bag receive time is not the
+    # start time (T20260928-03).
+    run_id = meta.get("run_id", run_dir.name)
     t_start_ns = None
     first_ns = None
     for topic, tname, t_ns, msg in read_bag(bag_dir):
         first_ns = first_ns if first_ns is not None else t_ns
-        if topic == "/oroha_experiment/event" and msg.event == "START":
-            t_start_ns = t_ns
+        if (topic == "/oroha_experiment/event" and msg.event == "START"
+                and msg.run_id == run_id):
+            t_start_ns = _stamp_ns(msg)
             break
     t0 = t_start_ns if t_start_ns is not None else (first_ns or 0)
+    foreign_events = 0
 
     w = Writers(out)
     odom_samples = []
@@ -172,7 +178,7 @@ def export(run_dir: Path, out: Path) -> dict:
         name = TOPIC_FILES.get(topic)
         if name is None:
             continue
-        if name == "cmd_vel":
+        if name in ("cmd_vel", "cmd_vel_out"):
             w.row(name, {**base, "v": msg.twist.linear.x, "w": msg.twist.angular.z})
         elif name == "odom":
             p = msg.pose.pose.position
@@ -239,6 +245,10 @@ def export(run_dir: Path, out: Path) -> dict:
         elif name == "temperature":
             w.row(name, {**base, "temperature_c": msg.temperature})
         elif name == "events":
+            if msg.run_id != run_id:
+                foreign_events += 1           # cached events of earlier runs (transient_local)
+                continue
+            base["t"] = round((s_ns - t0) * 1e-9, 6) if s_ns else base["t"]   # publish time
             w.row(name, {**base, "run_id": msg.run_id, "event": msg.event, "detail": msg.detail,
                          "repeat_index": msg.repeat_index, "segment_index": msg.segment_index,
                          "t_run": msg.t_run})
@@ -269,6 +279,8 @@ def export(run_dir: Path, out: Path) -> dict:
         "run_id": meta.get("run_id", run_dir.name),
         "status": meta.get("status"),
         "t_start_found": t_start_ns is not None,
+        "t0_method": "header stamp of this run's START event" if t_start_ns is not None else "first bag message",
+        "foreign_events_skipped": foreign_events,
         "message_counts": w.counts,
         "odometry": None if len(odom_samples) < 2 else odom_summary(odom_samples, ideal_end, gt),
         "power": None if n_power == 0 else {
@@ -296,14 +308,17 @@ def export(run_dir: Path, out: Path) -> dict:
 
 COLUMNS_MD = """# CSV columns
 
-Time bases (all rows): `t` = seconds since the run's START event (bag receive time; negative
-before START; falls back to the first message when no START exists), `ros_t_ns` = bag receive
-time (ROS clock, ns), `stamp_ns` = message header stamp (ns; publisher's clock — for
+Time bases (all rows): `t` = seconds since this run's START event, measured from its header
+stamp (publish time; negative before START; falls back to the first message when no START
+exists) against each row's bag receive time — events.csv uses the event's own publish time;
+`ros_t_ns` = bag receive time (ROS clock, ns; for transient_local topics such as the events a
+late-joining recorder receives them late, so do not use it for events), `stamp_ns` = message header stamp (ns; publisher's clock — for
 oroha_power the host receive time, for um7 the receive time, for controllers the update time).
 
 | file | columns | units / notes |
 |---|---|---|
 | cmd_vel.csv | v, w | m/s, rad/s commanded body velocity (TwistStamped on /diff_cont/cmd_vel) |
+| cmd_vel_out.csv | v, w | m/s, rad/s command actually applied by diff_cont after its speed/acceleration limits |
 | odom.csv | x, y, yaw, vx, wz | m, m, rad (odom frame), m/s, rad/s — wheel odometry, no-slip assumption |
 | joint_states.csv | <joint>_pos, _vel, _eff | rad, rad/s at the MOTOR SHAFT (34.615:1 to the wheel), A (MD400 internal, unsigned) |
 | power.csv | device_stamp_ns, seq, t_us, n_rounds, gp2x_mean/min/max, flags, zero_valid, overrun | Pico window (20 ms): raw 12-bit ADC; t_us = device monotonic us; device_stamp_ns = t_us mapped to ROS time |

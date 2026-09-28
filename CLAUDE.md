@@ -98,5 +98,5 @@ oroha_versions --out records/tests/<ID>/                              # 시험�
 - E-stop 해제 규칙은 E1 시험(`direction_check --sec 10`) 결과로 확정한다(`docs/operation.md`). 그 전까지: 해제 전에 명령 0 확인(런치 종료 또는 `oroha_md_stop`).
 - 속도 명령 전에 `enable()`이 필요하다(플러그인은 `auto_enable`). `use_limit_sw`는 0 고정(1이면 왼쪽 reverse 바퀴가 무알람 정지; 공장값 1이라 `direction_check`도 0을 쓴다).
 - preflight·direction_check·wheel_push는 포트를 연 다른 프로세스가 있으면 거부한다 — 런치 전에 쓴다. 모든 프로세스는 `source setup/env.sh`(ROS_DOMAIN_ID=42)로 띄운다.
-- 노드는 `(setsid ros2 run … > log 2>&1 &)`로 띄우고, 정리는 `for p in $(pgrep -f '^/usr/bin/python3 .*[p]attern'); do kill $p; done`처럼 셸 자신의 명령줄과 일치하지 않는 패턴으로만 한다(`pkill -f`는 셸을 죽인다). 시험 전 `ros2 node list`로 중복 노드가 없는지 본다.
+- Claude가 띄우는 장시간 프로세스(런치·노드)는 **`pid=$(setup/bg.sh <log> <명령…>)`**로 띄우고 **`kill -INT $pid`**로 끈다(사용자 Ctrl-C와 같음). 비대화형 셸의 백그라운드 작업은 SIGINT가 무시로 상속돼 `ros2 launch`가 `kill -INT`를 무시하고, **SIGTERM을 받으면 자식을 정리하지 않고 죽는다**(런치 안전망도 못 돎) — 런치에 SIGTERM 금지. 찾기는 `pgrep -f '[p]attern'`처럼 셸 자신과 일치하지 않는 패턴으로만(`pkill -f` 금지). 시험 전 `ros2 node list`로 중복 노드가 없는지 본다.
 - 시험 하나가 끝나면 `records/tests/tests.csv`에 행을 더하고 `records/tests/T<KST 날짜>-<NN>.md`(+ `records/tests/<ID>/`에 `oroha_versions --out`·로그)를 남긴다. 상태 어휘: 통과/실패/중단/미검증, 종결/열림/다시 열림/재현 실패/미수렴. ID·좌우·부호는 [하드웨어_확인표.md](하드웨어_확인표.md) §2·§5에 시험 ID와 함께 적는다.

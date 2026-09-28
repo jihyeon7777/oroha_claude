@@ -1,0 +1,22 @@
+Starting >>> mdrobot
+Starting >>> mdrobot_cpp
+Starting >>> oroha_power
+Finished <<< mdrobot [1.66s]
+Finished <<< oroha_power [2.01s]
+Starting >>> oroha_tools
+Finished <<< mdrobot_cpp [2.42s]
+Starting >>> mdrobot_ros2_control
+Finished <<< mdrobot_ros2_control [0.22s]
+Starting >>> oroha_description
+Finished <<< oroha_tools [1.25s]
+Starting >>> oroha_experiment
+Finished <<< oroha_description [1.18s]
+Starting >>> oroha_bringup
+Finished <<< oroha_experiment [1.35s]
+Finished <<< oroha_bringup [1.09s]
+
+Summary: 8 packages finished [5.22s]
+
+real	0m5.623s
+user	0m8.817s
+sys	0m1.525s

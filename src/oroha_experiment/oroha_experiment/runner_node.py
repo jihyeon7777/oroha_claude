@@ -483,11 +483,31 @@ class ExperimentRunner(Node):
             if self.bag_proc.poll() is not None:
                 return False
             if out.exists() and any(out.glob("*.mcap")):
-                self.event(ExperimentEvent.BAG_STARTED, str(out))
-                return True
+                break
             time.sleep(0.1)
-        self.get_logger().error("bag directory did not appear within 10 s")
-        return False
+        else:
+            self.get_logger().error("bag directory did not appear within 10 s")
+            return False
+        # The mcap file exists before the recorder has discovered every publisher: on
+        # 2026-09-28 (T20260928-03) it subscribed to this node's own topics 3.2 s after
+        # START and the first seconds of cmd_vel were lost. Wait until the recorder
+        # has a subscription on every bag topic that currently has a publisher.
+        missing = self._recorder_missing(topics, timeout=15.0)
+        if missing:
+            self.get_logger().error("bag recorder did not subscribe to %s" % missing)
+            return False
+        self.event(ExperimentEvent.BAG_STARTED, str(out))
+        return True
+
+    def _recorder_missing(self, topics, timeout: float) -> list:
+        t0 = time.monotonic()
+        while True:
+            live = [t for t in topics if self.count_publishers(t) > 0]
+            missing = [t for t in live
+                       if not any("rosbag2" in i.node_name for i in self.get_subscriptions_info_by_topic(t))]
+            if not missing or time.monotonic() - t0 > timeout:
+                return missing
+            time.sleep(0.1)
 
     def _stop_bag(self):
         if self.bag_proc is None:

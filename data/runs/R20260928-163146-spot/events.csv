@@ -1,0 +1,9 @@
+stamp_ns,t_run,event,segment_index,detail
+1790580709898703171,-1.0,ARMED,-1,"spot {'angle_deg': 360.0, 'post_rest': 1.0, 'pre_rest': 1.0, 'turn_w': 0.5}"
+1790580710603340219,-1.0,BAG_STARTED,-1,/home/oroha/oroha_claude/data/runs/R20260928-163146-spot/bag
+1790580710613462938,0.0065,START,-1,t_total=15.07
+1790580710614773768,0.0078,SEGMENT,0,rest_pre
+1790580711621794625,1.0148,SEGMENT,1,spot
+1790580724721725536,14.1147,SEGMENT,2,rest_post
+1790580725721898093,15.1149,END,2,profile complete
+1790580727047770814,-1.0,BAG_STOPPED,-1,rc=0

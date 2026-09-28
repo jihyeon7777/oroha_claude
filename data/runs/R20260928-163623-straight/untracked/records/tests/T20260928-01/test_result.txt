@@ -1,0 +1,15 @@
+build/mdrobot_cpp/test_results/mdrobot_cpp/test_frame.gtest.xml: 22 tests, 0 errors, 0 failures, 0 skipped
+build/mdrobot_cpp/test_results/mdrobot_cpp/test_protocol.gtest.xml: 14 tests, 0 errors, 0 failures, 0 skipped
+build/mdrobot_cpp/test_results/mdrobot_cpp/test_status.gtest.xml: 12 tests, 0 errors, 0 failures, 0 skipped
+build/mdrobot_cpp/test_results/mdrobot_cpp/test_units.gtest.xml: 11 tests, 0 errors, 0 failures, 0 skipped
+build/mdrobot_ros2_control/Testing/20260928-0727/Test.xml: 1 test, 0 errors, 0 failures, 0 skipped
+build/mdrobot_ros2_control/test_results/mdrobot_ros2_control/test_plugin_load.gtest.xml: 2 tests, 0 errors, 0 failures, 0 skipped
+build/oroha_bringup/Testing/20260928-0727/Test.xml: 1 test, 0 errors, 0 failures, 0 skipped
+build/oroha_bringup/test_results/oroha_bringup/test_config.xunit.xml: 10 tests, 0 errors, 0 failures, 0 skipped
+build/oroha_description/Testing/20260928-0727/Test.xml: 1 test, 0 errors, 0 failures, 0 skipped
+build/oroha_description/test_results/oroha_description/test_xacro.xunit.xml: 6 tests, 0 errors, 0 failures, 0 skipped
+build/oroha_experiment/pytest.xml: 13 tests, 0 errors, 0 failures, 0 skipped
+build/oroha_power/pytest.xml: 6 tests, 0 errors, 0 failures, 0 skipped
+build/oroha_tools/pytest.xml: 7 tests, 0 errors, 0 failures, 0 skipped
+
+Summary: 316 tests, 0 errors, 0 failures, 0 skipped

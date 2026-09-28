@@ -6,7 +6,7 @@ if [ -f "$_oroha_ws/install/setup.bash" ]; then
 fi
 export OROHA_WS="$_oroha_ws"
 export ROS_DOMAIN_ID=42
-export ROS_LOCALHOST_ONLY=0
+unset ROS_LOCALHOST_ONLY          # deprecated in Jazzy; discovery range defaults to SUBNET (GT laptop on the WLAN)
 # If the GT laptop cannot be discovered over WiFi (multicast blocked), list it here:
 # export ROS_STATIC_PEERS=192.168.5.xxx
 export PATH="$HOME/.local/bin:$PATH"   # mpremote

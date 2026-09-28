@@ -1,0 +1,115 @@
+run_id: R20260928-163109-straight
+series_id: S20260928-163108
+repeat_index: 0
+repeats: 1
+path: straight
+params:
+  length: 1.0
+  post_rest: 1.0
+  pre_rest: 1.0
+  v: 0.2
+profile:
+  name: straight
+  params:
+    length: 1.0
+    v: 0.2
+  duration_s: 7.667
+  limits:
+    v_max: 0.35
+    w_max: 1.2
+    accel: 0.3
+    ang_accel: 1.0
+    wheel_v_max: 1.0
+    half_track: 0.2255
+  segments:
+  - label: rest_pre
+    kind: rest
+    duration: 1.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+  - label: straight
+    kind: straight
+    duration: 5.666666666666667
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+  - label: rest_post
+    kind: rest
+    duration: 1.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+timezone: KST
+armed_utc: '2026-09-28T07:31:12Z'
+armed_local: 2026-09-28 16:31:12 KST
+status: DONE
+conditions:
+  updated_utc: '2026-09-28T07:31:08Z'
+  rig_state: mock
+  surface: mock
+versions:
+  workspace:
+    path: /home/oroha/oroha_claude
+    head: 61455b33849a00f4f38e7e8c472be1fae04b1844
+    describe: 61455b3-dirty
+    branch: main
+    dirty: true
+  external:
+    mdrobot_motor_driver:
+      head: c5c1f3f5613bd72a607d0724e8bc58902497b720
+      describe: v1.4.0
+      branch: HEAD
+      dirty: false
+    um7_driver:
+      head: 9a342584bf985d9e5af265d99aa64bb3eb47f29f
+      describe: 9a34258
+      branch: HEAD
+      dirty: false
+  firmware_sha256: bace95054b5498fcc5d8acb95ff797909c4857f53977f9990579aca3b7884483
+  calibration:
+    sensing-20260828.yaml: sensing-20260828
+    wheel-20260909.yaml: wheel-20260909
+  uncommitted_diff_bytes: 4565
+  untracked_files: 20
+cmd_topic: /diff_cont/cmd_vel
+cmd_rate_hz: 20.0
+bag:
+  path: bag
+  bytes: 260891
+  topics:
+  - /diff_cont/cmd_vel
+  - /diff_cont/cmd_vel_out
+  - /diff_cont/odom
+  - /joint_states
+  - /dynamic_joint_states
+  - /tf
+  - /tf_static
+  - /robot_description
+  - /oroha_power/sample
+  - /oroha_power/battery
+  - /oroha_power/calibration_event
+  - /imu/data
+  - /imu/mag
+  - /imu/temperature
+  - /diagnostics
+  - /oroha_experiment/event
+  - /oroha_experiment/status
+  - /rosout
+manual_gt: null
+notes: []
+rig_state: mock
+arena:
+  room_m: 3.0
+  margin_m: 0.3
+  needed_m:
+  - 1.72
+  - 0.72
+  placement: wall
+  start_offset_m:
+  - 0.66
+  - 0.66
+start_utc: '2026-09-28T07:31:13Z'
+start_ros_ns: 1790580673379938840
+end_utc: '2026-09-28T07:31:22Z'
+t_run_end: 9.007

@@ -1,0 +1,4 @@
+odom before: x: 0.0 y: 0.0 
+published 30 x (0.2 m/s) at 10 Hz = 3.0 s
+odom vx right after: 2.711641990907343e-06
+odom after:  x: 0.6800070130287731 y: 0.0 

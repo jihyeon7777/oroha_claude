@@ -1,0 +1,12 @@
+[WARN] [1790580983.022232368] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[WARN] [1790580983.022414793] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+straight {'length': 2.0, 'v': 0.2, 'pre_rest': 1.0, 'post_rest': 1.0}: 12.7 s, path 2.00 m, ideal end x=2.00 y=0.00 yaw=0 deg
+
+[1/1] armed R20260928-163623-straight -> /home/oroha/oroha_claude/data/runs/R20260928-163623-straight
+   armed: 12.7 s profile, 3 segments; room check not applied (mock)
+   ARMED       0.0/ 12.7 s [-1]            v=+0.00 w=+0.00 bag=on      RUNNING     0.4/ 12.7 s [ 0] rest_pre   v=+0.00 w=+0.00 bag=on      RUNNING     1.0/ 12.7 s [ 1] straight   v=+0.00 w=+0.00 bag=on      RUNNING     1.4/ 12.7 s [ 1] straight   v=+0.12 w=+0.00 bag=on      RUNNING     2.0/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     2.4/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     3.0/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     3.6/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     4.0/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     4.6/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     5.2/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     5.8/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     5.8/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     5.8/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     5.8/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     5.8/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on      RUNNING     5.8/ 12.7 s [ 1] straight   v=+0.20 w=+0.00 bag=on   
+   no runner status for 3 s — runner stopped or crashed (check its log / meta.yaml)
+   -> RUNNER LOST
+
+series S20260928-163623
+  R20260928-163623-straight  RUNNER LOST
