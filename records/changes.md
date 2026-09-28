@@ -34,3 +34,4 @@
 - T20260928-01 빌드·테스트 관문 통과(11 패키지 56.5 s 경고 0, 테스트 316 실패 0 — 패치 없는 v1.4.0이 ros2_control 4.48에서 그대로 동작).
 - T20260928-02 mock bringup 통과(10 Hz, 단일 TF 루트, diff_cont 구독 QoS BEST_EFFORT 확인, 명령 0.68 m 예측 일치). 런치를 Claude 셸에서 띄우면 SIGINT 무시·SIGTERM 시 자식 미정리 → `setup/bg.sh` 추가, 규칙 문서화.
 - T20260928-03 실행기 mock: bag 녹화기 늦은 구독(3.15 s)·transient_local 캐시 이벤트로 추출 t=0이 틀리던 결함 수정(녹화기 구독 대기, run_id의 START header stamp 사용). SIGINT·Ctrl-C 정리 경로, CLI "RUNNER LOST", cmd_vel_out 추출 추가. env.sh에서 사용 중단된 ROS_LOCALHOST_ONLY 제거.
+- T20260928-05 방향 점검 통과: id1 오른쪽 전진·id2 왼쪽 후진(사용자 관측, 500 rpm). 100 rpm은 바퀴 2.9 rpm이라 육안 판별 불가 → direction_check rpm 상한 600.

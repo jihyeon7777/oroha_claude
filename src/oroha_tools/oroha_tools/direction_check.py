@@ -31,7 +31,7 @@ from pathlib import Path
 from oroha_tools.ws import records_dir
 
 MD_PORT = "/dev/oroha_md400"
-RPM_CAP = 300
+RPM_CAP = 600         # motor rpm; lifted visual checks (500 rpm = 14 wheel rpm, 0.19 m/s)
 SEC_CAP = 10.0
 EXPECTED = {1: ("right", "forward"), 2: ("left", "backward")}
 STOP_RPM = 5          # |rpm| below this while commanded = "not turning"
