@@ -27,6 +27,21 @@ STATUS_VOCAB = {"통과", "실패", "중단", "미검증"}
 VERDICT_VOCAB = {"종결", "열림", "다시 열림", "재현 실패", "미수렴"}
 
 
+def _rig_state(meta: dict) -> str:
+    return str(meta.get("rig_state") or (meta.get("conditions") or {}).get("rig_state") or "")
+
+
+def default_usable(meta: dict) -> bool:
+    """Only completed runs on the ground (real hardware) are paper data by default."""
+    return meta.get("status") == "DONE" and _rig_state(meta) == "on_ground"
+
+
+def default_reason(meta: dict) -> str:
+    if default_usable(meta):
+        return ""
+    return "status %s, rig_state %s" % (meta.get("status", "?"), _rig_state(meta) or "unset")
+
+
 def load_existing(path: Path) -> dict:
     if not path.exists():
         return {}
@@ -57,8 +72,8 @@ def run_row(run: Path, old: dict) -> dict:
         "bag_bytes": (meta.get("bag") or {}).get("bytes", ""),
         "csv_exported": (run / "csv" / "summary.yaml").exists(),
         "test_id": old.get("test_id", ""),
-        "usable": old.get("usable", "yes" if meta.get("status") == "DONE" else "no"),
-        "exclude_reason": old.get("exclude_reason", "" if meta.get("status") == "DONE" else str(meta.get("status", ""))),
+        "usable": old.get("usable", "yes" if default_usable(meta) else "no"),
+        "exclude_reason": old.get("exclude_reason", default_reason(meta)),
         "note": old.get("note", ""),
     }
     return row

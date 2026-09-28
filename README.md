@@ -27,7 +27,7 @@ oroha_paper_export --runs usable                     # paper_export/<ts>/ + CHEC
 | `oroha.repos` | 외부 소스 고정: `TaesuYim/mdrobot_motor_driver` v1.4.0, `jihyeon7777/um7_driver` |
 | `src/external/` | 위 소스의 checkout (커밋하지 않음). 수정은 `patches/`로만 |
 | `src/oroha_*` | OROHA 패키지: msgs · description · bringup · power · teleop · experiment · tools |
-| `firmware/pico/` | Pico 계측 펌웨어(MicroPython, `oroha-bench-1.1`)와 sha256 |
+| `firmware/pico/` | Pico 계측 펌웨어(MicroPython, `oroha-bench-1.2`)와 sha256, 1.1은 `archive/` |
 | `setup/` | 시스템 설치·환경 스크립트, udev·chrony 설정 |
 | `records/` | 개발 기록: 변경·결정·시험 목록·교정값·preflight 결과·논문용 요약 |
 | `data/runs/<RUN_ID>/` | 실험 실행별 메타·이벤트·버전(커밋) + bag·csv(커밋 안 함) |
@@ -36,4 +36,4 @@ oroha_paper_export --runs usable                     # paper_export/<ts>/ + CHEC
 
 ## 안전
 
-모터를 움직이는 시험은 **바퀴를 띄운 상태**에서 먼저 하고, E-stop이 손에 닿는 곳에 있어야 한다. MD400에는 통신 워치독이 없어 호스트가 멈추면 물리 E-stop만 로봇을 세운다. `use_limit_sw`는 0을 유지한다(1이면 왼쪽 바퀴의 음수 명령이 무알람 차단된다).
+모터를 움직이는 시험은 **바퀴를 띄운 상태**에서 먼저 하고, E-stop이 손에 닿는 곳에 있어야 한다. MD400에는 통신 워치독이 없어 호스트가 명령을 못 보내면 마지막 명령이 남는다 — 런치는 `ros2_control_node`가 끝나면 양쪽 MD400을 멈추고, 수동 정지는 `oroha_md_stop`. 모든 모션 명령은 스스로 끝나야 한다. `use_limit_sw`는 0을 유지한다(1이면 왼쪽 바퀴의 음수 명령이 무알람 차단된다). 자세한 규칙은 [CLAUDE.md](CLAUDE.md)와 [docs/operation.md](docs/operation.md).

@@ -367,7 +367,63 @@ def s_curve(radius: float, v: float, arc_deg: float = 180.0, first: str = "left"
                              "join": join, "dwell": dwell}, motion, limits, pre_rest, post_rest, d)
 
 
-PATHS = {"straight": straight, "circle": circle, "square": square, "s_curve": s_curve}
+def spot(angle_deg: float = 360.0, turn_w: float = 0.5, limits: Limits = Limits(),
+         pre_rest: float = 3.0, post_rest: float = 3.0) -> Profile:
+    """Turn in place through `angle_deg` (+ = ccw/left) at `turn_w` rad/s."""
+    _require(0.0, turn_w, limits)
+    seg = spot_segment(math.radians(angle_deg), turn_w, limits.ang_accel, "spot")
+    return _wrap("spot", {"angle_deg": angle_deg, "turn_w": turn_w}, [seg], limits,
+                 pre_rest, post_rest, 0.0)
+
+
+PATHS = {"straight": straight, "circle": circle, "square": square, "s_curve": s_curve,
+         "spot": spot}
+
+
+@dataclass
+class Footprint:
+    """Axis-aligned room space the run needs, in the robot's START frame (x forward, y left)."""
+    xmin: float
+    xmax: float
+    ymin: float
+    ymax: float
+
+    @property
+    def size(self) -> Tuple[float, float]:
+        return self.xmax - self.xmin, self.ymax - self.ymin
+
+    def fits(self, arena: float, margin: float) -> bool:
+        """Fits with the path axes parallel to the walls."""
+        dx, dy = self.size
+        return dx <= arena - 2 * margin + 1e-9 and dy <= arena - 2 * margin + 1e-9
+
+    def fits_diagonal(self, arena: float, margin: float) -> bool:
+        """Fits when the start heading points along the room diagonal (45 deg)."""
+        dx, dy = self.size
+        return (dx + dy) / math.sqrt(2.0) <= arena - 2 * margin + 1e-9
+
+    def placement(self, arena: float, margin: float) -> str:
+        """'wall', 'diagonal' or 'none' (does not fit)."""
+        if self.fits(arena, margin):
+            return "wall"
+        if self.fits_diagonal(arena, margin):
+            return "diagonal"
+        return "none"
+
+    def start_offset(self, margin: float) -> Tuple[float, float]:
+        """Where to put the robot centre, measured from the room corner it faces away
+        from: (distance from the wall behind, distance from the wall on the right)."""
+        return margin - self.xmin, margin - self.ymin
+
+
+def footprint(profile: Profile, half_diag: float, dt: float = DT_DEFAULT) -> Footprint:
+    """Ideal path swept by a circle of radius `half_diag` (robot body half-diagonal).
+    Open-loop runs drift, which is what the arena margin is for."""
+    poses = profile.ideal_path(dt)
+    xs = [p.x for p in poses]
+    ys = [p.y for p in poses]
+    return Footprint(min(xs) - half_diag, max(xs) + half_diag,
+                     min(ys) - half_diag, max(ys) + half_diag)
 
 
 def build(name: str, **params) -> Profile:
@@ -390,6 +446,10 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--arc-deg", type=float, default=180.0)
     ap.add_argument("--first", default="left")
     ap.add_argument("--join", default="continuous")
+    ap.add_argument("--angle-deg", type=float, default=360.0)
+    ap.add_argument("--half-diag", type=float, default=0.36, help="robot body half-diagonal [m]")
+    ap.add_argument("--arena", type=float, default=3.0)
+    ap.add_argument("--margin", type=float, default=0.3)
     ap.add_argument("--dt", type=float, default=DT_DEFAULT)
     ap.add_argument("--csv", help="write samples + ideal pose to this CSV")
     a = ap.parse_args(list(argv) if argv is not None else None)
@@ -401,6 +461,8 @@ def main(argv: Iterable[str] | None = None) -> int:
         p = circle(a.radius, direction=a.direction, **common)
     elif a.path == "square":
         p = square(a.side, corner=a.corner, turn_w=a.turn_w, direction=a.direction, **common)
+    elif a.path == "spot":
+        p = spot(a.angle_deg, turn_w=a.turn_w)
     else:
         p = s_curve(a.radius, arc_deg=a.arc_deg, first=a.first, join=a.join, **common)
 
@@ -408,6 +470,14 @@ def main(argv: Iterable[str] | None = None) -> int:
     print(f"{p.name} {p.params}")
     print(f"duration {p.duration:.2f} s, path length {p.path_length(a.dt):.3f} m, "
           f"end pose x={end.x:.3f} y={end.y:.3f} yaw={math.degrees(end.yaw):.1f} deg")
+    fp = footprint(p, a.half_diag, a.dt)
+    dx, dy = fp.size
+    ox, oy = fp.start_offset(a.margin)
+    place = fp.placement(a.arena, a.margin)
+    msg = {"wall": f"fits along the walls; start {ox:.2f} m from the wall behind, {oy:.2f} m from the wall on the right",
+           "diagonal": "fits only along the room diagonal (start near a corner, heading to the opposite corner)",
+           "none": "DOES NOT FIT the room"}[place]
+    print(f"room needed {dx:.2f} x {dy:.2f} m (arena {a.arena} m, margin {a.margin} m, half-diag {a.half_diag} m): {msg}")
     for i, s in enumerate(p.segments):
         print(f"  [{i}] {s.label:10s} {s.kind:8s} {s.duration:6.2f} s  v={s.v_peak:+.3f} w={s.w_peak:+.3f} ramp={s.ramp:.2f}")
     if a.csv:

@@ -20,6 +20,7 @@ second line of defence; the physical E-stop the last.
 from __future__ import annotations
 
 import select
+import signal
 import sys
 import termios
 import time
@@ -29,6 +30,7 @@ import rclpy
 from geometry_msgs.msg import TwistStamped
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy
+from rclpy.signals import SignalHandlerOptions
 
 KEYMAP = {  # key -> (v_dir, w_dir)
     "w": (1, 0), "s": (-1, 0), "a": (0, 1), "d": (0, -1), "q": (1, 1), "e": (1, -1),
@@ -56,7 +58,8 @@ class DeadmanTeleop(Node):
         self.hold_arm, self.release_stop = float(g("hold_arm")), float(g("release_stop"))
         self.frame_id = str(g("frame_id"))
         self.pub = self.create_publisher(TwistStamped, str(g("cmd_topic")),
-                                         QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT))
+                                         # RELIABLE: compatible with any diff_cont subscription QoS
+                                         QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
         self.scale = 0.5
         self.target = (0.0, 0.0)
         self.cmd = [0.0, 0.0]
@@ -97,6 +100,7 @@ class DeadmanTeleop(Node):
             if self.last_key_t and now - self.last_key_t > grace and self.target != (0.0, 0.0):
                 self.target = (0.0, 0.0)
                 self.hold_armed = False
+                self.last_key_t = 0.0      # next press starts un-armed (0.8 s grace) — no stutter
                 self.stopped_reason = "released"
             for i, (tgt, up, down) in enumerate(((self.target[0], self.accel, self.decel),
                                                  (self.target[1], self.ang_accel, self.ang_accel))):
@@ -121,7 +125,9 @@ def main(args=None):
     if not sys.stdin.isatty():
         print("deadman_teleop needs a terminal (run it with ros2 run in a real shell)")
         return 2
-    rclpy.init(args=args)
+    # own SIGINT: with rclpy's handler the context dies before the zeros are published
+    rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
+    signal.signal(signal.SIGTERM, lambda *_: (_ for _ in ()).throw(KeyboardInterrupt()))
     node = DeadmanTeleop()
     fd = sys.stdin.fileno()
     saved = termios.tcgetattr(fd)
@@ -147,13 +153,18 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, saved)     # terminal first, whatever happens next
+        sent = 0
         for _ in range(5):
             node.cmd = [0.0, 0.0]
             node.hard_stop = True
-            node.step(time.monotonic(), period)
+            try:
+                node.step(time.monotonic(), period)
+                sent += 1
+            except Exception:  # noqa: BLE001
+                pass
             time.sleep(0.05)
-        termios.tcsetattr(fd, termios.TCSADRAIN, saved)
-        print("\nstopped (zeros sent)")
+        print("\nstopped (%d zero commands sent; diff_cont also times out after 0.5 s)" % sent)
         node.destroy_node()
         rclpy.try_shutdown()
     return 0

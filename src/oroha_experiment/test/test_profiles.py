@@ -104,3 +104,33 @@ def test_rows_and_csv(tmp_path):
 def test_cli_runs(capsys):
     assert P.main(["square", "--side", "1.0", "--v", "0.2"]) == 0
     assert "duration" in capsys.readouterr().out
+
+
+def test_spot_turns_in_place():
+    p = P.spot(360.0, turn_w=0.5)
+    e = _end(p)
+    assert math.hypot(e.x, e.y) < 1e-9
+    assert abs(e.yaw - 2.0 * math.pi) < 2e-3
+    assert p.path_length(DT) == 0.0
+    with pytest.raises(ValueError):
+        P.spot(360.0, turn_w=3.0)                  # > w_max
+
+
+def test_footprint_and_arena():
+    half = 0.36          # robot body half-diagonal (placeholder until measured)
+    fp = P.footprint(P.straight(2.0, 0.2), half)
+    assert fp.size == pytest.approx((2.0 + 2 * half, 2 * half), abs=3e-3)
+    # 3 m room, 0.3 m margins -> 2.4 m usable: a 2 m straight needs 2.72 m along a wall
+    assert fp.placement(3.0, 0.3) == "none"
+    assert P.footprint(P.straight(1.5, 0.2), half).placement(3.0, 0.3) == "wall"
+    assert P.footprint(P.straight(1.9, 0.2), half).placement(3.0, 0.3) == "diagonal"
+    # S at R0.6 needs 4R + body = 3.12 m; R0.4 fits along the walls
+    assert P.footprint(P.s_curve(0.6, 0.25), half).placement(3.0, 0.3) == "none"
+    assert P.footprint(P.s_curve(0.4, 0.2), half).placement(3.0, 0.3) == "wall"
+    assert P.footprint(P.circle(0.75, 0.3), half).placement(3.0, 0.3) == "wall"
+    assert P.footprint(P.spot(360.0), half).placement(3.0, 0.3) == "wall"
+    # start offset puts the whole footprint inside [margin, arena - margin]
+    fp = P.footprint(P.circle(0.75, 0.3, direction="cw"), half)
+    ox, oy = fp.start_offset(0.3)
+    assert fp.xmin + ox == pytest.approx(0.3) and fp.ymin + oy == pytest.approx(0.3)
+    assert fp.xmax + ox <= 2.7 + 1e-9 and fp.ymax + oy <= 2.7 + 1e-9

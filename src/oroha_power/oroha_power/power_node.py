@@ -29,15 +29,17 @@ from ament_index_python.packages import get_package_share_directory
 from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus, KeyValue
 from geometry_msgs.msg import Vector3Stamped
 from rclpy.callback_groups import MutuallyExclusiveCallbackGroup, ReentrantCallbackGroup
-from rclpy.executors import MultiThreadedExecutor
+from rclpy.executors import ExternalShutdownException, MultiThreadedExecutor
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
+from rclpy.signals import SignalHandlerOptions
 from rclpy.time import Time
 from sensor_msgs.msg import BatteryState
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 
 from oroha_msgs.msg import PowerSample
+from oroha_power.port_guard import describe, port_holders
 from oroha_power.protocol import (FLAG_BAD_MASK, FLAG_ZERO_VALID, Calibration, Frame,
                                   OffsetFilter, convert, flag_names, parse_data_line, parse_kv)
 
@@ -209,6 +211,14 @@ class OrohaPowerNode(Node):
                 self.ser = SimulatedPico(int(self.get_parameter("rate").value) or 50)
             else:
                 import serial
+                holders = port_holders(self.port)
+                if holders:
+                    # a preflight/bench tool is talking to the Pico; opening now would
+                    # interleave commands (X/Z/S) — retry in the reader loop
+                    self.get_logger().error("%s is open by %s — not opening (retry in 1 s)"
+                                            % (self.port, describe(holders)))
+                    self.ser = None
+                    return
                 self.ser = serial.Serial(self.port, self.baud, timeout=0.5)
                 time.sleep(0.3)
                 self.ser.reset_input_buffer()
@@ -461,14 +471,21 @@ class OrohaPowerNode(Node):
         super().destroy_node()
 
 
+def _raise_interrupt(signum, frame):
+    raise KeyboardInterrupt
+
+
 def main(args=None):
-    rclpy.init(args=args)
+    rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
+    import signal
+    signal.signal(signal.SIGINT, _raise_interrupt)
+    signal.signal(signal.SIGTERM, _raise_interrupt)
     node = OrohaPowerNode()
     ex = MultiThreadedExecutor(num_threads=3)
     ex.add_node(node)
     try:
         ex.spin()
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, ExternalShutdownException):
         pass
     finally:
         node.destroy_node()

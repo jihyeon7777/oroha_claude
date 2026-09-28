@@ -26,3 +26,6 @@ __pycache__/
 .idea/
 *.swp
 .DS_Store
+
+# hardware-test bags (records/tests/<ID>/ holds the committed notes and versions)
+/data/tests/*/bag/

@@ -29,11 +29,14 @@ import threading
 import time
 from pathlib import Path
 
+import atexit
+
 import rclpy
 import yaml
 from geometry_msgs.msg import TwistStamped
 from rclpy.callback_groups import MutuallyExclusiveCallbackGroup, ReentrantCallbackGroup
-from rclpy.executors import MultiThreadedExecutor
+from rclpy.executors import ExternalShutdownException, MultiThreadedExecutor
+from rclpy.signals import SignalHandlerOptions
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
 from sensor_msgs.msg import JointState
@@ -45,7 +48,8 @@ from oroha_msgs.srv import AddNote, ArmExperiment
 from oroha_experiment import profiles as P
 
 DEFAULT_BAG_TOPICS = [
-    "/diff_cont/cmd_vel", "/diff_cont/odom", "/joint_states", "/dynamic_joint_states",
+    "/diff_cont/cmd_vel", "/diff_cont/cmd_vel_out", "/diff_cont/odom", "/joint_states",
+    "/dynamic_joint_states",
     "/tf", "/tf_static", "/robot_description",
     "/oroha_power/sample", "/oroha_power/battery", "/oroha_power/calibration_event",
     "/imu/data", "/imu/mag", "/imu/temperature", "/diagnostics",
@@ -90,8 +94,12 @@ class ExperimentRunner(Node):
         d("stall_cmd_w", 0.2)           # rad/s
         d("stall_motor_rad_s", 2.0)     # measured motor-shaft speed below this = not moving
         d("abort_zero_s", 1.0)
-        d("v_max", 0.8)
-        d("w_max", 2.0)
+        # first ground sessions (plan review C5): diff_cont keeps its own hard caps (0.8 / 2.0)
+        d("v_max", 0.35)
+        d("w_max", 1.2)
+        d("arena_m", 3.0)               # square room side
+        d("arena_margin_m", 0.3)        # drift allowance at every wall
+        d("robot_half_diag_m", 0.36)    # body half-diagonal; set from the measured body size
 
         g = lambda k: self.get_parameter(k).value  # noqa: E731
         self.cmd_topic = str(g("cmd_topic"))
@@ -123,7 +131,9 @@ class ExperimentRunner(Node):
 
         latched = QoSProfile(depth=100, reliability=ReliabilityPolicy.RELIABLE,
                              durability=DurabilityPolicy.TRANSIENT_LOCAL, history=HistoryPolicy.KEEP_LAST)
-        cmd_qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
+        # RELIABLE matches both RELIABLE and BEST_EFFORT subscriptions; a BEST_EFFORT publisher
+        # would be ignored by a RELIABLE diff_cont subscription (plan review H7).
+        cmd_qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE)
         self.pub_cmd = self.create_publisher(TwistStamped, self.cmd_topic, cmd_qos)
         self.pub_event = self.create_publisher(ExperimentEvent, "~/event", latched)
         self.pub_status = self.create_publisher(ExperimentStatus, "~/status", 10)
@@ -149,15 +159,18 @@ class ExperimentRunner(Node):
 
     def event(self, kind: str, detail: str = "", seg: int = -1):
         m = ExperimentEvent()
-        m.header.stamp = self.get_clock().now().to_msg()
         m.run_id = self.run_id
         m.event = kind
         m.detail = detail
         m.repeat_index = self.repeat_index
         m.segment_index = seg
         m.t_run = self.t_run() if self.state in ("RUNNING",) or kind in ("END", "ABORT", "FAIL") else -1.0
-        self.pub_event.publish(m)
-        row = {"stamp_ns": self.now_ns(), "t_run": round(m.t_run, 4), "event": kind,
+        try:
+            m.header.stamp = self.get_clock().now().to_msg()
+            self.pub_event.publish(m)
+        except Exception:  # noqa: BLE001 - still written to events.csv below
+            pass
+        row = {"stamp_ns": time.time_ns(), "t_run": round(m.t_run, 4), "event": kind,
                "segment_index": seg, "detail": detail}
         self.events.append(row)
         if self.run_dir:
@@ -168,16 +181,22 @@ class ExperimentRunner(Node):
                 if new:
                     w.writeheader()
                 w.writerow(row)
-        self.get_logger().info("[%s] %s %s" % (self.run_id, kind, detail))
+        try:
+            self.get_logger().info("[%s] %s %s" % (self.run_id, kind, detail))
+        except Exception:  # noqa: BLE001
+            print("[%s] %s %s" % (self.run_id, kind, detail))
 
     def publish_cmd(self, v: float, w: float):
-        m = TwistStamped()
-        m.header.stamp = self.get_clock().now().to_msg()
-        m.header.frame_id = self.frame_id
-        m.twist.linear.x = float(v)
-        m.twist.angular.z = float(w)
-        self.pub_cmd.publish(m)
         self.cmd_v, self.cmd_w = v, w
+        try:
+            m = TwistStamped()
+            m.header.stamp = self.get_clock().now().to_msg()
+            m.header.frame_id = self.frame_id
+            m.twist.linear.x = float(v)
+            m.twist.angular.z = float(w)
+            self.pub_cmd.publish(m)
+        except Exception:  # noqa: BLE001 - context may be gone during shutdown; diff_cont times out
+            pass
 
     # -------------------------------------------------------------- inputs
     def on_joint_states(self, msg: JointState):
@@ -276,8 +295,22 @@ class ExperimentRunner(Node):
             except Exception as e:  # noqa: BLE001
                 res.ok, res.message = False, "bad run config: %s" % e
                 return res
+            rig_state = str(conditions.get("rig_state", "")).strip()
+            if rig_state not in ("mock", "lifted", "on_ground"):
+                res.ok, res.message = False, ("conditions.rig_state must be mock | lifted | on_ground "
+                                              "(oroha_exp run --rig-state ...), got %r" % rig_state)
+                return res
+            arena = float(self.get_parameter("arena_m").value)
+            margin = float(self.get_parameter("arena_margin_m").value)
+            fp = P.footprint(profile, float(self.get_parameter("robot_half_diag_m").value))
+            placement = fp.placement(arena, margin)
+            if rig_state == "on_ground" and placement == "none":
+                dx, dy = fp.size
+                res.ok, res.message = False, ("path needs %.2f x %.2f m, does not fit the %.1f m room with "
+                                              "%.1f m margins — make it smaller" % (dx, dy, arena, margin))
+                return res
             self.meta = {}
-            fails = self.checks()
+            fails = self.checks() + self._orphan_bags()
             if fails:
                 res.ok, res.message = False, "; ".join(fails)
                 return res
@@ -306,6 +339,10 @@ class ExperimentRunner(Node):
                 "status": "ARMED", "conditions": conditions,
                 "versions": versions, "cmd_topic": self.cmd_topic, "cmd_rate_hz": self.cmd_rate,
                 "bag": None, "manual_gt": None, "notes": [],
+                "rig_state": rig_state,
+                "arena": {"room_m": arena, "margin_m": margin, "needed_m": [round(x, 3) for x in fp.size],
+                          "placement": placement,
+                          "start_offset_m": [round(x, 3) for x in fp.start_offset(margin)]},
             })
             self._write_meta()
             self.state = "ARMED"
@@ -316,7 +353,12 @@ class ExperimentRunner(Node):
                     res.ok, res.message = False, "bag record did not start"
                     return res
             res.ok, res.run_id, res.run_dir = True, self.run_id, str(self.run_dir)
-            res.message = "armed: %.1f s profile, %d segments" % (profile.duration, len(profile.segments))
+            ox, oy = fp.start_offset(margin)
+            where = {"wall": "start %.2f m from the wall behind, %.2f m from the wall on the right" % (ox, oy),
+                     "diagonal": "start near a corner heading along the room diagonal",
+                     "none": "room check not applied (%s)" % rig_state}[placement]
+            res.message = "armed: %.1f s profile, %d segments; %s" % (
+                profile.duration, len(profile.segments), where)
             return res
 
     def on_start(self, req, res):
@@ -407,7 +449,10 @@ class ExperimentRunner(Node):
         self.publish_cmd(0.0, 0.0)
 
     def _finalize(self, final_state: str, why: str):
-        self._stop_bag()
+        try:
+            self._stop_bag()
+        except Exception as e:  # noqa: BLE001 - never skip the meta write
+            print("bag stop failed: %s" % e)
         self.meta["status"] = final_state
         self.meta["end_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         self.meta["t_run_end"] = round(self.t_run(), 3)
@@ -447,15 +492,9 @@ class ExperimentRunner(Node):
     def _stop_bag(self):
         if self.bag_proc is None:
             return
-        if self.bag_proc.poll() is None:
-            os.killpg(os.getpgid(self.bag_proc.pid), signal.SIGINT)
-            try:
-                self.bag_proc.wait(timeout=15.0)
-            except subprocess.TimeoutExpired:
-                os.killpg(os.getpgid(self.bag_proc.pid), signal.SIGTERM)
-                self.get_logger().warn("bag record did not stop on SIGINT; SIGTERM sent")
-        self.event(ExperimentEvent.BAG_STOPPED, "rc=%s" % self.bag_proc.returncode)
-        self.bag_proc = None
+        proc, self.bag_proc = self.bag_proc, None
+        _kill_bag(proc)
+        self.event(ExperimentEvent.BAG_STOPPED, "rc=%s" % proc.returncode)
 
     # --------------------------------------------------------------- files
     def _write_meta(self):
@@ -503,36 +542,84 @@ class ExperimentRunner(Node):
         m.repeat_index, m.repeats = self.repeat_index, self.repeats
         self.pub_status.publish(m)
 
-    def destroy_node(self):
+    def _orphan_bags(self) -> list:
+        """ros2 bag record processes writing under runs_dir that this node does not own."""
+        mine = self.bag_proc.pid if self.bag_proc else None
+        out = []
+        for name in os.listdir("/proc"):
+            if not name.isdigit() or int(name) == mine:
+                continue
+            try:
+                cmd = open("/proc/%s/cmdline" % name, "rb").read().replace(b"\0", b" ").decode(errors="replace")
+            except OSError:
+                continue
+            if "bag record" in cmd and str(self.runs_dir) in cmd:
+                out.append("orphan bag recorder pid %s (%s) — stop it with kill -INT %s" % (name, cmd[:80], name))
+        return out
+
+    def shutdown_cleanup(self, why: str = "node shutdown"):
+        """Idempotent; safe after the ROS context is gone. Order: zeros -> ABORT -> bag -> meta."""
         with self.lock:
             if self.state in ("ARMED", "RUNNING"):
                 for _ in range(5):
                     self.publish_cmd(0.0, 0.0)
                     time.sleep(0.05)
-                self.event(ExperimentEvent.ABORT, "node shutdown", self.seg_idx)
-                self._finalize("ABORTED", "shutdown")
-        super().destroy_node()
+                self.event(ExperimentEvent.ABORT, why, self.seg_idx)
+                self._finalize("ABORTED", why)
+            elif self.state in ("DONE", "ABORTED", "FAILED"):
+                self._finalize(self.state, why)
+            elif self.bag_proc is not None:
+                self._stop_bag()
+
+    def destroy_node(self):
+        try:
+            self.shutdown_cleanup()
+        finally:
+            try:
+                super().destroy_node()
+            except Exception:  # noqa: BLE001
+                pass
 
 
-def _sigterm(signum, frame):
-    # SIGTERM (kill, ros2 launch shutdown) must run the same cleanup as Ctrl-C:
-    # zeros on cmd_vel, ABORT event, bag stopped, meta finalized.
+def _kill_bag(proc) -> None:
+    """SIGINT the recorder's process group and wait, so metadata.yaml gets written."""
+    if proc is None or proc.poll() is not None:
+        return
+    try:
+        os.killpg(os.getpgid(proc.pid), signal.SIGINT)
+        proc.wait(timeout=15.0)
+    except subprocess.TimeoutExpired:
+        os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+    except (ProcessLookupError, OSError):
+        pass
+
+
+def _raise_interrupt(signum, frame):
     raise KeyboardInterrupt
 
 
 def main(args=None):
-    rclpy.init(args=args)
-    signal.signal(signal.SIGTERM, _sigterm)
+    # Own the signals (plan review H2): with rclpy's default handlers Ctrl-C shuts the
+    # context down first, publishing zeros/events then fails and the bag recorder (own
+    # session) is orphaned without metadata.yaml.
+    rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
+    signal.signal(signal.SIGINT, _raise_interrupt)
+    signal.signal(signal.SIGTERM, _raise_interrupt)
     node = ExperimentRunner()
+    atexit.register(lambda: _kill_bag(node.bag_proc))
     ex = MultiThreadedExecutor(num_threads=4)
     ex.add_node(node)
     try:
         ex.spin()
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, ExternalShutdownException):
         pass
     finally:
-        node.destroy_node()
-        rclpy.try_shutdown()
+        try:
+            node.shutdown_cleanup("runner stopped (SIGINT/SIGTERM)")
+        finally:
+            ex.shutdown(timeout_sec=1.0)
+            node.destroy_node()
+            rclpy.try_shutdown()
 
 
 if __name__ == "__main__":

@@ -31,6 +31,43 @@ TOPIC_FILES = {
 }
 
 
+def wrap_pi(a: float) -> float:
+    return (a + math.pi) % (2.0 * math.pi) - math.pi
+
+
+def odom_summary(samples, ideal_end=None, gt=None) -> dict:
+    """samples: [(x, y, yaw)] in the odom frame, in time order (yaw wrapped, as published).
+
+    Returns the path length, the end pose RELATIVE TO THE START POSE (rotated into the
+    start heading: x forward, y left) and the unwrapped heading change, plus errors
+    against the ideal end pose of the profile and the manual ground truth if given.
+    """
+    x0, y0, yaw0 = samples[0]
+    length = 0.0
+    yaw_acc = 0.0
+    for (xa, ya, ta), (xb, yb, tb) in zip(samples, samples[1:]):
+        length += math.hypot(xb - xa, yb - ya)
+        yaw_acc += wrap_pi(tb - ta)
+    dx, dy = samples[-1][0] - x0, samples[-1][1] - y0
+    c, s = math.cos(yaw0), math.sin(yaw0)
+    rel = {"x": c * dx + s * dy, "y": -s * dx + c * dy, "yaw_change_rad": yaw_acc}
+    out = {"method": "diff_cont/odom, no-slip wheel odometry (motor-shaft counts, effective wheel_radius)",
+           "path_length_m": round(length, 4),
+           "end_pose_rel": {k: round(v, 4) for k, v in rel.items()}}
+    if ideal_end:
+        out["ideal_end"] = ideal_end
+        out["odom_minus_ideal"] = {"x": round(rel["x"] - ideal_end["x"], 4),
+                                   "y": round(rel["y"] - ideal_end["y"], 4),
+                                   "yaw_rad": round(rel["yaw_change_rad"] - ideal_end["yaw"], 4)}
+    if gt:
+        out["manual_gt"] = gt
+        out["odom_minus_gt"] = {"x": round(rel["x"] - gt["x_m"], 4), "y": round(rel["y"] - gt["y_m"], 4)}
+        if ideal_end:
+            out["ideal_minus_gt"] = {"x": round(ideal_end["x"] - gt["x_m"], 4),
+                                     "y": round(ideal_end["y"] - gt["y_m"], 4)}
+    return out
+
+
 def _yaw(q) -> float:
     return math.atan2(2.0 * (q.w * q.z + q.x * q.y), 1.0 - 2.0 * (q.y * q.y + q.z * q.z))
 
@@ -112,9 +149,7 @@ def export(run_dir: Path, out: Path) -> dict:
     t0 = t_start_ns if t_start_ns is not None else (first_ns or 0)
 
     w = Writers(out)
-    odom_prev = None
-    odom_dist = 0.0
-    odom_first = odom_last = None
+    odom_samples = []
     power_prev_dev = None
     energy_wh = 0.0
     gap_count = 0
@@ -142,11 +177,8 @@ def export(run_dir: Path, out: Path) -> dict:
         elif name == "odom":
             p = msg.pose.pose.position
             yaw = _yaw(msg.pose.pose.orientation)
-            if odom_prev is not None:
-                odom_dist += math.hypot(p.x - odom_prev[0], p.y - odom_prev[1])
-            odom_prev = (p.x, p.y)
-            odom_first = odom_first or (p.x, p.y, yaw)
-            odom_last = (p.x, p.y, yaw)
+            if t >= 0.0 or t_start_ns is None:        # from START on (ARMED zeros excluded)
+                odom_samples.append((p.x, p.y, yaw))
             w.row(name, {**base, "x": p.x, "y": p.y, "yaw": yaw,
                          "vx": msg.twist.twist.linear.x, "wz": msg.twist.twist.angular.z,
                          "frame_id": msg.header.frame_id, "child_frame_id": msg.child_frame_id})
@@ -223,6 +255,9 @@ def export(run_dir: Path, out: Path) -> dict:
             w.row(name, {**base, "data": msg.data})
     w.close()
 
+    gt = None
+    if (run_dir / "manual_gt.yaml").exists():
+        gt = yaml.safe_load(open(run_dir / "manual_gt.yaml"))
     ideal_end = None
     prof = run_dir / "profile.csv"
     if prof.exists():
@@ -235,14 +270,7 @@ def export(run_dir: Path, out: Path) -> dict:
         "status": meta.get("status"),
         "t_start_found": t_start_ns is not None,
         "message_counts": w.counts,
-        "odometry": None if odom_first is None else {
-            "method": "diff_cont/odom, no-slip wheel odometry (motor-shaft counts, effective wheel_radius)",
-            "path_length_m": round(odom_dist, 4),
-            "end_pose_rel": {"x": round(odom_last[0] - odom_first[0], 4),
-                             "y": round(odom_last[1] - odom_first[1], 4),
-                             "yaw_change_rad": round(odom_last[2] - odom_first[2], 4)},
-            "ideal_end": ideal_end,
-        },
+        "odometry": None if len(odom_samples) < 2 else odom_summary(odom_samples, ideal_end, gt),
         "power": None if n_power == 0 else {
             "samples": n_power, "overrun_samples": n_overrun, "seq_gaps": seq_gaps,
             "energy_wh": round(energy_wh, 5),

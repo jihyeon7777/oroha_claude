@@ -26,3 +26,8 @@
 
 - 사용자가 `setup/install_system.sh` 실행: ros2_control 4.48.0·ros2_controllers 4.42.1·xacro·chrony·udev(`/dev/oroha_*` 3개)·Asia/Seoul 확인. UM7 USB 연결(CP2102→`/dev/oroha_um7`), 섀시 미고정. 모터 시험 준비(바퀴 띄움·E-stop)됨.
 - 배터리 충전을 위해 Pi 종료. 빌드·시험은 하지 않고 [next_session.md](next_session.md)에 시작점·순서를 정리. 미빌드: `mdrobot_ros2_control`·`oroha_description`·`oroha_bringup`.
+
+## 2026-09-28 (KST)
+
+- **계획 재검토**(설치 패키지·v1.4.0 소스·이전 보고서 대조, xacro 메모리 렌더, 교차 검토): 첫 주행 전 필수 5건(C1 xacro `reverse`가 `True`로 렌더링돼 왼쪽 reverse 미적용, C2 E-stop 해제 거동 미확인, C3 명령 잔류—on_shutdown 없음·RS485 분리·SIGTERM, C4 FTDI latency 16 ms, C5 3 m 방 접지 경로 안전)과 H1~H10을 찾아 세션 A/B/C로 재편. 사용자 결정 D-08(3 m×3 m), D-09(patches/).
+- A0 코드 수정: xacro `$(arg)` + URDF·설정 테스트(수정 전 xacro에서 실패 확인), `oroha_md_stop`·런치 안전망, direction_check(SIGTERM 정지, USE_LIMIT_SW 0, ENC_PPR, 타임라인·정지/재출발 판정, --resend), wheel_push `--phase`, preflight(시간 동기·latency·포트·레지스터), port_guard, 컨트롤러 설정(max_deceleration·publish_rate 10·publish_limited_velocity·base_footprint·wheel_vel_cont 제거), runner/power/teleop/cli 신호 처리·RELIABLE QoS, 실행기 한계 0.35/1.2·방 크기 검사·spot·`--rig-state`·Ctrl-C 중단·`gt`, 원장 usable 규칙(mock 실행 제외), 오도메트리 비교(시작 자세 기준·yaw 연속). setup: FTDI latency udev·rviz_imu_plugin.

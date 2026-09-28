@@ -9,3 +9,7 @@
 | D-05 | 2026-09-22 | OROHA 전용 description·launch(diffbot 예제 패턴), 드라이버의 bringup.launch.py 미사용 | 드라이버 런치는 외부 URDF를 받지 못함. 한 쪽 두 바퀴는 벨트로 묶여 조인트 2개로 모델링 |
 | D-06 | 2026-09-22 | 장치 이름 `/dev/oroha_md400`·`/dev/oroha_pico`·`/dev/oroha_um7` (udev serial 고정) | by-id 경로는 길고 어댑터 교체 시 바뀜; 확인표 §5에 by-id 원본을 남김 |
 | D-07 | 2026-09-22 | 시간 기준: ROS 시계(시스템 시계, chrony) 하나. Pico는 `t_us`+min-filter 오프셋을 `device_stamp`로, UM7은 수신 시각 | USB CDC 묶음 전송(≈65 ms)이라 정밀 정렬은 `t_us`. Pi가 GT 노트북의 NTP 서버 |
+| D-08 | 2026-09-28 | 시험 공간은 3 m×3 m 방만. 접지 경로는 궤적+차체 반대각+여유 0.3 m 검사(벽/대각선 배치) 통과 크기만, 손밀기는 대각선 3회전 | 사용자 결정. 6 m 직진·6 m 손밀기 불가 |
+| D-09 | 2026-09-28 | mdrobot 플러그인 수정(on_shutdown 정지, status·read_seq 인터페이스)은 `patches/`로 로컬 적용, 업스트림은 나중에 | 사용자 결정. v1.4.0 고정 유지, 재현 가능 |
+| D-10 | 2026-09-28 | 안전 원칙: 모든 모션 명령은 스스로 끝남, 런치 안전망(ros2_control_node 종료 → MD400 정지) + `oroha_md_stop`, E-stop 해제 규칙은 E1 시험으로 확정, Claude는 실시간 정지 경로가 아님 | MD400 통신 워치독 없음, 플러그인 on_shutdown 없음, RS485 분리 시 정지 명령 전달 불가 |
+| D-11 | 2026-09-28 | cmd_vel 발행은 RELIABLE, `diff_cont.base_frame_id = base_footprint`, `max_deceleration` 사용, forward_command_controller 미사용 | QoS 호환(RELIABLE→모든 구독), TF 단일 부모, 4.42 파라미터, 타임아웃 없는 컨트롤러 배제 |

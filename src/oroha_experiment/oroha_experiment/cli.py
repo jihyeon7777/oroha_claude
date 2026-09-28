@@ -5,10 +5,15 @@
   oroha_exp run --path circle --radius 0.75 --v 0.3 --direction cw
   oroha_exp run --path s_curve --radius 0.6 --v 0.25 --arc-deg 180
   oroha_exp conditions            # edit records/conditions_latest.yaml interactively
+  oroha_exp conditions --set surface="epoxy floor" --set floor_slope_deg=0.2     # non-interactive
+  oroha_exp gt --run R20260930-101500-straight --x 1.47 --y -0.03 --yaw-deg -1.5  # tape ground truth
   oroha_exp status | abort | note "text"
 
-During a run: [space]/[Esc] abort, [n] note. The runner node (ros2 run oroha_experiment runner)
-and the robot (robot.launch.py) must be up; run oroha_preflight first.
+--rig-state (mock | lifted | on_ground) is required for `run` and written into the conditions.
+On the ground: start runs from your own terminal, one run per invocation (--yes with
+--repeats > 1 is refused there), keep the E-stop in hand. During a run: [space]/[Esc] or
+Ctrl-C abort, [n] note. The runner node (ros2 run oroha_experiment runner) and the robot
+(robot.launch.py) must be up; run oroha_preflight first.
 """
 
 from __future__ import annotations
@@ -26,6 +31,7 @@ from pathlib import Path
 import rclpy
 import yaml
 from rclpy.node import Node
+from rclpy.signals import SignalHandlerOptions
 from std_srvs.srv import Trigger
 
 from oroha_msgs.msg import ExperimentStatus
@@ -33,7 +39,7 @@ from oroha_msgs.srv import AddNote, ArmExperiment
 from oroha_experiment import profiles as P
 
 CONDITION_FIELDS = [
-    ("rig_state", "lifted | on_ground | mock", "on_ground"),
+    ("rig_state", "lifted | on_ground | mock", ""),
     ("surface", "floor material / description", "미측정"),
     ("floor_slope_deg", "spirit level across the travel line [deg]", "미측정"),
     ("robot_mass_kg", "robot mass without payload [kg]", "미측정"),
@@ -61,17 +67,21 @@ def _conditions_path() -> Path:
     return _ws_root() / "records" / "conditions_latest.yaml"
 
 
-def edit_conditions(path: Path, interactive: bool = True) -> dict:
+def edit_conditions(path: Path, interactive: bool = True, sets: dict | None = None) -> dict:
     cur = {}
     if path.exists():
         with open(path) as f:
             cur = yaml.safe_load(f) or {}
+    for key, val in (sets or {}).items():
+        cur[key] = val
     if interactive:
         print("Conditions (Enter keeps the value in brackets; '미측정' = not measured):")
         for key, help_, default in CONDITION_FIELDS:
             old = cur.get(key, default)
             val = input(f"  {key} ({help_}) [{old}]: ").strip()
             cur[key] = val if val else old
+    for key, val in (sets or {}).items():      # explicit --set / --rig-state win over prompts
+        cur[key] = val
     cur["updated_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w") as f:
@@ -136,13 +146,27 @@ def path_params(a) -> dict:
     fn = P.PATHS[a.path]
     accepted = set(inspect.signature(fn).parameters)
     cand = {"length": a.length, "radius": a.radius, "side": a.side, "corner": a.corner,
+            "angle_deg": getattr(a, "angle_deg", None),
             "turn_w": a.turn_w, "corner_radius": a.corner_radius, "direction": a.direction,
             "arc_deg": a.arc_deg, "first": a.first, "join": a.join, "dwell": a.dwell, "v": a.v,
             "pre_rest": a.pre_rest, "post_rest": a.post_rest}
     return {k: v for k, v in cand.items() if k in accepted and v is not None}
 
 
+def _parse_sets(items) -> dict:
+    out = {}
+    for item in items or []:
+        if "=" not in item:
+            raise SystemExit(f"--set expects key=value, got {item!r}")
+        k, v = item.split("=", 1)
+        out[k.strip()] = v.strip()
+    return out
+
+
 def run(a) -> int:
+    if a.yes and a.rig_state == "on_ground" and a.repeats > 1:
+        print("refused: on the ground each run is started by the operator (no --yes with --repeats > 1)")
+        return 2
     params = path_params(a)
     profile = P.build(a.path, **params)          # validate locally first
     end = profile.ideal_path()[-1]
@@ -150,13 +174,15 @@ def run(a) -> int:
           f"ideal end x={end.x:.2f} y={end.y:.2f} yaw={end.yaw * 57.3:.0f} deg")
 
     cond_path = Path(a.conditions) if a.conditions else _conditions_path()
-    if not a.yes:
-        edit_conditions(cond_path, interactive=True)
-    elif not cond_path.exists():
-        edit_conditions(cond_path, interactive=False)
+    sets = {"rig_state": a.rig_state, **_parse_sets(a.set)}
+    if cond_path.exists() and a.yes:
+        age_h = (time.time() - cond_path.stat().st_mtime) / 3600
+        if age_h > 12:
+            print(f"WARNING: {cond_path} was last edited {age_h:.0f} h ago — are the conditions still true?")
+    edit_conditions(cond_path, interactive=not a.yes, sets=sets)
 
     series = a.series or time.strftime("S%Y%m%d-%H%M%S")
-    rclpy.init()
+    rclpy.init(signal_handler_options=SignalHandlerOptions.NO)   # Ctrl-C must reach us to abort
     node = Client()
     results = []
     try:
@@ -181,7 +207,16 @@ def run(a) -> int:
             if not r2.success:
                 print(f"START refused: {r2.message}")
                 return 1
-            final = monitor(node)
+            try:
+                final = monitor(node)
+            except KeyboardInterrupt:
+                print("\n   Ctrl-C -> ABORT")
+                try:
+                    node.call(node.cli_abort, Trigger.Request(), timeout=5.0)
+                except Exception as e:  # noqa: BLE001
+                    print(f"   abort call failed ({e}) — diff_cont stops within cmd_vel_timeout; use the E-stop if not")
+                results.append((res.run_id, "ABORTED (Ctrl-C)"))
+                break
             results.append((res.run_id, final))
             print(f"   -> {final}")
             if i + 1 < a.repeats and a.rest > 0:
@@ -232,6 +267,25 @@ def monitor(node: Client) -> str:
     return final
 
 
+def write_gt(a) -> int:
+    """Manual ground truth (tape) for a run, in the robot's START frame: x forward, y left."""
+    run_dir = _ws_root() / "data" / "runs" / a.run
+    if not (run_dir / "meta.yaml").exists():
+        print(f"no run {a.run} under data/runs")
+        return 2
+    gt = {"run_id": a.run, "method": a.method, "x_m": a.x, "y_m": a.y, "yaw_deg": a.yaw_deg,
+          "frame": "robot start pose: x forward, y left, yaw ccw+", "note": a.note,
+          "recorded_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    path = run_dir / "manual_gt.yaml"
+    if path.exists() and not a.overwrite:
+        print(f"{path} exists; pass --overwrite to replace it")
+        return 2
+    with open(path, "w") as f:
+        yaml.safe_dump(gt, f, allow_unicode=True, sort_keys=False)
+    print(f"wrote {path}")
+    return 0
+
+
 def simple(a) -> int:
     rclpy.init()
     node = Client()
@@ -260,6 +314,9 @@ def main(argv=None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("run", help="arm/start one or more runs")
     r.add_argument("--path", required=True, choices=sorted(P.PATHS))
+    r.add_argument("--rig-state", required=True, choices=["mock", "lifted", "on_ground"])
+    r.add_argument("--set", action="append", metavar="KEY=VALUE", help="condition field (repeatable)")
+    r.add_argument("--angle-deg", type=float, help="spot: turn angle")
     r.add_argument("--v", type=float, default=0.2)
     r.add_argument("--length", type=float)
     r.add_argument("--radius", type=float)
@@ -279,7 +336,17 @@ def main(argv=None) -> int:
     r.add_argument("--series", help="series id shared by the repeats")
     r.add_argument("--conditions", help="conditions YAML (default records/conditions_latest.yaml)")
     r.add_argument("--yes", action="store_true", help="no prompts (conditions file must exist)")
-    sub.add_parser("conditions", help="edit the conditions file")
+    c = sub.add_parser("conditions", help="edit the conditions file")
+    c.add_argument("--set", action="append", metavar="KEY=VALUE",
+                   help="set a field without prompting (repeatable)")
+    g = sub.add_parser("gt", help="record the tape-measured end pose of a run")
+    g.add_argument("--run", required=True)
+    g.add_argument("--x", type=float, required=True, help="m, forward from the start pose")
+    g.add_argument("--y", type=float, required=True, help="m, left of the start pose")
+    g.add_argument("--yaw-deg", type=float, default=None, help="deg, ccw+ (optional)")
+    g.add_argument("--method", default="tape")
+    g.add_argument("--note", default="")
+    g.add_argument("--overwrite", action="store_true")
     sub.add_parser("status")
     sub.add_parser("abort")
     n = sub.add_parser("note")
@@ -288,8 +355,11 @@ def main(argv=None) -> int:
     if a.cmd == "run":
         return run(a)
     if a.cmd == "conditions":
-        edit_conditions(_conditions_path(), interactive=True)
+        sets = _parse_sets(a.set)
+        edit_conditions(_conditions_path(), interactive=not sets, sets=sets)
         return 0
+    if a.cmd == "gt":
+        return write_gt(a)
     return simple(a)
 
 
