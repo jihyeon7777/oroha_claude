@@ -1,0 +1,198 @@
+{
+ "timestamp_utc": "2026-09-28T07:43:25Z",
+ "timezone": "KST",
+ "args": {
+  "md_port": "/dev/oroha_md400",
+  "pico_port": "/dev/oroha_pico",
+  "sec": 15.0,
+  "polls": 10,
+  "rate": 50,
+  "no_zero": false,
+  "skip_md400": false,
+  "skip_pico": false,
+  "out_dir": "records/tests/T20260928-04"
+ },
+ "host": {
+  "ntp_synchronized": "yes",
+  "timezone": "Asia/Seoul",
+  "ftdi_latency_timer_ms": 16
+ },
+ "md400": {
+  "1": {
+   "n": 10,
+   "volt": [
+    27.7,
+    27.7,
+    27.7,
+    27.7,
+    27.7,
+    27.7,
+    27.7,
+    27.7,
+    27.7,
+    27.7
+   ],
+   "rpm": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "alarm": 0,
+   "pos": 0,
+   "ver": 86,
+   "err": "",
+   "status": [],
+   "use_limit_sw": 1,
+   "enc_ppr": 1000,
+   "use_eposi": 0,
+   "v": 27.7
+  },
+  "2": {
+   "n": 10,
+   "volt": [
+    28.4,
+    28.4,
+    28.4,
+    28.4,
+    28.4,
+    28.4,
+    28.4,
+    28.4,
+    28.4,
+    28.4
+   ],
+   "rpm": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "alarm": 0,
+   "pos": 0,
+   "ver": 86,
+   "err": "",
+   "status": [],
+   "use_limit_sw": 1,
+   "enc_ppr": 1000,
+   "use_eposi": 0,
+   "v": 28.4
+  }
+ },
+ "calib_id": "sensing-20260828",
+ "pico": {
+  "fw": "?",
+  "zero": "",
+  "samples": 0
+ },
+ "checks": [
+  {
+   "ok": true,
+   "msg": "clock NTP-synchronized: yes (timezone Asia/Seoul)",
+   "blocking": false
+  },
+  {
+   "ok": false,
+   "msg": "FTDI latency_timer 16 ms (want 1: twin cycle ~66 ms instead of ~96 ms at 10 Hz)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "MD400: /dev/oroha_md400 -> /dev/ttyUSB0 writable",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "MD400: not open by another process",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "Pico: /dev/oroha_pico -> /dev/ttyACM0 writable",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "Pico: not open by another process",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1 (RIGHT): answered 10/10, fw v86, 27.700 V, pos=0",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: status alarms 0",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: at rest (max |rpm| 0)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: bus voltage in range (27.700 V)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: USE_EPOSI 0 (hall position counter, counts_per_rev 30 valid)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2 (LEFT): answered 10/10, fw v86, 28.400 V, pos=0",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: status alarms 0",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: at rest (max |rpm| 0)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: bus voltage in range (28.400 V)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: USE_EPOSI 0 (hall position counter, counts_per_rev 30 valid)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "controller voltmeter gap id2-id1 +0.700 V (reference +0.600 V, measurement offset)",
+   "blocking": false
+  },
+  {
+   "ok": false,
+   "msg": "firmware ? (expected oroha-bench-1.2)",
+   "blocking": false
+  },
+  {
+   "ok": false,
+   "msg": "0 samples — no stream",
+   "blocking": true
+  }
+ ],
+ "ok": false
+}

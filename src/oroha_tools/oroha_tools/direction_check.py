@@ -78,12 +78,14 @@ def run_one(port: str, sid: int, rpm: int, sec: float, resend: bool, use_limit_s
             rec["version"] = d.get_version()
             rec["use_limit_sw_before"] = d.client.read_register(reg.PID_USE_LIMIT_SW)
             rec["enc_ppr"] = d.client.read_register(reg.PID_ENC_PPR)
+            rec["use_eposi"] = d.client.read_register(reg.PID_USE_EPOSI)
             if use_limit_sw != "keep":
                 d.client.write_register(reg.PID_USE_LIMIT_SW, int(use_limit_sw))
             rec["use_limit_sw_used"] = d.client.read_register(reg.PID_USE_LIMIT_SW)
             print(f"   fw v{rec['version']}  USE_LIMIT_SW {rec['use_limit_sw_before']} -> "
-                  f"{rec['use_limit_sw_used']}  ENC_PPR {rec['enc_ppr']} "
-                  f"({'hall, 30 counts/rev' if rec['enc_ppr'] == 0 else 'ENCODER MODE — counts_per_rev 30 invalid'})")
+                  f"{rec['use_limit_sw_used']}  ENC_PPR {rec['enc_ppr']} (velocity loop "
+                  f"{'encoder' if rec['enc_ppr'] else 'hall'})  USE_EPOSI {rec['use_eposi']} "
+                  f"({'hall position, 30 counts/rev' if rec['use_eposi'] == 0 else 'ENCODER POSITION — 30 counts/rev invalid'})")
             m = d.read_monitor()
             rec["pos_start"] = m.position
             d.enable()

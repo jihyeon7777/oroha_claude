@@ -122,6 +122,7 @@ def check_md400(r: Report, md_port: str, polls: int) -> dict:
                 rec["ver"] = d.get_version()
                 rec["use_limit_sw"] = d.client.read_register(reg.PID_USE_LIMIT_SW)
                 rec["enc_ppr"] = d.client.read_register(reg.PID_ENC_PPR)
+                rec["use_eposi"] = d.client.read_register(reg.PID_USE_EPOSI)
                 for _ in range(polls):
                     try:
                         m = d.read_monitor()
@@ -150,9 +151,16 @@ def check_md400(r: Report, md_port: str, polls: int) -> dict:
         r.ok(all(x == 0 for x in rec["rpm"]),
              f"id={sid}: at rest (max |rpm| {max(abs(x) for x in rec['rpm'])})")
         r.ok(20.0 < v < 30.0, f"id={sid}: bus voltage in range ({v:.3f} V)")
-        r.ok(rec.get("enc_ppr") == 0, f"id={sid}: ENC_PPR {rec.get('enc_ppr')} "
-             f"({'hall mode, counts_per_rev 30 valid' if rec.get('enc_ppr') == 0 else 'ENCODER MODE — counts_per_rev 30 and wheel_radius invalid'})")
-        print(f"      id={sid}: USE_LIMIT_SW {rec.get('use_limit_sw')} (plugin and direction_check write 0 before driving)")
+        # USE_EPOSI selects the POSITION source (0 = hall counter, 30 counts/motor rev, what
+        # counts_per_rev and wheel_radius assume; 1 = encoder, 4 x ENC_PPR). It is stored in
+        # EEPROM and was toggled on this hardware during driver development (2026-08-22).
+        r.ok(rec.get("use_eposi") == 0, f"id={sid}: USE_EPOSI {rec.get('use_eposi')} "
+             f"({'hall position counter, counts_per_rev 30 valid' if rec.get('use_eposi') == 0 else 'ENCODER POSITION — counts_per_rev 30 and wheel_radius invalid'})")
+        # ENC_PPR only feeds the velocity loop. 1000 = the wired 1000 PPR encoders, the
+        # intended setting per hardware_test_20260809.md; 0 = hall speed loop.
+        print(f"      id={sid}: ENC_PPR {rec.get('enc_ppr')} (velocity loop: "
+              f"{'encoder' if rec.get('enc_ppr') else 'hall'}; 1000 = intended per 2026-08-09) · "
+              f"USE_LIMIT_SW {rec.get('use_limit_sw')} (plugin and direction_check write 0 before driving)")
     if all("v" in out[s] for s in (1, 2)):
         gap = out[2]["v"] - out[1]["v"]
         r.ok(abs(gap - VOLT_GAP) < 0.25,
