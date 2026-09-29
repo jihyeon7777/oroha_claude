@@ -1,0 +1,17 @@
+[WARN] [ros2bag]: Positional "topics" argument deprecated. Please use optional "--topics" argument instead.
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1790660188.105296186] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1790660188.105332464] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1790660188.113282395] [rosbag2_recorder]: Starting recording to 'data/tests/T20260929-04/bag_unplug'
+[INFO] [1790660188.117441518] [rosbag2_recorder]: Subscribed to topic '/rosout'
+[INFO] [1790660188.117769258] [rosbag2_recorder]: Listening for topics...
+[INFO] [1790660188.117847814] [rosbag2_recorder]: Recording...
+[INFO] [1790660188.117941462] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1790660188.208082389] [rosbag2_recorder]: Subscribed to topic '/diagnostics'
+[INFO] [1790660188.318011043] [rosbag2_recorder]: Subscribed to topic '/joint_states'
+[INFO] [1790660188.322505961] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel_out'
+[INFO] [1790660188.322636943] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[INFO] [1790660188.322682480] [rosbag2_recorder]: Topics discovery stopped.
+[INFO] [1790660207.549636155] [rosbag2_recorder]: Pausing recording.
+[INFO] [1790660207.549899858] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1790660207.555760015] [rosbag2_recorder]: Recording stopped
+[INFO] [1790660207.557239569] [rosbag2_recorder]: Event publisher thread: Exited

@@ -21,6 +21,6 @@
 6. 추출·기록: `oroha_export_csv data/runs/<RUN_ID>` → `oroha_ledger --check` → 시험 기록(`records/tests/`).
 7. 논문 묶음: `oroha_paper_export --runs usable` → `paper_export/<ts>/CHECK.md` 확인.
 
-## 통신 재연결 (개요 §4)
+## 통신 두절·재연결 (개요 §4, T20260929-04에서 확인)
 
-`mdrobot_ros2_control`은 5회 연속 통신 실패 시 하드웨어 컴포넌트를 ERROR로 내리고 torque_off를 시도한다. 복구: 원인 제거(케이블) → `oroha_md_stop` → `ros2 control set_hardware_component_state oroha_base inactive` → `… active` → `ros2 control switch_controllers --activate diff_cont` (절차는 세션 A 정지 시험에서 검증 후 확정).
+RS485가 끊기면 플러그인은 약 0.4 s(5회 실패) 뒤 하드웨어를 ERROR → unconfigured로 내리고 컨트롤러를 끄지만, **MD400은 마지막 명령으로 계속 돈다 — E-stop만이 멈춘다.** 복구: E-stop 누른 채 유지 → 케이블 재연결(링크 `/dev/oroha_md400`·latency 1 ms는 udev가 자동 적용) → 런치 Ctrl-C(안전망이 양쪽 정지) 또는 `oroha_md_stop` → E-stop 해제 → 런치 재기동.
