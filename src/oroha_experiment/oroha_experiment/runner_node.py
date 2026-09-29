@@ -94,6 +94,8 @@ class ExperimentRunner(Node):
         d("stall_cmd_w", 0.2)           # rad/s
         d("stall_motor_rad_s", 2.0)     # measured motor-shaft speed below this = not moving
         d("abort_zero_s", 1.0)
+        d("direct_stop_on_fail", True)      # Modbus stop of both MD400 after a FAIL (hardware link lost)
+        d("md_port", "/dev/oroha_md400")
         # first ground sessions (plan review C5): diff_cont keeps its own hard caps (0.8 / 2.0)
         d("v_max", 0.35)
         d("w_max", 1.2)
@@ -444,6 +446,13 @@ class ExperimentRunner(Node):
     def _begin_stop(self, final_state: str, why: str):
         if final_state == "ABORTED":
             self.event(ExperimentEvent.ABORT, why, self.seg_idx)
+        if (final_state == "FAILED" and "no /joint_states" in why
+                and self.get_parameter("direct_stop_on_fail").value):
+            # When the failure is a lost hardware link, ros2_control has deactivated the
+            # component and no zero will ever reach the MD400s, which keep their last
+            # command (T20260929-05: right wheel kept turning after a left-MD400 power
+            # dip). Stop them directly over Modbus, retrying while the bus recovers.
+            threading.Thread(target=self._direct_stop, daemon=True).start()
         self.state = final_state
         self.zero_until_ns = self.now_ns() + int(float(self.get_parameter("abort_zero_s").value) * 1e9)
         self.publish_cmd(0.0, 0.0)
@@ -561,6 +570,22 @@ class ExperimentRunner(Node):
         m.preflight_ok = self.preflight_ok
         m.repeat_index, m.repeats = self.repeat_index, self.repeats
         self.pub_status.publish(m)
+
+    def _direct_stop(self):
+        try:
+            from oroha_tools.md_stop import stop_all
+        except Exception as e:  # noqa: BLE001
+            print("direct stop unavailable: %s" % e)
+            return
+        port = str(self.get_parameter("md_port").value)
+        for attempt in range(20):                   # ~10 s while the bus comes back
+            lines = []
+            res = stop_all(port, retries=1, log=lines.append)
+            if all(v == "ok" for v in res.values()):
+                self.event(ExperimentEvent.NOTE, "direct MD400 stop ok (attempt %d)" % (attempt + 1))
+                return
+            time.sleep(0.5)
+        self.event(ExperimentEvent.NOTE, "direct MD400 stop FAILED after 20 attempts — use the E-stop")
 
     def _orphan_bags(self) -> list:
         """ros2 bag record processes writing under runs_dir that this node does not own."""

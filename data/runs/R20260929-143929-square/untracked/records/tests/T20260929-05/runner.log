@@ -1,0 +1,10 @@
+[INFO] [1790660336.731046016] [oroha_experiment]: experiment runner ready; runs -> /home/oroha/oroha_claude/data/runs
+[INFO] [1790660349.482629422] [oroha_experiment]: [R20260929-143906-straight] ARMED straight {'length': 2.0, 'v': 0.2}
+[INFO] [1790660350.501996662] [oroha_experiment]: [R20260929-143906-straight] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-143906-straight/bag
+[INFO] [1790660350.511796750] [oroha_experiment]: [R20260929-143906-straight] START t_total=16.67
+[INFO] [1790660350.513764790] [oroha_experiment]: [R20260929-143906-straight] SEGMENT rest_pre
+[INFO] [1790660353.509452737] [oroha_experiment]: [R20260929-143906-straight] SEGMENT straight
+[INFO] [1790660364.209119925] [oroha_experiment]: [R20260929-143906-straight] SEGMENT rest_post
+[INFO] [1790660367.208806119] [oroha_experiment]: [R20260929-143906-straight] END profile complete
+[INFO] [1790660368.534538280] [oroha_experiment]: [R20260929-143906-straight] BAG_STOPPED rc=0
+[INFO] [1790660368.542708699] [oroha_experiment]: run R20260929-143906-straight finished: DONE
