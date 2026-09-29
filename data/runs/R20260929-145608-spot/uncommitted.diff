@@ -1,0 +1,11 @@
+diff --git a/records/conditions_latest.yaml b/records/conditions_latest.yaml
+index 6b7c487..41a14e9 100644
+--- a/records/conditions_latest.yaml
++++ b/records/conditions_latest.yaml
+@@ -1,4 +1,4 @@
+-updated_utc: '2026-09-29T05:39:29Z'
++updated_utc: '2026-09-29T05:56:08Z'
+ rig_state: lifted
+ surface: lifted
+-note: A9 T20260929-05
++note: T20260929-06 repro

@@ -1,0 +1,56 @@
+captured_utc: '2026-09-29T06:00:38Z'
+captured_local: 2026-09-29 15:00:38 KST
+timezone: Asia/Seoul
+chrony_tracking:
+- 'Reference ID    : D36C75D3 (211.108.117.211)'
+- 'Stratum         : 3'
+- 'Ref time (UTC)  : Tue Sep 29 05:59:30 2026'
+- 'System time     : 0.000116296 seconds fast of NTP time'
+- 'Last offset     : -0.000210382 seconds'
+- 'RMS offset      : 0.000857872 seconds'
+host:
+  hostname: pi
+  os: Linux-6.8.0-1064-raspi-aarch64-with-glibc2.39
+  kernel: 6.8.0-1064-raspi
+  python: 3.12.3
+workspace:
+  path: /home/oroha/oroha_claude
+  head: cf4d4186af64ce77578183c9a5fa08b6eb6d6406
+  describe: cf4d418-dirty
+  branch: main
+  dirty: true
+external:
+  mdrobot_motor_driver:
+    head: c5c1f3f5613bd72a607d0724e8bc58902497b720
+    describe: v1.4.0
+    branch: HEAD
+    dirty: false
+  um7_driver:
+    head: 9a342584bf985d9e5af265d99aa64bb3eb47f29f
+    describe: 9a34258
+    branch: HEAD
+    dirty: false
+patches_applied: []
+firmware:
+  file: firmware/pico/main.py
+  sha256: bace95054b5498fcc5d8acb95ff797909c4857f53977f9990579aca3b7884483
+calibration:
+  sensing-20260828.yaml: sensing-20260828
+  wheel-20260909.yaml: wheel-20260909
+config_sha256:
+  src/oroha_bringup/config/oroha_controllers.yaml: c1a289b293a681e0cab2307f0dada718059802e52c9bc42dde4282cf1fb53cec
+  src/oroha_bringup/config/power.yaml: d57d7cc647e19552b1e21cce296b0066147026eaf9350d85ba8ed6a8863e2963
+  src/oroha_bringup/config/um7.yaml: a52d09b120afe871938d2413dcdddc004ea479c7da145280c2c449f9563e945e
+  src/oroha_description/urdf/oroha.urdf.xacro: 56eaccc12a7d730087d4c86886d8b82538e7c93170f9b24e6e8a18b80f4b0961
+  src/oroha_description/urdf/oroha.ros2_control.xacro: 1ce128229d8e8aa842546a0bf568f50deafeaf5e2d0d4ff61deb527ca8f5d41d
+ros_packages:
+  ros2_control: 4.48.0
+  ros2_controllers: 4.42.1
+  diff_drive_controller: 4.42.1
+  hardware_interface: 4.48.0
+  controller_manager: 4.48.0
+  rosbag2: 0.26.11
+  xacro: 2.1.1
+ros_distro: jazzy
+ros_domain_id: '42'
+rmw: rmw_fastrtps_cpp (default)

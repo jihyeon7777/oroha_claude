@@ -3,7 +3,7 @@
 # to a file, and print its pid:
 #   setup/bg.sh <logfile> <command> [args...]
 #   pid=$(setup/bg.sh /tmp/launch.log ros2 launch oroha_bringup robot.launch.py)
-#   kill -INT "$pid"      # same as Ctrl-C in a terminal: clean shutdown (and the launch safety net)
+#   kill -INT -- "-$pid"  # whole process group (ros2 run keeps the node as a child) = Ctrl-C in a terminal: clean shutdown (and the launch safety net)
 #
 # Why: a non-interactive shell starts background jobs with SIGINT *ignored*, Python keeps an
 # ignored SIGINT, and `ros2 launch` then ignores `kill -INT`; SIGTERM makes it exit without

@@ -1,0 +1,27 @@
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1790661428.878390325] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1790661428.878389825] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1790661428.889232520] [rosbag2_recorder]: Starting recording to '/home/oroha/oroha_claude/data/runs/R20260929-145704-spot/bag'
+[INFO] [1790661428.895648940] [rosbag2_recorder]: Subscribed to topic '/rosout'
+[INFO] [1790661428.896368532] [rosbag2_recorder]: Listening for topics...
+[INFO] [1790661428.896445773] [rosbag2_recorder]: Recording...
+[INFO] [1790661428.896659421] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1790661429.309813158] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel'
+[INFO] [1790661429.315611912] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/event'
+[INFO] [1790661429.318956909] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/status'
+[INFO] [1790661429.432936200] [rosbag2_recorder]: Subscribed to topic '/diagnostics'
+[INFO] [1790661429.438099751] [rosbag2_recorder]: Subscribed to topic '/oroha_power/battery'
+[INFO] [1790661429.441336026] [rosbag2_recorder]: Subscribed to topic '/oroha_power/calibration_event'
+[INFO] [1790661429.443725579] [rosbag2_recorder]: Subscribed to topic '/oroha_power/sample'
+[INFO] [1790661429.448468001] [rosbag2_recorder]: Subscribed to topic '/robot_description'
+[INFO] [1790661429.455213810] [rosbag2_recorder]: Subscribed to topic '/tf_static'
+[INFO] [1790661429.458136011] [rosbag2_recorder]: Subscribed to topic '/tf'
+[INFO] [1790661429.986862742] [rosbag2_recorder]: Subscribed to topic '/dynamic_joint_states'
+[INFO] [1790661429.991719163] [rosbag2_recorder]: Subscribed to topic '/diff_cont/odom'
+[INFO] [1790661429.993334699] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel_out'
+[INFO] [1790661429.995784845] [rosbag2_recorder]: Subscribed to topic '/joint_states'
+[INFO] [1790661450.235114790] [rosbag2_recorder]: Topics discovery stopped.
+[INFO] [1790661450.235749733] [rosbag2_recorder]: Pausing recording.
+[INFO] [1790661450.235992622] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1790661450.253429692] [rosbag2_recorder]: Recording stopped
+[WARN] [1790661450.253491322] [rosbag2_recorder]: Number of messages lost on the transport layer: 3
+[INFO] [1790661450.254935894] [rosbag2_recorder]: Event publisher thread: Exited

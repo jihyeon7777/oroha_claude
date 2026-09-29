@@ -1,0 +1,5 @@
+records/tests/T20260929-06/launch.log
+records/tests/T20260929-06/launch.pid
+records/tests/T20260929-06/runner.log
+records/tests/T20260929-06/runner.pid
+records/tests/T20260929-06/runner2.log

@@ -1,0 +1,10 @@
+[INFO] [1790661420.508881714] [oroha_experiment]: experiment runner ready; runs -> /home/oroha/oroha_claude/data/runs
+[INFO] [1790661428.172625655] [oroha_experiment]: [R20260929-145704-spot] ARMED spot {'angle_deg': -360.0, 'turn_w': 0.5}
+[INFO] [1790661430.099976755] [oroha_experiment]: [R20260929-145704-spot] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-145704-spot/bag
+[INFO] [1790661430.109651858] [oroha_experiment]: [R20260929-145704-spot] START t_total=19.07
+[INFO] [1790661430.136399446] [oroha_experiment]: [R20260929-145704-spot] SEGMENT rest_pre
+[INFO] [1790661433.136237346] [oroha_experiment]: [R20260929-145704-spot] SEGMENT spot
+[INFO] [1790661446.186871909] [oroha_experiment]: [R20260929-145704-spot] SEGMENT rest_post
+[INFO] [1790661449.187113463] [oroha_experiment]: [R20260929-145704-spot] END profile complete
+[INFO] [1790661450.503667298] [oroha_experiment]: [R20260929-145704-spot] BAG_STOPPED rc=0
+[INFO] [1790661450.511667788] [oroha_experiment]: run R20260929-145704-spot finished: DONE

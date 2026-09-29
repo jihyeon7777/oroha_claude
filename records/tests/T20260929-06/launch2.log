@@ -1,0 +1,160 @@
+[INFO] [launch]: All log files can be found below /home/oroha/.ros/log/2026-09-29-15-00-25-903513-pi-71433
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [ros2_control_node-1]: process started with pid [71455]
+[INFO] [robot_state_publisher-2]: process started with pid [71456]
+[INFO] [spawner-3]: process started with pid [71457]
+[INFO] [spawner-4]: process started with pid [71458]
+[INFO] [power_node-5]: process started with pid [71459]
+[robot_state_publisher-2] [INFO] [1790661626.334523339] [robot_state_publisher]: Robot initialized
+[ros2_control_node-1] [INFO] [1790661626.401193460] [controller_manager]: Using Steady (Monotonic) clock for triggering controller manager cycles.
+[ros2_control_node-1] [INFO] [1790661626.420392227] [controller_manager]: Subscribing to '/robot_description' topic for robot description.
+[ros2_control_node-1] [INFO] [1790661626.420626301] [controller_manager]: update rate is 10 Hz
+[ros2_control_node-1] [INFO] [1790661626.420661449] [controller_manager]: Overruns handling is : enabled
+[ros2_control_node-1] [INFO] [1790661626.420681782] [controller_manager]: Spawning controller_manager RT thread with scheduler priority: 50
+[ros2_control_node-1] [WARN] [1790661626.421315392] [controller_manager]: Could not enable FIFO RT scheduling policy: with error number <1>(Operation not permitted). See [https://control.ros.org/master/doc/ros2_control/controller_manager/doc/userdoc.html] for details on how to enable realtime scheduling.
+[ros2_control_node-1] [INFO] [1790661626.674275545] [controller_manager]: Received robot description from topic.
+[ros2_control_node-1] [INFO] [1790661626.674367434] [controller_manager]: Enforcing command limits is disabled. Command limits from URDF will be ignored.
+[ros2_control_node-1] [INFO] [1790661626.695135977] [controller_manager]: Loading hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790661626.702316447] [controller_manager]: Loaded hardware 'oroha_base' from plugin 'mdrobot_ros2_control/MdrobotSystemHardware'
+[ros2_control_node-1] [INFO] [1790661626.702540910] [controller_manager]: Initialize hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790661626.786119894] [controller_manager.hardware_component.system.oroha_base]: init: port=/dev/oroha_md400 baud=19200 type=twin joints=2
+[ros2_control_node-1] [INFO] [1790661626.786233764] [controller_manager.hardware_component.system.oroha_base]:   joint 'motor_L' slave_id=2 direction=-1 SI counts_per_rev=30.000
+[ros2_control_node-1] [INFO] [1790661626.786256524] [controller_manager.hardware_component.system.oroha_base]:   joint 'motor_R' slave_id=1 direction=+1 SI counts_per_rev=30.000
+[ros2_control_node-1] [INFO] [1790661626.786293283] [controller_manager]: Successful initialization of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790661626.786531190] [controller_manager]: Activating component 'oroha_base'.
+[ros2_control_node-1] [INFO] [1790661626.786588486] [resource_manager]: 'configure' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790661627.030673949] [controller_manager.hardware_component.system.oroha_base]: opened /dev/oroha_md400 slave_id=2: version=86 voltage=27.6V
+[ros2_control_node-1] [INFO] [1790661627.072629904] [controller_manager.hardware_component.system.oroha_base]: opened /dev/oroha_md400 slave_id=1: version=86 voltage=27.0V
+[ros2_control_node-1] [INFO] [1790661627.100623991] [controller_manager.hardware_component.system.oroha_base]: USE_LIMIT_SW set to 1
+[ros2_control_node-1] [INFO] [1790661627.100731158] [resource_manager]: Successful 'configure' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790661627.100755658] [resource_manager]: 'activate' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790661627.184472105] [controller_manager.hardware_component.system.oroha_base]: enabled (UI_COM=1 + START_STOP arm)
+[ros2_control_node-1] [INFO] [1790661627.185121326] [resource_manager]: Successful 'activate' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790661627.185296455] [controller_manager]: Registering statistics for : oroha_base
+[ros2_control_node-1] [INFO] [1790661627.185486733] [controller_manager]: Resource Manager has been successfully initialized. Starting Controller Manager services...
+[spawner-3] [INFO] [1790661627.297399934] [spawner_joint_state_broadcaster]: waiting for service /controller_manager/list_controllers to become available...
+[power_node-5] [INFO] [1790661627.842349236] [oroha_power]: oroha_power: /dev/oroha_pico @ 115200, calib sensing-20260828
+[ros2_control_node-1] [INFO] [1790661630.552226681] [controller_manager]: Loading controller : 'joint_state_broadcaster' of type 'joint_state_broadcaster/JointStateBroadcaster'
+[ros2_control_node-1] [INFO] [1790661630.552319959] [controller_manager]: Loading controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1790661630.558835357] [controller_manager]: Controller 'joint_state_broadcaster' node arguments: --ros-args --params-file /home/oroha/oroha_claude/install/oroha_bringup/share/oroha_bringup/config/oroha_controllers.yaml 
+[spawner-3] [INFO] [1790661630.663124235] [spawner_joint_state_broadcaster]: Loaded joint_state_broadcaster
+[ros2_control_node-1] [INFO] [1790661630.665823620] [controller_manager]: Configuring controller: 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1790661630.666048472] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published
+[ros2_control_node-1] [INFO] [1790661630.763290528] [controller_manager]: Activating controllers: [ joint_state_broadcaster ]
+[ros2_control_node-1] [INFO] [1790661630.860458380] [controller_manager]: Successfully switched controllers!
+[spawner-3] [INFO] [1790661630.962967429] [spawner_joint_state_broadcaster]: Configured and activated joint_state_broadcaster
+[INFO] [spawner-3]: process has finished cleanly [pid 71457]
+[ros2_control_node-1] [INFO] [1790661631.462183116] [controller_manager]: Loading controller : 'diff_cont' of type 'diff_drive_controller/DiffDriveController'
+[ros2_control_node-1] [INFO] [1790661631.462247690] [controller_manager]: Loading controller 'diff_cont'
+[ros2_control_node-1] [INFO] [1790661631.466277443] [controller_manager]: Controller 'diff_cont' node arguments: --ros-args --params-file /home/oroha/oroha_claude/install/oroha_bringup/share/oroha_bringup/config/oroha_controllers.yaml 
+[spawner-4] [INFO] [1790661631.585588966] [spawner_diff_cont]: Loaded diff_cont
+[ros2_control_node-1] [INFO] [1790661631.587536481] [controller_manager]: Configuring controller: 'diff_cont'
+[ros2_control_node-1] [INFO] [1790661631.663571847] [controller_manager]: Activating controllers: [ diff_cont ]
+[ros2_control_node-1] [INFO] [1790661631.760899774] [controller_manager]: Successfully switched controllers!
+[spawner-4] [INFO] [1790661631.863213508] [spawner_diff_cont]: Configured and activated diff_cont
+[INFO] [spawner-4]: process has finished cleanly [pid 71458]
+[ros2_control_node-1] [WARN] [1790661632.160443612] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661633.160864576] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661634.260215501] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661635.260607391] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661636.360944574] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661637.460284091] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661638.460701166] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661639.560045758] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661640.560454240] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661641.560861723] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661642.660196444] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661643.660613927] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661644.761942441] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661704.160340799] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661705.160716410] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661706.260056260] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661707.260458408] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661708.260845649] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661709.360190314] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661710.360591980] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661711.360982721] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661712.460323182] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661713.460738942] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661714.560396161] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661715.560790587] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661716.560918458] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661717.660230290] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661718.660700512] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661719.760984712] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661720.860373340] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661721.860736062] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661774.660191830] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661775.660536478] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661776.660928867] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661777.760272995] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661778.760652718] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661779.860002975] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661780.860397716] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661781.860808531] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661782.960166843] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661783.960558140] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661784.960968936] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661786.060300342] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661787.060698434] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661788.161044987] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661789.260372948] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661790.260778929] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661791.361322629] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661792.460486035] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661793.460869683] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661794.560213070] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661795.560617533] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661796.660958845] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661797.760302194] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661798.760781361] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661799.861058210] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661800.960407782] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661801.960804708] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661803.060191058] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661804.060560632] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661805.060954225] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661806.160293112] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661807.160683408] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790661808.260020739] [diff_cont]: Velocity command timed out. Braking.
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[robot_state_publisher-2] [INFO] [1790661808.724058424] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-1] [INFO] [1790661808.724486757] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-1] [INFO] [1790661808.724613275] [controller_manager]: Shutdown request received....
+[ros2_control_node-1] [INFO] [1790661808.724683404] [controller_manager]: Shutting down all controllers in the controller manager.
+[ros2_control_node-1] [INFO] [1790661808.724718219] [controller_manager]: Deactivating controller 'diff_cont'
+[ros2_control_node-1] [INFO] [1790661808.724816386] [controller_manager]: Shutting down controller 'diff_cont'
+[ros2_control_node-1] [INFO] [1790661808.724997330] [controller_manager]: Deactivating controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1790661808.725046978] [controller_manager]: Shutting down controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1790661808.725121570] [resource_manager]: 'deactivate' hardware 'oroha_base' 
+[INFO] [power_node-5]: sending signal 'SIGINT' to process[power_node-5]
+[INFO] [robot_state_publisher-2]: sending signal 'SIGINT' to process[robot_state_publisher-2]
+[INFO] [ros2_control_node-1]: sending signal 'SIGINT' to process[ros2_control_node-1]
+[power_node-5] Traceback (most recent call last):
+[power_node-5]   File "/home/oroha/oroha_claude/install/oroha_power/lib/oroha_power/power_node", line 33, in <module>
+[power_node-5]     sys.exit(load_entry_point('oroha-power', 'console_scripts', 'power_node')())
+[power_node-5]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[power_node-5]   File "/home/oroha/oroha_claude/build/oroha_power/oroha_power/power_node.py", line 491, in main
+[power_node-5]     node.destroy_node()
+[power_node-5]   File "/home/oroha/oroha_claude/build/oroha_power/oroha_power/power_node.py", line 466, in destroy_node
+[power_node-5]     time.sleep(0.1)
+[power_node-5]   File "/home/oroha/oroha_claude/build/oroha_power/oroha_power/power_node.py", line 475, in _raise_interrupt
+[power_node-5]     raise KeyboardInterrupt
+[power_node-5] KeyboardInterrupt
+[robot_state_publisher-2] [INFO] [1790661808.735540684] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-1] [INFO] [1790661808.781746836] [controller_manager.hardware_component.system.oroha_base]: deactivate: stop + torque_off
+[ros2_control_node-1] [INFO] [1790661808.781883521] [resource_manager]: Successful 'deactivate' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790661808.781910188] [resource_manager]: 'shutdown' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790661808.781920503] [resource_manager]: Successful 'shutdown' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790661808.782008151] [controller_manager]: Shutting down the controller manager.
+[ros2_control_node-1] [ERROR] [1790661808.784712628] [controller_manager.pal_statistics]: Exception in publisher thread: context cannot be slept with because it's invalid!. Aborting!
+[ros2_control_node-1] [ERROR] [1790661808.786317237] [controller_manager.pal_statistics]: Exception in publisher thread: context cannot be slept with because it's invalid!. Aborting!
+[ros2_control_node-1] [INFO] [1790661808.790807823] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-1] [INFO] [1790661808.824994419] [controller_manager.pal_statistics]: Async messages lost 0
+[ros2_control_node-1] [INFO] [1790661808.825026141] [controller_manager.pal_statistics]: publish_async_failures_ 0
+[ros2_control_node-1] [INFO] [1790661808.829971115] [controller_manager.pal_statistics]: Async messages lost 0
+[ros2_control_node-1] [INFO] [1790661808.830022800] [controller_manager.pal_statistics]: publish_async_failures_ 0
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 71456]
+[ERROR] [power_node-5]: process has died [pid 71459, exit code -2, cmd '/home/oroha/oroha_claude/install/oroha_power/lib/oroha_power/power_node --ros-args -r __node:=oroha_power --params-file /home/oroha/oroha_claude/install/oroha_bringup/share/oroha_bringup/config/power.yaml --params-file /tmp/launch_params_db7auv9t'].
+[INFO] [ros2_control_node-1]: process has finished cleanly [pid 71455]
+[INFO] [launch.user]: [oroha safety] ros2_control_node exited -> MD400 stop: id 2 (LEFT): set_velocity(0) + stop() + torque_off() -> ok; id 1 (RIGHT): set_velocity(0) + stop() + torque_off() -> ok

@@ -1,0 +1,41 @@
+diff --git a/records/conditions_latest.yaml b/records/conditions_latest.yaml
+index 6b7c487..6def5f0 100644
+--- a/records/conditions_latest.yaml
++++ b/records/conditions_latest.yaml
+@@ -1,4 +1,4 @@
+-updated_utc: '2026-09-29T05:39:29Z'
++updated_utc: '2026-09-29T05:57:02Z'
+ rig_state: lifted
+ surface: lifted
+-note: A9 T20260929-05
++note: T20260929-06 repro
+diff --git a/records/tests/T20260929-05/runner.log b/records/tests/T20260929-05/runner.log
+index 3ef2c3e..7c6aafb 100644
+--- a/records/tests/T20260929-05/runner.log
++++ b/records/tests/T20260929-05/runner.log
+@@ -26,3 +26,12 @@
+ [INFO] [1790660411.910001654] [oroha_experiment]: [R20260929-143929-square] FAIL no /joint_states
+ [INFO] [1790660413.223757403] [oroha_experiment]: [R20260929-143929-square] BAG_STOPPED rc=0
+ [INFO] [1790660413.234208441] [oroha_experiment]: run R20260929-143929-square finished: FAILED
++[INFO] [1790661372.149827866] [oroha_experiment]: [R20260929-145608-spot] ARMED spot {'angle_deg': 360.0, 'turn_w': 0.5}
++[INFO] [1790661374.827193415] [oroha_experiment]: [R20260929-145608-spot] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-145608-spot/bag
++[INFO] [1790661374.839256060] [oroha_experiment]: [R20260929-145608-spot] START t_total=19.07
++[INFO] [1790661374.859688629] [oroha_experiment]: [R20260929-145608-spot] SEGMENT rest_pre
++[INFO] [1790661377.859313272] [oroha_experiment]: [R20260929-145608-spot] SEGMENT spot
++[INFO] [1790661390.908778597] [oroha_experiment]: [R20260929-145608-spot] SEGMENT rest_post
++[INFO] [1790661393.909760236] [oroha_experiment]: [R20260929-145608-spot] END profile complete
++[INFO] [1790661395.223675661] [oroha_experiment]: [R20260929-145608-spot] BAG_STOPPED rc=0
++[INFO] [1790661395.231596339] [oroha_experiment]: run R20260929-145608-spot finished: DONE
+diff --git a/setup/bg.sh b/setup/bg.sh
+index d9082d0..3196a82 100755
+--- a/setup/bg.sh
++++ b/setup/bg.sh
+@@ -3,7 +3,7 @@
+ # to a file, and print its pid:
+ #   setup/bg.sh <logfile> <command> [args...]
+ #   pid=$(setup/bg.sh /tmp/launch.log ros2 launch oroha_bringup robot.launch.py)
+-#   kill -INT "$pid"      # same as Ctrl-C in a terminal: clean shutdown (and the launch safety net)
++#   kill -INT -- "-$pid"  # whole process group (ros2 run keeps the node as a child) = Ctrl-C in a terminal: clean shutdown (and the launch safety net)
+ #
+ # Why: a non-interactive shell starts background jobs with SIGINT *ignored*, Python keeps an
+ # ignored SIGINT, and `ros2 launch` then ignores `kill -INT`; SIGTERM makes it exit without
