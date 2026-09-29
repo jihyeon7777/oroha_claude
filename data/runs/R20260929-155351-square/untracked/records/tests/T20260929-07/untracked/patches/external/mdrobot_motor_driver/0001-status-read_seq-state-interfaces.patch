@@ -1,0 +1,72 @@
+Subject: mdrobot_ros2_control: optional status/status2/read_seq state interfaces
+
+Exports the MD400 status bytes already present in each monitor read and a
+per-joint successful-read counter (unchanged = stale value). No extra bus traffic.
+Base: v1.4.0 c5c1f3f.
+---
+diff --git a/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp b/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp
+index 7dcbb6c..f5e3a6c 100644
+--- a/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp
++++ b/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp
+@@ -84,6 +84,10 @@ class MdrobotSystemHardware : public hardware_interface::SystemInterface {
+     bool has_position_state = false;
+     bool has_velocity_state = false;
+     bool has_effort_state = false;
++    bool has_status_state = false;   ///< "status": MD400 status byte (raw bits).
++    bool has_status2_state = false;  ///< "status2": MD400 status2 byte (raw bits).
++    bool has_read_seq_state = false; ///< "read_seq": count of successful reads.
++    double read_seq = 0.0;           ///< advances only on a fresh read (stale = unchanged).
+     CmdMode mode = CmdMode::kNone;       ///< current active command interface.
+     double last_position_cmd = 0.0;      ///< last issued position goal (cmd units).
+     bool position_cmd_valid = false;     ///< a position goal has been issued.
+@@ -96,7 +100,7 @@ class MdrobotSystemHardware : public hardware_interface::SystemInterface {
+   /// Convert a joint's commanded position (cmd units) to motor counts.
+   int32_t position_cmd_to_counts(const JointCfg& j, double cmd) const;
+   /// Push state into the exported interfaces for one joint from a Monitor.
+-  void publish_joint_state(const JointCfg& j, const mdrobot::Monitor& mon);
++  void publish_joint_state(JointCfg& j, const mdrobot::Monitor& mon);
+   /// Issue one joint's active velocity/position command on its own driver
+   /// (single + each twin wheel). Mutates the joint's position bookkeeping.
+   void write_single_joint(JointCfg& j, mdrobot::SingleMotorDriver& drv);
+diff --git a/src/mdrobot_ros2_control/src/mdrobot_system.cpp b/src/mdrobot_ros2_control/src/mdrobot_system.cpp
+index b63fa05..a8840f1 100644
+--- a/src/mdrobot_ros2_control/src/mdrobot_system.cpp
++++ b/src/mdrobot_ros2_control/src/mdrobot_system.cpp
+@@ -125,6 +125,11 @@ CallbackReturn MdrobotSystemHardware::on_init(
+         has_interface(j.state_interfaces, hardware_interface::HW_IF_VELOCITY);
+     cfg.has_effort_state =
+         has_interface(j.state_interfaces, hardware_interface::HW_IF_EFFORT);
++    // Optional diagnostic state interfaces (no extra bus traffic: the bytes
++    // come with the same monitor read).
++    cfg.has_status_state = has_interface(j.state_interfaces, "status");
++    cfg.has_status2_state = has_interface(j.state_interfaces, "status2");
++    cfg.has_read_seq_state = has_interface(j.state_interfaces, "read_seq");
+ 
+     if (!cfg.has_velocity_cmd && !cfg.has_position_cmd) {
+       RCLCPP_ERROR(get_logger(),
+@@ -413,7 +418,7 @@ int32_t MdrobotSystemHardware::position_cmd_to_counts(const JointCfg& j,
+   return static_cast<int32_t>(j.direction) * counts;
+ }
+ 
+-void MdrobotSystemHardware::publish_joint_state(const JointCfg& j,
++void MdrobotSystemHardware::publish_joint_state(JointCfg& j,
+                                                 const mdrobot::Monitor& mon) {
+   // direction (reverse) is applied symmetrically to commands and feedback so a
+   // mirrored wheel's odometry sign stays consistent with its commanded sign.
+@@ -434,6 +439,16 @@ void MdrobotSystemHardware::publish_joint_state(const JointCfg& j,
+     set_state(j.name + "/" + hardware_interface::HW_IF_EFFORT,
+               mon.current_a.value_or(0.0));
+   }
++  if (j.has_status_state) {
++    set_state(j.name + "/status", static_cast<double>(mon.status.raw));
++  }
++  if (j.has_status2_state) {
++    set_state(j.name + "/status2", static_cast<double>(mon.status2_raw));
++  }
++  j.read_seq += 1.0;
++  if (j.has_read_seq_state) {
++    set_state(j.name + "/read_seq", j.read_seq);
++  }
+ }
+ 
+ return_type MdrobotSystemHardware::read(const rclcpp::Time& /*time*/,

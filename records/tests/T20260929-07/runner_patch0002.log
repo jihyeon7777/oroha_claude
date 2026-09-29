@@ -1,0 +1,185 @@
+[INFO] [1790664817.315067701] [oroha_experiment]: experiment runner ready; runs -> /home/oroha/oroha_claude/data/runs
+[INFO] [1790664835.320524884] [oroha_experiment]: [R20260929-155351-square] ARMED square {'side': 1.0, 'v': 0.2}
+[INFO] [1790664837.565204290] [oroha_experiment]: [R20260929-155351-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-155351-square/bag
+[INFO] [1790664837.580010426] [oroha_experiment]: [R20260929-155351-square] START t_total=50.23
+[INFO] [1790664837.592834289] [oroha_experiment]: [R20260929-155351-square] SEGMENT rest_pre
+[INFO] [1790664840.593110444] [oroha_experiment]: [R20260929-155351-square] SEGMENT side1
+[INFO] [1790664846.242601510] [oroha_experiment]: [R20260929-155351-square] SEGMENT dwell1
+[INFO] [1790664847.242951925] [oroha_experiment]: [R20260929-155351-square] SEGMENT turn1
+[INFO] [1790664850.893445657] [oroha_experiment]: [R20260929-155351-square] SEGMENT dwell2
+[INFO] [1790664851.893021741] [oroha_experiment]: [R20260929-155351-square] SEGMENT side2
+[INFO] [1790664857.593271388] [oroha_experiment]: [R20260929-155351-square] SEGMENT dwell3
+[INFO] [1790664858.593089860] [oroha_experiment]: [R20260929-155351-square] SEGMENT turn2
+[INFO] [1790664862.193062621] [oroha_experiment]: [R20260929-155351-square] SEGMENT dwell4
+[INFO] [1790664863.193132185] [oroha_experiment]: [R20260929-155351-square] SEGMENT side3
+[INFO] [1790664868.893269537] [oroha_experiment]: [R20260929-155351-square] SEGMENT dwell5
+[INFO] [1790664869.893214990] [oroha_experiment]: [R20260929-155351-square] SEGMENT turn3
+[INFO] [1790664873.543053038] [oroha_experiment]: [R20260929-155351-square] SEGMENT dwell6
+[INFO] [1790664874.542911695] [oroha_experiment]: [R20260929-155351-square] SEGMENT side4
+[INFO] [1790664880.193105611] [oroha_experiment]: [R20260929-155351-square] SEGMENT dwell7
+[INFO] [1790664881.193110972] [oroha_experiment]: [R20260929-155351-square] SEGMENT turn4
+[INFO] [1790664884.842944612] [oroha_experiment]: [R20260929-155351-square] SEGMENT rest_post
+[INFO] [1790664887.843174231] [oroha_experiment]: [R20260929-155351-square] END profile complete
+[INFO] [1790664889.159781036] [oroha_experiment]: [R20260929-155351-square] BAG_STOPPED rc=0
+[INFO] [1790664889.169727830] [oroha_experiment]: run R20260929-155351-square finished: DONE
+[INFO] [1790664897.603693234] [oroha_experiment]: [R20260929-155454-square] ARMED square {'side': 1.0, 'v': 0.2}
+[INFO] [1790664898.819525431] [oroha_experiment]: [R20260929-155454-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-155454-square/bag
+[INFO] [1790664898.878088126] [oroha_experiment]: [R20260929-155454-square] START t_total=50.23
+[INFO] [1790664898.879814381] [oroha_experiment]: [R20260929-155454-square] SEGMENT rest_pre
+[INFO] [1790664901.842837465] [oroha_experiment]: [R20260929-155454-square] SEGMENT side1
+[INFO] [1790664907.493672269] [oroha_experiment]: [R20260929-155454-square] SEGMENT dwell1
+[INFO] [1790664908.493666185] [oroha_experiment]: [R20260929-155454-square] SEGMENT turn1
+[INFO] [1790664912.142992308] [oroha_experiment]: [R20260929-155454-square] SEGMENT dwell2
+[INFO] [1790664913.143065353] [oroha_experiment]: [R20260929-155454-square] SEGMENT side2
+[INFO] [1790664918.842917168] [oroha_experiment]: [R20260929-155454-square] SEGMENT dwell3
+[INFO] [1790664919.843260602] [oroha_experiment]: [R20260929-155454-square] SEGMENT turn2
+[INFO] [1790664923.442989493] [oroha_experiment]: [R20260929-155454-square] SEGMENT dwell4
+[INFO] [1790664924.442834854] [oroha_experiment]: [R20260929-155454-square] SEGMENT side3
+[INFO] [1790664930.142926409] [oroha_experiment]: [R20260929-155454-square] SEGMENT dwell5
+[INFO] [1790664931.142823604] [oroha_experiment]: [R20260929-155454-square] SEGMENT turn3
+[INFO] [1790664934.793287113] [oroha_experiment]: [R20260929-155454-square] SEGMENT dwell6
+[INFO] [1790664935.793245955] [oroha_experiment]: [R20260929-155454-square] SEGMENT side4
+[INFO] [1790664941.442795132] [oroha_experiment]: [R20260929-155454-square] SEGMENT dwell7
+[INFO] [1790664942.443091437] [oroha_experiment]: [R20260929-155454-square] SEGMENT turn4
+[INFO] [1790664946.093720168] [oroha_experiment]: [R20260929-155454-square] SEGMENT rest_post
+[INFO] [1790664949.094086583] [oroha_experiment]: [R20260929-155454-square] END profile complete
+[INFO] [1790664950.408623707] [oroha_experiment]: [R20260929-155454-square] BAG_STOPPED rc=0
+[INFO] [1790664950.419617425] [oroha_experiment]: run R20260929-155454-square finished: DONE
+[INFO] [1790664958.916085534] [oroha_experiment]: [R20260929-155555-square] ARMED square {'side': 1.0, 'v': 0.2}
+[INFO] [1790664959.937624332] [oroha_experiment]: [R20260929-155555-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-155555-square/bag
+[INFO] [1790664959.951680377] [oroha_experiment]: [R20260929-155555-square] START t_total=50.23
+[INFO] [1790664959.953711281] [oroha_experiment]: [R20260929-155555-square] SEGMENT rest_pre
+[INFO] [1790664962.942930903] [oroha_experiment]: [R20260929-155555-square] SEGMENT side1
+[INFO] [1790664968.642869829] [oroha_experiment]: [R20260929-155555-square] SEGMENT dwell1
+[INFO] [1790664969.642457227] [oroha_experiment]: [R20260929-155555-square] SEGMENT turn1
+[INFO] [1790664973.293800124] [oroha_experiment]: [R20260929-155555-square] SEGMENT dwell2
+[INFO] [1790664974.293702559] [oroha_experiment]: [R20260929-155555-square] SEGMENT side2
+[INFO] [1790664979.942875477] [oroha_experiment]: [R20260929-155555-square] SEGMENT dwell3
+[INFO] [1790664980.965387310] [oroha_experiment]: [R20260929-155555-square] SEGMENT turn2
+[INFO] [1790664984.593115496] [oroha_experiment]: [R20260929-155555-square] SEGMENT dwell4
+[INFO] [1790664985.593184856] [oroha_experiment]: [R20260929-155555-square] SEGMENT side3
+[INFO] [1790664991.243563143] [oroha_experiment]: [R20260929-155555-square] SEGMENT dwell5
+[INFO] [1790664992.242847097] [oroha_experiment]: [R20260929-155555-square] SEGMENT turn3
+[INFO] [1790664995.893675532] [oroha_experiment]: [R20260929-155555-square] SEGMENT dwell6
+[INFO] [1790664996.893522208] [oroha_experiment]: [R20260929-155555-square] SEGMENT side4
+[INFO] [1790665002.543013237] [oroha_experiment]: [R20260929-155555-square] SEGMENT dwell7
+[INFO] [1790665003.542992486] [oroha_experiment]: [R20260929-155555-square] SEGMENT turn4
+[INFO] [1790665007.192965460] [oroha_experiment]: [R20260929-155555-square] SEGMENT rest_post
+[INFO] [1790665010.193314726] [oroha_experiment]: [R20260929-155555-square] END profile complete
+[INFO] [1790665011.508651775] [oroha_experiment]: [R20260929-155555-square] BAG_STOPPED rc=0
+[INFO] [1790665011.520534306] [oroha_experiment]: run R20260929-155555-square finished: DONE
+[INFO] [1790665019.974024910] [oroha_experiment]: [R20260929-155656-square] ARMED square {'side': 1.0, 'v': 0.2}
+[INFO] [1790665021.290543660] [oroha_experiment]: [R20260929-155656-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-155656-square/bag
+[INFO] [1790665021.304784575] [oroha_experiment]: [R20260929-155656-square] START t_total=50.23
+[INFO] [1790665021.397983866] [oroha_experiment]: [R20260929-155656-square] SEGMENT rest_pre
+[INFO] [1790665024.346358479] [oroha_experiment]: [R20260929-155656-square] SEGMENT side1
+[INFO] [1790665029.993015848] [oroha_experiment]: [R20260929-155656-square] SEGMENT dwell1
+[INFO] [1790665030.993128615] [oroha_experiment]: [R20260929-155656-square] SEGMENT turn1
+[INFO] [1790665034.642558905] [oroha_experiment]: [R20260929-155656-square] SEGMENT dwell2
+[INFO] [1790665035.642894191] [oroha_experiment]: [R20260929-155656-square] SEGMENT side2
+[INFO] [1790665041.293517088] [oroha_experiment]: [R20260929-155656-square] SEGMENT dwell3
+[INFO] [1790665042.293479078] [oroha_experiment]: [R20260929-155656-square] SEGMENT turn2
+[INFO] [1790665045.942898182] [oroha_experiment]: [R20260929-155656-square] SEGMENT dwell4
+[INFO] [1790665046.942887432] [oroha_experiment]: [R20260929-155656-square] SEGMENT side3
+[INFO] [1790665052.593073793] [oroha_experiment]: [R20260929-155656-square] SEGMENT dwell5
+[INFO] [1790665053.593094968] [oroha_experiment]: [R20260929-155656-square] SEGMENT turn3
+[INFO] [1790665057.242845776] [oroha_experiment]: [R20260929-155656-square] SEGMENT dwell6
+[INFO] [1790665058.242935840] [oroha_experiment]: [R20260929-155656-square] SEGMENT side4
+[INFO] [1790665063.893625200] [oroha_experiment]: [R20260929-155656-square] SEGMENT dwell7
+[INFO] [1790665064.893503579] [oroha_experiment]: [R20260929-155656-square] SEGMENT turn4
+[INFO] [1790665068.542974646] [oroha_experiment]: [R20260929-155656-square] SEGMENT rest_post
+[INFO] [1790665071.543030978] [oroha_experiment]: [R20260929-155656-square] END profile complete
+[INFO] [1790665072.907899470] [oroha_experiment]: [R20260929-155656-square] BAG_STOPPED rc=0
+[INFO] [1790665072.919735906] [oroha_experiment]: run R20260929-155656-square finished: DONE
+[INFO] [1790665081.398745552] [oroha_experiment]: [R20260929-155757-square] ARMED square {'side': 1.0, 'v': 0.2}
+[INFO] [1790665085.018431362] [oroha_experiment]: [R20260929-155757-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-155757-square/bag
+[INFO] [1790665085.032603552] [oroha_experiment]: [R20260929-155757-square] START t_total=50.23
+[INFO] [1790665085.042763102] [oroha_experiment]: [R20260929-155757-square] SEGMENT rest_pre
+[INFO] [1790665088.043075694] [oroha_experiment]: [R20260929-155757-square] SEGMENT side1
+[INFO] [1790665093.693280218] [oroha_experiment]: [R20260929-155757-square] SEGMENT dwell1
+[INFO] [1790665094.693299249] [oroha_experiment]: [R20260929-155757-square] SEGMENT turn1
+[INFO] [1790665098.342900711] [oroha_experiment]: [R20260929-155757-square] SEGMENT dwell2
+[INFO] [1790665099.342853242] [oroha_experiment]: [R20260929-155757-square] SEGMENT side2
+[INFO] [1790665105.043015704] [oroha_experiment]: [R20260929-155757-square] SEGMENT dwell3
+[INFO] [1790665106.042791773] [oroha_experiment]: [R20260929-155757-square] SEGMENT turn2
+[INFO] [1790665109.642787925] [oroha_experiment]: [R20260929-155757-square] SEGMENT dwell4
+[INFO] [1790665110.642981919] [oroha_experiment]: [R20260929-155757-square] SEGMENT side3
+[INFO] [1790665116.342786271] [oroha_experiment]: [R20260929-155757-square] SEGMENT dwell5
+[INFO] [1790665117.343089468] [oroha_experiment]: [R20260929-155757-square] SEGMENT turn3
+[INFO] [1790665120.993167244] [oroha_experiment]: [R20260929-155757-square] SEGMENT dwell6
+[INFO] [1790665121.993192460] [oroha_experiment]: [R20260929-155757-square] SEGMENT side4
+[INFO] [1790665127.642847466] [oroha_experiment]: [R20260929-155757-square] SEGMENT dwell7
+[INFO] [1790665128.642864460] [oroha_experiment]: [R20260929-155757-square] SEGMENT turn4
+[INFO] [1790665132.293695901] [oroha_experiment]: [R20260929-155757-square] SEGMENT rest_post
+[INFO] [1790665135.293849420] [oroha_experiment]: [R20260929-155757-square] END profile complete
+[INFO] [1790665136.713994616] [oroha_experiment]: [R20260929-155757-square] BAG_STOPPED rc=0
+[INFO] [1790665136.723808019] [oroha_experiment]: run R20260929-155757-square finished: DONE
+[INFO] [1790665145.284609197] [oroha_experiment]: [R20260929-155901-square] ARMED square {'side': 1.0, 'v': 0.2}
+[INFO] [1790665148.747810947] [oroha_experiment]: [R20260929-155901-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-155901-square/bag
+[INFO] [1790665148.759608327] [oroha_experiment]: [R20260929-155901-square] START t_total=50.23
+[INFO] [1790665148.793002526] [oroha_experiment]: [R20260929-155901-square] SEGMENT rest_pre
+[INFO] [1790665151.793110286] [oroha_experiment]: [R20260929-155901-square] SEGMENT side1
+[INFO] [1790665157.443045217] [oroha_experiment]: [R20260929-155901-square] SEGMENT dwell1
+[INFO] [1790665158.442683490] [oroha_experiment]: [R20260929-155901-square] SEGMENT turn1
+[INFO] [1790665162.093525968] [oroha_experiment]: [R20260929-155901-square] SEGMENT dwell2
+[INFO] [1790665163.093727110] [oroha_experiment]: [R20260929-155901-square] SEGMENT side2
+[INFO] [1790665168.930070735] [oroha_experiment]: [R20260929-155901-square] SEGMENT dwell3
+[INFO] [1790665169.742925426] [oroha_experiment]: [R20260929-155901-square] SEGMENT turn2
+[INFO] [1790665173.393128109] [oroha_experiment]: [R20260929-155901-square] SEGMENT dwell4
+[INFO] [1790665174.393362158] [oroha_experiment]: [R20260929-155901-square] SEGMENT side3
+[INFO] [1790665180.042844387] [oroha_experiment]: [R20260929-155901-square] SEGMENT dwell5
+[INFO] [1790665181.043027214] [oroha_experiment]: [R20260929-155901-square] SEGMENT turn3
+[INFO] [1790665184.693567489] [oroha_experiment]: [R20260929-155901-square] SEGMENT dwell6
+[INFO] [1790665185.696425920] [oroha_experiment]: [R20260929-155901-square] SEGMENT side4
+[INFO] [1790665191.393764945] [oroha_experiment]: [R20260929-155901-square] SEGMENT dwell7
+[INFO] [1790665192.393007774] [oroha_experiment]: [R20260929-155901-square] SEGMENT turn4
+[INFO] [1790665195.993131593] [oroha_experiment]: [R20260929-155901-square] SEGMENT rest_post
+[INFO] [1790665198.993490759] [oroha_experiment]: [R20260929-155901-square] END profile complete
+[INFO] [1790665200.307914999] [oroha_experiment]: [R20260929-155901-square] BAG_STOPPED rc=0
+[INFO] [1790665200.318806899] [oroha_experiment]: run R20260929-155901-square finished: DONE
+[INFO] [1790665208.850469349] [oroha_experiment]: [R20260929-160005-square] ARMED square {'side': 1.0, 'v': 0.2}
+[INFO] [1790665211.880584372] [oroha_experiment]: [R20260929-160005-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-160005-square/bag
+[INFO] [1790665211.894725709] [oroha_experiment]: [R20260929-160005-square] START t_total=50.23
+[INFO] [1790665211.896438427] [oroha_experiment]: [R20260929-160005-square] SEGMENT rest_pre
+[INFO] [1790665214.893641453] [oroha_experiment]: [R20260929-160005-square] SEGMENT side1
+[INFO] [1790665220.593243879] [oroha_experiment]: [R20260929-160005-square] SEGMENT dwell1
+[INFO] [1790665221.593253410] [oroha_experiment]: [R20260929-160005-square] SEGMENT turn1
+[INFO] [1790665225.242541040] [oroha_experiment]: [R20260929-160005-square] SEGMENT dwell2
+[INFO] [1790665226.242913181] [oroha_experiment]: [R20260929-160005-square] SEGMENT side2
+[INFO] [1790665231.893802055] [oroha_experiment]: [R20260929-160005-square] SEGMENT dwell3
+[INFO] [1790665232.893459531] [oroha_experiment]: [R20260929-160005-square] SEGMENT turn2
+[INFO] [1790665236.542784438] [oroha_experiment]: [R20260929-160005-square] SEGMENT dwell4
+[INFO] [1790665237.542463100] [oroha_experiment]: [R20260929-160005-square] SEGMENT side3
+[INFO] [1790665243.193318122] [oroha_experiment]: [R20260929-160005-square] SEGMENT dwell5
+[INFO] [1790665244.193208208] [oroha_experiment]: [R20260929-160005-square] SEGMENT turn3
+[INFO] [1790665247.842682190] [oroha_experiment]: [R20260929-160005-square] SEGMENT dwell6
+[INFO] [1790665248.842907294] [oroha_experiment]: [R20260929-160005-square] SEGMENT side4
+[INFO] [1790665254.493686224] [oroha_experiment]: [R20260929-160005-square] SEGMENT dwell7
+[INFO] [1790665255.493579718] [oroha_experiment]: [R20260929-160005-square] SEGMENT turn4
+[INFO] [1790665259.143146366] [oroha_experiment]: [R20260929-160005-square] SEGMENT rest_post
+[INFO] [1790665262.143353866] [oroha_experiment]: [R20260929-160005-square] END profile complete
+[INFO] [1790665263.458938770] [oroha_experiment]: [R20260929-160005-square] BAG_STOPPED rc=0
+[INFO] [1790665263.470049151] [oroha_experiment]: run R20260929-160005-square finished: DONE
+[INFO] [1790665272.066384653] [oroha_experiment]: [R20260929-160108-square] ARMED square {'side': 1.0, 'v': 0.2}
+[INFO] [1790665274.922304731] [oroha_experiment]: [R20260929-160108-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-160108-square/bag
+[INFO] [1790665274.938546953] [oroha_experiment]: [R20260929-160108-square] START t_total=50.23
+[INFO] [1790665274.942357536] [oroha_experiment]: [R20260929-160108-square] SEGMENT rest_pre
+[INFO] [1790665277.943054165] [oroha_experiment]: [R20260929-160108-square] SEGMENT side1
+[INFO] [1790665283.643186534] [oroha_experiment]: [R20260929-160108-square] SEGMENT dwell1
+[INFO] [1790665284.642904381] [oroha_experiment]: [R20260929-160108-square] SEGMENT turn1
+[INFO] [1790665288.243067052] [oroha_experiment]: [R20260929-160108-square] SEGMENT dwell2
+[INFO] [1790665289.242840639] [oroha_experiment]: [R20260929-160108-square] SEGMENT side2
+[INFO] [1790665294.943161211] [oroha_experiment]: [R20260929-160108-square] SEGMENT dwell3
+[INFO] [1790665295.942867539] [oroha_experiment]: [R20260929-160108-square] SEGMENT turn2
+[INFO] [1790665299.593165593] [oroha_experiment]: [R20260929-160108-square] SEGMENT dwell4
+[INFO] [1790665300.593258235] [oroha_experiment]: [R20260929-160108-square] SEGMENT side3
+[INFO] [1790665306.242901389] [oroha_experiment]: [R20260929-160108-square] SEGMENT dwell5
+[INFO] [1790665307.242840031] [oroha_experiment]: [R20260929-160108-square] SEGMENT turn3
+[INFO] [1790665310.894059546] [oroha_experiment]: [R20260929-160108-square] SEGMENT dwell6
+[INFO] [1790665311.893612355] [oroha_experiment]: [R20260929-160108-square] SEGMENT side4
+[INFO] [1790665317.543088621] [oroha_experiment]: [R20260929-160108-square] SEGMENT dwell7
+[INFO] [1790665318.542711912] [oroha_experiment]: [R20260929-160108-square] SEGMENT turn4
+[INFO] [1790665322.192930651] [oroha_experiment]: [R20260929-160108-square] SEGMENT rest_post
+[INFO] [1790665325.194573277] [oroha_experiment]: [R20260929-160108-square] END profile complete
+[INFO] [1790665326.508265723] [oroha_experiment]: [R20260929-160108-square] BAG_STOPPED rc=0
+[INFO] [1790665326.519973214] [oroha_experiment]: run R20260929-160108-square finished: DONE

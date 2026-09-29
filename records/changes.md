@@ -45,3 +45,5 @@
 - **T20260929-04 통과**: FTDI 1 ms 적용(주기 64 ms), ros2_control 운용 중 E-stop 정지·해제 시 재출발, RS485 분리 시 E-stop까지 계속 회전 — 복구 절차 문서화. 세션 A의 띄운 상태 안전 시험 완료.
 - T20260929-05 중단: 사각 경로 회전 중 왼쪽 MD400 전원 순간 차단 추정(Pico 전류가 대기 이하, 카운터 리셋), 버스 전체 4 s 무응답, 오른쪽은 명령 유지. runner에 FAIL(하드웨어 링크 끊김) 시 Modbus 직접 정지 추가.
 - T20260929-06: 두절은 간헐(사각 3회 중 2회, side3 감속 직후, 왼쪽 MD400 무전력 정황). 직접 정지 보완 동작 확인. 정지 규칙 kill -INT -- -$pid(ros2 run 래퍼 뒤 노드 잔존).
+- **T20260929-07 통과(종결)**: 통신 두절 원인 = **MD400 수신 잠김**. 신규 `oroha_bus_probe`(런치 없이 두 MD400 직접 폴링, 트랜잭션 전수 기록, 잠김 진단 단계)로 ros2_control 없이 5회 재현. 잠긴 장치는 다른 장치 통신 직후의 요청을 모두 무시(무응답·명령 미실행, status 0, 카운터 유지), 휴지 뒤 요청 하나에 복구. 전원 문제 정황 없음(Pico). 프레임 간격 5 ms로도 발생. T-05·06의 "왼쪽 무전력" 해석 대체.
+- 패치 `patches/external/mdrobot_motor_driver/0001`(joint별 `status`·`status2`·`read_seq` 상태 인터페이스 → `/dynamic_joint_states`, export `joint_diag.csv`), `0002`(실패 장치 즉시 재시도 `resync_retry`, `inter_frame_delay` 파라미터). xacro: 새 상태 인터페이스, `timeout 0.1`, `resync_retry true`. 재시도 후 띄운 사각 8/8 DONE(잠김 3회 복구). `.gitignore`: `data/tests/*/bag*/`.

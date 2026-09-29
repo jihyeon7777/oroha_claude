@@ -1,0 +1,137 @@
+diff --git a/records/conditions_latest.yaml b/records/conditions_latest.yaml
+index ec09010..cc44ed6 100644
+--- a/records/conditions_latest.yaml
++++ b/records/conditions_latest.yaml
+@@ -1,4 +1,4 @@
+-updated_utc: '2026-09-29T06:01:54Z'
++updated_utc: '2026-09-29T06:08:05Z'
+ rig_state: lifted
+ surface: lifted
+ note: T20260929-06 square repeat
+diff --git a/src/oroha_description/test/test_xacro.py b/src/oroha_description/test/test_xacro.py
+index 783c4c2..16386e8 100644
+--- a/src/oroha_description/test/test_xacro.py
++++ b/src/oroha_description/test/test_xacro.py
+@@ -63,7 +63,7 @@ def test_interfaces(mode):
+     for name in ("motor_L", "motor_R"):
+         _, cmds, states = joint_params(root, name)
+         assert cmds == ["velocity"]
+-        assert states == ["position", "velocity", "effort"]
++        assert states == ["position", "velocity", "effort", "status", "status2", "read_seq"]
+ 
+ 
+ def test_mock_plugin():
+diff --git a/src/oroha_description/urdf/oroha.ros2_control.xacro b/src/oroha_description/urdf/oroha.ros2_control.xacro
+index 2a33f10..0288088 100644
+--- a/src/oroha_description/urdf/oroha.ros2_control.xacro
++++ b/src/oroha_description/urdf/oroha.ros2_control.xacro
+@@ -37,6 +37,11 @@
+         <state_interface name="position"/>
+         <state_interface name="velocity"/>
+         <state_interface name="effort"/>   <!-- MD400 internal current, A, unsigned, 0.1 A steps -->
++        <!-- patches/external/mdrobot_motor_driver/0001: raw MD400 status bytes and a
++             successful-read counter (unchanged = repeated/stale value); /dynamic_joint_states -->
++        <state_interface name="status"/>
++        <state_interface name="status2"/>
++        <state_interface name="read_seq"/>
+         <param name="motor_id">$(arg motor_id_L)</param>
+         <param name="reverse">$(arg reverse_L)</param>
+         <param name="counts_per_rev">$(arg counts_per_rev_L)</param>
+@@ -46,6 +51,9 @@
+         <state_interface name="position"/>
+         <state_interface name="velocity"/>
+         <state_interface name="effort"/>
++        <state_interface name="status"/>
++        <state_interface name="status2"/>
++        <state_interface name="read_seq"/>
+         <param name="motor_id">$(arg motor_id_R)</param>
+         <param name="reverse">$(arg reverse_R)</param>
+         <param name="counts_per_rev">$(arg counts_per_rev_R)</param>
+diff --git a/src/oroha_tools/oroha_tools/export_csv.py b/src/oroha_tools/oroha_tools/export_csv.py
+index 811d699..72123eb 100644
+--- a/src/oroha_tools/oroha_tools/export_csv.py
++++ b/src/oroha_tools/oroha_tools/export_csv.py
+@@ -2,7 +2,7 @@
+ 
+   oroha_export_csv data/runs/R20260925-143012-square [--out csv]
+ 
+-Writes <run>/csv/{cmd_vel,odom,joint_states,power,battery,imu,mag,events,status,diagnostics}.csv,
++Writes <run>/csv/{cmd_vel,odom,joint_states,joint_diag,power,battery,imu,mag,events,status,diagnostics}.csv,
+ <run>/csv/columns.md (units, time bases) and <run>/csv/summary.yaml (durations, odometry vs
+ ideal, currents/energy, sample counts, calibration ids). Raw data are never modified;
+ processed columns state their method here and in columns.md.
+@@ -28,6 +28,7 @@ TOPIC_FILES = {
+     "/imu/mag": "mag", "/imu/temperature": "temperature", "/oroha_experiment/event": "events",
+     "/oroha_experiment/status": "status", "/diagnostics": "diagnostics",
+     "/oroha_power/calibration_event": "calibration_events",
++    "/dynamic_joint_states": "joint_diag",
+ }
+ 
+ 
+@@ -170,6 +171,7 @@ def export(run_dir: Path, out: Path) -> dict:
+     gyro_int = 0.0
+     gyro_prev = None
+     joint_names = None
++    diag = {}          # joint -> {"n", "stale", "stale_run", "stale_run_max", "seq", "status": {value: n}}
+ 
+     for topic, tname, t_ns, msg in read_bag(bag_dir):
+         t = (t_ns - t0) * 1e-9
+@@ -196,6 +198,28 @@ def export(run_dir: Path, out: Path) -> dict:
+                 row[f"{jn}_vel"] = msg.velocity[i] if i < len(msg.velocity) else ""
+                 row[f"{jn}_eff"] = msg.effort[i] if i < len(msg.effort) else ""
+             w.row(name, row)
++        elif name == "joint_diag":
++            row = dict(base)
++            for jn, iv in zip(msg.joint_names, msg.interface_values):
++                vals = dict(zip(iv.interface_names, iv.values))
++                if "read_seq" not in vals:
++                    continue                      # plugin without patch 0001
++                st, st2, seq = int(vals.get("status", 0)), int(vals.get("status2", 0)), vals["read_seq"]
++                row[f"{jn}_status"], row[f"{jn}_status2"], row[f"{jn}_read_seq"] = st, st2, int(seq)
++                d = diag.setdefault(jn, {"n": 0, "stale": 0, "stale_run": 0, "stale_run_max": 0,
++                                         "seq": None, "status": {}})
++                d["n"] += 1
++                if d["seq"] is not None and seq == d["seq"]:
++                    d["stale"] += 1
++                    d["stale_run"] += 1
++                    d["stale_run_max"] = max(d["stale_run_max"], d["stale_run"])
++                else:
++                    d["stale_run"] = 0
++                d["seq"] = seq
++                key = f"{st:#04x}/{st2:#04x}"
++                d["status"][key] = d["status"].get(key, 0) + 1
++            if len(row) > len(base):
++                w.row(name, row)
+         elif name == "power":
+             dev_ns = int(msg.device_stamp.sec) * 1_000_000_000 + int(msg.device_stamp.nanosec)
+             n_power += 1
+@@ -292,6 +316,9 @@ def export(run_dir: Path, out: Path) -> dict:
+             "i_left_max_a": round(i_left_max, 4), "i_right_max_a": round(i_right_max, 4),
+             "calib_ids": sorted(calib_ids),
+         },
++        "joint_diag": None if not diag else {
++            jn: {"samples": d["n"], "stale_samples": d["stale"], "max_consecutive_stale": d["stale_run_max"],
++                 "status/status2 counts": d["status"]} for jn, d in diag.items()},
+         "imu": None if imu_yaw_first is None else {
+             "fused_yaw_change_rad": round(imu_yaw_last - imu_yaw_first, 4),
+             "gyro_integrated_yaw_rad": round(gyro_int, 4),
+@@ -321,6 +348,7 @@ oroha_power the host receive time, for um7 the receive time, for controllers the
+ | cmd_vel_out.csv | v, w | m/s, rad/s command actually applied by diff_cont after its speed/acceleration limits |
+ | odom.csv | x, y, yaw, vx, wz | m, m, rad (odom frame), m/s, rad/s — wheel odometry, no-slip assumption |
+ | joint_states.csv | <joint>_pos, _vel, _eff | rad, rad/s at the MOTOR SHAFT (34.615:1 to the wheel), A (MD400 internal, unsigned) |
++| joint_diag.csv | <joint>_status, _status2, _read_seq | MD400 status bytes as read (raw bits, see MD400 manual PID_MONITOR) and the plugin's successful-read counter; a repeated read_seq = the value was NOT re-read that cycle (comm failure, last value republished) |
+ | power.csv | device_stamp_ns, seq, t_us, n_rounds, gp2x_mean/min/max, flags, zero_valid, overrun | Pico window (20 ms): raw 12-bit ADC; t_us = device monotonic us; device_stamp_ns = t_us mapped to ROS time |
+ | power.csv | v_bus, i_left, i_right, p_left, p_right, p_total | V, A (discharge positive; LEFT=GP27=id2, RIGHT=GP28=id1), W; converted with calib_id |
+ | power.csv | zero_gp27, zero_gp28, rail_corr, sync_offset_s, sync_residual_ms, calib_id, fw_version | conversion inputs actually applied |
+diff --git a/src/oroha_tools/setup.py b/src/oroha_tools/setup.py
+index 6443738..d78e958 100644
+--- a/src/oroha_tools/setup.py
++++ b/src/oroha_tools/setup.py
+@@ -28,6 +28,7 @@ setup(
+             "oroha_ledger = oroha_tools.ledger:main",
+             "oroha_paper_export = oroha_tools.paper_export:main",
+             "oroha_verify_export = oroha_tools.verify_export:main",
++            "oroha_bus_probe = oroha_tools.bus_probe:main",
+         ],
+     },
+ )

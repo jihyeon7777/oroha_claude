@@ -43,13 +43,13 @@ OROHA는 HardwareX 논문으로 공개할 4륜 skid-steer 연구 플랫폼이다
 
 ```
 oroha.repos            외부 소스 고정: TaesuYim/mdrobot_motor_driver v1.4.0 (c5c1f3f), jihyeon7777/um7_driver (9a34258)
-src/external/          위 checkout — 커밋하지 않음, 직접 수정 금지(patches/ 로만)
+src/external/          위 checkout — 커밋하지 않음, 직접 수정 금지(patches/ 로만: mdrobot 0001 status·read_seq, 0002 즉시 재시도)
 src/oroha_msgs         PowerSample·ExperimentEvent/Status·ArmExperiment/AddNote
 src/oroha_description  4륜(조인트 motor_L/motor_R 2개) xacro, use_mock_hardware 스위치, test/test_xacro.py
 src/oroha_bringup      robot.launch.py(종료·크래시 시 MD400 정지 안전망), config/oroha_controllers.yaml(실측값), test/test_config.py
 src/oroha_power        Pico 계측 노드(2.0.0), port_guard, config/calibration/sensing-20260828.yaml(교정 단일 출처)
 src/oroha_experiment   profiles.py(시간 기반 경로·spot·방 크기 검사), runner_node, cli(oroha_exp)
-src/oroha_tools        preflight·md_stop·direction_check·wheel_push·versions·export_csv·ledger·paper_export·verify_export
+src/oroha_tools        preflight·md_stop·direction_check·wheel_push·bus_probe·versions·export_csv·ledger·paper_export·verify_export
 src/oroha_teleop       deadman_teleop (사용자 터미널 전용)
 firmware/pico/         MicroPython main.py (oroha-bench-1.2, sha256 bace9505…; 1.1은 archive/)
 records/               changes.md · decisions.md · tests/tests.csv + T*.md(+<ID>/ 증거) · calibration/ · preflight/
@@ -89,6 +89,7 @@ oroha_export_csv data/runs/<RUN_ID>; oroha_ledger --check             # CSV 추�
 oroha_paper_export --runs usable; oroha_verify_export paper_export/<ts>
 oroha_profile s_curve --radius 0.4 --v 0.2                            # 프로파일·필요 공간 확인
 oroha_versions --out records/tests/<ID>/                              # 시험별 버전·미커밋 diff 스냅샷
+oroha_bus_probe --mode steps --resend --period 0.1 --sec 300 --on-lock diag --yes --out <csv>   # 런치 없이 RS485 트랜잭션 전수 기록(바퀴 돈다)
 ```
 
 ## 실물 시험 규칙

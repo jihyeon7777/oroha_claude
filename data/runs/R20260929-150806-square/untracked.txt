@@ -1,0 +1,1 @@
+patches/external/mdrobot_motor_driver/0001-status-read_seq-state-interfaces.patch

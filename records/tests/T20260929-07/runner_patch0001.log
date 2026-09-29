@@ -1,0 +1,24 @@
+[INFO] [1790662061.562649922] [oroha_experiment]: experiment runner ready; runs -> /home/oroha/oroha_claude/data/runs
+[INFO] [1790662089.633741920] [oroha_experiment]: [R20260929-150806-square] ARMED square {'side': 1.0, 'v': 0.2}
+[INFO] [1790662091.465630558] [oroha_experiment]: [R20260929-150806-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20260929-150806-square/bag
+[INFO] [1790662091.481710911] [oroha_experiment]: [R20260929-150806-square] START t_total=50.23
+[INFO] [1790662091.488916080] [oroha_experiment]: [R20260929-150806-square] SEGMENT rest_pre
+[INFO] [1790662094.489123625] [oroha_experiment]: [R20260929-150806-square] SEGMENT side1
+[INFO] [1790662100.140019452] [oroha_experiment]: [R20260929-150806-square] SEGMENT dwell1
+[INFO] [1790662101.140078899] [oroha_experiment]: [R20260929-150806-square] SEGMENT turn1
+[INFO] [1790662104.789472576] [oroha_experiment]: [R20260929-150806-square] SEGMENT dwell2
+[INFO] [1790662105.789205283] [oroha_experiment]: [R20260929-150806-square] SEGMENT side2
+[INFO] [1790662111.489245631] [oroha_experiment]: [R20260929-150806-square] SEGMENT dwell3
+[INFO] [1790662112.489189578] [oroha_experiment]: [R20260929-150806-square] SEGMENT turn2
+[INFO] [1790662116.089409846] [oroha_experiment]: [R20260929-150806-square] SEGMENT dwell4
+[INFO] [1790662117.089429979] [oroha_experiment]: [R20260929-150806-square] SEGMENT side3
+[INFO] [1790662122.789254920] [oroha_experiment]: [R20260929-150806-square] SEGMENT dwell5
+[INFO] [1790662123.788877516] [oroha_experiment]: [R20260929-150806-square] SEGMENT turn3
+[INFO] [1790662127.439476524] [oroha_experiment]: [R20260929-150806-square] SEGMENT dwell6
+[INFO] [1790662128.445109717] [oroha_experiment]: [R20260929-150806-square] SEGMENT side4
+[INFO] [1790662134.088988764] [oroha_experiment]: [R20260929-150806-square] SEGMENT dwell7
+[INFO] [1790662135.089592562] [oroha_experiment]: [R20260929-150806-square] SEGMENT turn4
+[INFO] [1790662136.289821435] [oroha_experiment]: [R20260929-150806-square] FAIL no /joint_states
+[INFO] [1790662137.604458720] [oroha_experiment]: [R20260929-150806-square] BAG_STOPPED rc=0
+[INFO] [1790662137.618075375] [oroha_experiment]: run R20260929-150806-square finished: FAILED
+[INFO] [1790662138.497407942] [oroha_experiment]: [R20260929-150806-square] NOTE direct MD400 stop ok (attempt 2)

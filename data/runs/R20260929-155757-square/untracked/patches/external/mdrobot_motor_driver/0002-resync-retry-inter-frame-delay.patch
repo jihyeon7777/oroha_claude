@@ -1,0 +1,97 @@
+Subject: mdrobot_ros2_control: immediate same-driver retry + inter_frame_delay param
+
+An MD400 can get stuck ignoring every request that follows other bus traffic
+closely, until one request arrives after an idle gap (T20260929-07). After a
+failed transaction (its timeout is that gap) retry the same driver once
+(resync_retry, default true). inter_frame_delay (s) is passed to the transport.
+Applies after 0001. Base: v1.4.0 c5c1f3f.
+---
+diff --git a/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp b/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp
+index f5e3a6c..2d5cb47 100644
+--- a/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp
++++ b/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp
+@@ -117,6 +117,11 @@ class MdrobotSystemHardware : public hardware_interface::SystemInterface {
+   bool auto_enable_ = true;
+   int position_max_rpm_ = 100;
+   double timeout_ = 0.3;
++  double inter_frame_delay_ = -1.0;  ///< s before each request; <0 = Modbus t3.5 from baud.
++  /// twin/single: after a failed transaction, retry the SAME driver once right away.
++  /// An MD400 can get stuck ignoring requests that follow other bus traffic closely;
++  /// a request after an idle gap (the failed transaction's timeout) clears it.
++  bool resync_retry_ = true;
+   int max_comm_errors_ = 5;  ///< consecutive read/write failures tolerated before ERROR.
+ 
+   std::vector<JointCfg> joints_;
+diff --git a/src/mdrobot_ros2_control/src/mdrobot_system.cpp b/src/mdrobot_ros2_control/src/mdrobot_system.cpp
+index a8840f1..385c803 100644
+--- a/src/mdrobot_ros2_control/src/mdrobot_system.cpp
++++ b/src/mdrobot_ros2_control/src/mdrobot_system.cpp
+@@ -64,6 +64,9 @@ CallbackReturn MdrobotSystemHardware::on_init(
+     position_max_rpm_ = std::stoi(
+         param_or(hp, "position_max_rpm", std::to_string(position_max_rpm_)));
+     timeout_ = std::stod(param_or(hp, "timeout", std::to_string(timeout_)));
++    inter_frame_delay_ = std::stod(
++        param_or(hp, "inter_frame_delay", std::to_string(inter_frame_delay_)));
++    resync_retry_ = param_or(hp, "resync_retry", "true") != "false";
+     max_comm_errors_ = std::stoi(
+         param_or(hp, "max_comm_errors", std::to_string(max_comm_errors_)));
+   } catch (const std::exception& e) {
+@@ -219,8 +222,8 @@ CallbackReturn MdrobotSystemHardware::on_configure(
+   // would dangle, and pushing onto non-empty vectors would duplicate clients.
+   reset_comm();
+   try {
+-    transport_ = std::make_unique<mdrobot::SerialTransport>(port_, baudrate_,
+-                                                            timeout_);
++    transport_ = std::make_unique<mdrobot::SerialTransport>(
++        port_, baudrate_, timeout_, 0.2, 1.0, inter_frame_delay_);
+ 
+     if (device_type_ == DeviceType::kDual) {
+       clients_.push_back(
+@@ -473,8 +476,21 @@ return_type MdrobotSystemHardware::read(const rclcpp::Time& /*time*/,
+       try {
+         publish_joint_state(joints_[i], drivers_[i]->read_monitor());
+       } catch (const std::exception& e) {
+-        any_fail = true;
+-        err = e.what();
++        bool recovered = false;
++        if (resync_retry_) {
++          try {
++            publish_joint_state(joints_[i], drivers_[i]->read_monitor());
++            recovered = true;
++            RCLCPP_WARN(rclcpp::get_logger(kLogger),
++                        "read '%s' failed (%s), immediate retry ok",
++                        joints_[i].name.c_str(), e.what());
++          } catch (const std::exception&) {
++          }
++        }
++        if (!recovered) {
++          any_fail = true;
++          err = e.what();
++        }
+       }
+     }
+   }
+@@ -559,8 +575,21 @@ return_type MdrobotSystemHardware::write(const rclcpp::Time& /*time*/,
+       try {
+         write_single_joint(joints_[i], *drivers_[i]);
+       } catch (const std::exception& e) {
+-        any_fail = true;
+-        err = e.what();
++        bool recovered = false;
++        if (resync_retry_) {
++          try {  // same command again: VEL_CMD is idempotent, a failed move_to left no bookkeeping
++            write_single_joint(joints_[i], *drivers_[i]);
++            recovered = true;
++            RCLCPP_WARN(rclcpp::get_logger(kLogger),
++                        "write '%s' failed (%s), immediate retry ok",
++                        joints_[i].name.c_str(), e.what());
++          } catch (const std::exception&) {
++          }
++        }
++        if (!recovered) {
++          any_fail = true;
++          err = e.what();
++        }
+       }
+     }
+     // twin safety: if any controller failed this cycle, a moving skid-steer base

@@ -1,0 +1,204 @@
+preflight: /home/oroha/oroha_claude/records/preflight/20260929T053830Z.json
+run_id: R20260929-155901-square
+series_id: B1-sq-retry
+repeat_index: 5
+repeats: 8
+path: square
+params:
+  side: 1.0
+  v: 0.2
+profile:
+  name: square
+  params:
+    side: 1.0
+    v: 0.2
+    corner: spot
+    turn_w: 0.5
+    corner_radius: 0.3
+    direction: ccw
+    dwell: 1.0
+  duration_s: 50.233
+  limits:
+    v_max: 0.35
+    w_max: 1.2
+    accel: 0.3
+    ang_accel: 1.0
+    wheel_v_max: 1.0
+    half_track: 0.2255
+  segments:
+  - label: rest_pre
+    kind: rest
+    duration: 3.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+  - label: side1
+    kind: straight
+    duration: 5.666666666666667
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+  - label: dwell1
+    kind: rest
+    duration: 1.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+  - label: turn1
+    kind: spot
+    duration: 3.641592653589793
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+  - label: dwell2
+    kind: rest
+    duration: 1.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+  - label: side2
+    kind: straight
+    duration: 5.666666666666667
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+  - label: dwell3
+    kind: rest
+    duration: 1.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+  - label: turn2
+    kind: spot
+    duration: 3.641592653589793
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+  - label: dwell4
+    kind: rest
+    duration: 1.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+  - label: side3
+    kind: straight
+    duration: 5.666666666666667
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+  - label: dwell5
+    kind: rest
+    duration: 1.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+  - label: turn3
+    kind: spot
+    duration: 3.641592653589793
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+  - label: dwell6
+    kind: rest
+    duration: 1.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+  - label: side4
+    kind: straight
+    duration: 5.666666666666667
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+  - label: dwell7
+    kind: rest
+    duration: 1.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+  - label: turn4
+    kind: spot
+    duration: 3.641592653589793
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+  - label: rest_post
+    kind: rest
+    duration: 3.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+timezone: KST
+armed_utc: '2026-09-29T06:59:05Z'
+armed_local: 2026-09-29 15:59:05 KST
+status: DONE
+conditions:
+  updated_utc: '2026-09-29T06:53:50Z'
+  rig_state: lifted
+  surface: lifted
+  note: T20260929-06 square repeat
+versions:
+  workspace:
+    path: /home/oroha/oroha_claude
+    head: 961f0509717b26e4ed08eab78b8c4736d3e0366c
+    describe: 961f050-dirty
+    branch: main
+    dirty: true
+  external:
+    mdrobot_motor_driver:
+      head: c5c1f3f5613bd72a607d0724e8bc58902497b720
+      describe: v1.4.0-dirty
+      branch: HEAD
+      dirty: true
+    um7_driver:
+      head: 9a342584bf985d9e5af265d99aa64bb3eb47f29f
+      describe: 9a34258
+      branch: HEAD
+      dirty: false
+  firmware_sha256: bace95054b5498fcc5d8acb95ff797909c4857f53977f9990579aca3b7884483
+  calibration:
+    sensing-20260828.yaml: sensing-20260828
+    wheel-20260909.yaml: wheel-20260909
+  uncommitted_diff_bytes: 8280
+  untracked_files: 21
+cmd_topic: /diff_cont/cmd_vel
+cmd_rate_hz: 20.0
+bag:
+  path: bag
+  bytes: 2056975
+  topics:
+  - /diff_cont/cmd_vel
+  - /diff_cont/cmd_vel_out
+  - /diff_cont/odom
+  - /joint_states
+  - /dynamic_joint_states
+  - /tf
+  - /tf_static
+  - /robot_description
+  - /oroha_power/sample
+  - /oroha_power/battery
+  - /oroha_power/calibration_event
+  - /imu/data
+  - /imu/mag
+  - /imu/temperature
+  - /diagnostics
+  - /oroha_experiment/event
+  - /oroha_experiment/status
+  - /rosout
+manual_gt: null
+notes: []
+rig_state: lifted
+arena:
+  room_m: 3.0
+  margin_m: 0.3
+  needed_m:
+  - 1.72
+  - 1.72
+  placement: wall
+  start_offset_m:
+  - 0.66
+  - 0.66
+start_utc: '2026-09-29T06:59:08Z'
+start_ros_ns: 1790665148750315311
+end_utc: '2026-09-29T07:00:00Z'
+t_run_end: 51.558
