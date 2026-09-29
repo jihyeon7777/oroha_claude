@@ -1,0 +1,62 @@
+[INFO] [launch]: All log files can be found below /home/oroha/.ros/log/2026-09-29-14-22-47-141875-pi-60873
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [ros2_control_node-1]: process started with pid [60895]
+[INFO] [robot_state_publisher-2]: process started with pid [60896]
+[INFO] [spawner-3]: process started with pid [60897]
+[INFO] [spawner-4]: process started with pid [60902]
+[robot_state_publisher-2] [INFO] [1790659367.558954218] [robot_state_publisher]: Robot initialized
+[ros2_control_node-1] [INFO] [1790659367.576398149] [controller_manager]: Using Steady (Monotonic) clock for triggering controller manager cycles.
+[ros2_control_node-1] [INFO] [1790659367.588697391] [controller_manager]: Subscribing to '/robot_description' topic for robot description.
+[ros2_control_node-1] [INFO] [1790659367.588840669] [controller_manager]: update rate is 10 Hz
+[ros2_control_node-1] [INFO] [1790659367.588864280] [controller_manager]: Overruns handling is : enabled
+[ros2_control_node-1] [INFO] [1790659367.588877465] [controller_manager]: Spawning controller_manager RT thread with scheduler priority: 50
+[ros2_control_node-1] [WARN] [1790659367.589053483] [controller_manager]: Could not enable FIFO RT scheduling policy: with error number <1>(Operation not permitted). See [https://control.ros.org/master/doc/ros2_control/controller_manager/doc/userdoc.html] for details on how to enable realtime scheduling.
+[ros2_control_node-1] [INFO] [1790659367.743251315] [controller_manager]: Received robot description from topic.
+[ros2_control_node-1] [INFO] [1790659367.743349500] [controller_manager]: Enforcing command limits is disabled. Command limits from URDF will be ignored.
+[ros2_control_node-1] [INFO] [1790659367.749301742] [controller_manager]: Loading hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790659367.752460140] [controller_manager]: Loaded hardware 'oroha_base' from plugin 'mdrobot_ros2_control/MdrobotSystemHardware'
+[ros2_control_node-1] [INFO] [1790659367.753799525] [controller_manager]: Initialize hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790659367.778652268] [controller_manager.hardware_component.system.oroha_base]: init: port=/dev/oroha_md400 baud=19200 type=twin joints=2
+[ros2_control_node-1] [INFO] [1790659367.778719805] [controller_manager.hardware_component.system.oroha_base]:   joint 'motor_L' slave_id=2 direction=-1 SI counts_per_rev=30.000
+[ros2_control_node-1] [INFO] [1790659367.778740212] [controller_manager.hardware_component.system.oroha_base]:   joint 'motor_R' slave_id=1 direction=+1 SI counts_per_rev=30.000
+[ros2_control_node-1] [INFO] [1790659367.778778842] [controller_manager]: Successful initialization of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790659367.779004564] [controller_manager]: Activating component 'oroha_base'.
+[ros2_control_node-1] [INFO] [1790659367.779054323] [resource_manager]: 'configure' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790659368.036729504] [controller_manager.hardware_component.system.oroha_base]: opened /dev/oroha_md400 slave_id=2: version=86 voltage=27.3V
+[ros2_control_node-1] [INFO] [1790659368.084644199] [controller_manager.hardware_component.system.oroha_base]: opened /dev/oroha_md400 slave_id=1: version=86 voltage=26.7V
+[ros2_control_node-1] [INFO] [1790659368.117667641] [controller_manager.hardware_component.system.oroha_base]: USE_LIMIT_SW set to 1
+[ros2_control_node-1] [INFO] [1790659368.117828955] [resource_manager]: Successful 'configure' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790659368.117859270] [resource_manager]: 'activate' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1790659368.228450413] [controller_manager.hardware_component.system.oroha_base]: enabled (UI_COM=1 + START_STOP arm)
+[ros2_control_node-1] [INFO] [1790659368.228614135] [resource_manager]: Successful 'activate' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1790659368.228846764] [controller_manager]: Registering statistics for : oroha_base
+[ros2_control_node-1] [INFO] [1790659368.229085689] [controller_manager]: Resource Manager has been successfully initialized. Starting Controller Manager services...
+[spawner-3] [INFO] [1790659368.281525130] [spawner_joint_state_broadcaster]: waiting for service /controller_manager/list_controllers to become available...
+[ros2_control_node-1] [INFO] [1790659368.534453973] [controller_manager]: Loading controller : 'joint_state_broadcaster' of type 'joint_state_broadcaster/JointStateBroadcaster'
+[ros2_control_node-1] [INFO] [1790659368.534526066] [controller_manager]: Loading controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1790659368.540297234] [controller_manager]: Controller 'joint_state_broadcaster' node arguments: --ros-args --params-file /home/oroha/oroha_claude/install/oroha_bringup/share/oroha_bringup/config/oroha_controllers.yaml 
+[spawner-3] [INFO] [1790659368.646288687] [spawner_joint_state_broadcaster]: Loaded joint_state_broadcaster
+[ros2_control_node-1] [INFO] [1790659368.648397033] [controller_manager]: Configuring controller: 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1790659368.648633495] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published
+[ros2_control_node-1] [INFO] [1790659368.743384573] [controller_manager]: Activating controllers: [ joint_state_broadcaster ]
+[ros2_control_node-1] [INFO] [1790659368.851832816] [controller_manager]: Successfully switched controllers!
+[spawner-3] [INFO] [1790659368.950342235] [spawner_joint_state_broadcaster]: Configured and activated joint_state_broadcaster
+[ros2_control_node-1] [INFO] [1790659369.247236636] [controller_manager]: Loading controller : 'diff_cont' of type 'diff_drive_controller/DiffDriveController'
+[ros2_control_node-1] [INFO] [1790659369.247377117] [controller_manager]: Loading controller 'diff_cont'
+[INFO] [spawner-3]: process has finished cleanly [pid 60897]
+[ros2_control_node-1] [INFO] [1790659369.257792568] [controller_manager]: Controller 'diff_cont' node arguments: --ros-args --params-file /home/oroha/oroha_claude/install/oroha_bringup/share/oroha_bringup/config/oroha_controllers.yaml 
+[spawner-4] [INFO] [1790659369.371604332] [spawner_diff_cont]: Loaded diff_cont
+[ros2_control_node-1] [INFO] [1790659369.375063081] [controller_manager]: Configuring controller: 'diff_cont'
+[ros2_control_node-1] [INFO] [1790659369.445906210] [controller_manager]: Activating controllers: [ diff_cont ]
+[ros2_control_node-1] [INFO] [1790659369.539018441] [controller_manager]: Successfully switched controllers!
+[spawner-4] [INFO] [1790659369.653385203] [spawner_diff_cont]: Configured and activated diff_cont
+[INFO] [spawner-4]: process has finished cleanly [pid 60902]
+[ros2_control_node-1] [WARN] [1790659369.938241973] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790659370.944921471] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790659371.951535970] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1790659373.038126719] [diff_cont]: Velocity command timed out. Braking.
+[ERROR] [ros2_control_node-1]: process has died [pid 60895, exit code -9, cmd '/opt/ros/jazzy/lib/controller_manager/ros2_control_node --ros-args --params-file /home/oroha/oroha_claude/install/oroha_bringup/share/oroha_bringup/config/oroha_controllers.yaml -r ~/robot_description:=/robot_description'].
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [robot_state_publisher-2]: sending signal 'SIGINT' to process[robot_state_publisher-2]
+[robot_state_publisher-2] [INFO] [1790659378.041817595] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 60896]
