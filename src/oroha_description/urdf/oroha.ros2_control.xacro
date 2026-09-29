@@ -24,8 +24,8 @@
           <param name="device_type">twin</param>
           <param name="port">$(arg port)</param>
           <param name="baudrate">$(arg baudrate)</param>
-          <!-- MUST be 0 on OROHA: 1 blocks negative VEL_CMD and silently kills the
-               reversed (left) wheel (bringup field report ctrl-stop-input-blocks-reverse) -->
+          <!-- MUST be 1 on OROHA: the E-stop acts only through the CTRL stop gates
+               (pins 6+8), which the MD400 ignores with 0 (T20260928-06, T20260929-01) -->
           <param name="use_limit_sw">$(arg use_limit_sw)</param>
           <param name="auto_enable">$(arg auto_enable)</param>
           <param name="position_max_rpm">100</param>

@@ -94,9 +94,9 @@ oroha_versions --out records/tests/<ID>/                              # 시험�
 ## 실물 시험 규칙
 
 - MD400에는 통신 워치독이 없다. 호스트가 명령을 못 보내면(런치 Ctrl-C·크래시·RS485 분리) 마지막 명령이 남는다. 런치 안전망과 `oroha_md_stop`이 있어도 **E-stop은 항상 사용자 손에** 둔다. Claude의 도구 호출은 실시간 정지 경로가 아니다.
-- 순서: 바퀴 띄움 → E-stop 손에 → 사용자가 채팅으로 "진행" → **스스로 끝나는** 명령만 실행(`ros2 topic pub -t N`, 시간 제한 프로파일, `direction_check --sec`) → 사용자 관측 보고 → 기록. 무기한 발행(`-r` 단독)·타임아웃 없는 컨트롤러 금지.
-- E-stop 해제 규칙은 E1 시험(`direction_check --sec 10`) 결과로 확정한다(`docs/operation.md`). 그 전까지: 해제 전에 명령 0 확인(런치 종료 또는 `oroha_md_stop`).
-- 속도 명령 전에 `enable()`이 필요하다(플러그인은 `auto_enable`). `use_limit_sw`는 0 고정(1이면 왼쪽 reverse 바퀴가 무알람 정지; 공장값 1이라 `direction_check`도 0을 쓴다).
+- 순서: 바퀴 띄움 → E-stop 손에 → **스스로 끝나는** 명령만 실행(`ros2 topic pub -t N`, 시간 제한 프로파일, `direction_check --sec`) → 사용자 관측 보고 → 기록. 바퀴를 띄운 회전 시험은 사용자 승인 없이 진행(2026-09-29 사용자 지시); 접지 주행과 사용자 손이 필요한 시험(E-stop 조작·관측)은 조율한다. 무기한 발행(`-r` 단독)·타임아웃 없는 컨트롤러 금지.
+- E-stop: 누르면 0.13~0.14 s 안에 정지(코스팅). **해제하면 다음 명령이 오는 즉시 다시 돈다**(ros2_control은 매 주기 명령) → 해제 전에 명령 소스(텔레옵·실행기)를 멈추고 0 확인(`oroha_md_stop` 또는 런치 종료). T20260929-01.
+- 속도 명령 전에 `enable()`이 필요하다(플러그인은 `auto_enable`). **`use_limit_sw`는 1**: E-stop은 CTRL 정지 게이트(6·8번, 2극 NC)로만 동작하고 MD400은 0이면 이를 무시한다(T20260928-06 실패). 현재 결선에서는 1이어도 양방향 주행 가능(T20260929-01). 옛 "1이면 역방향 차단"은 8번만 결선됐던 07-29 기준.
 - preflight·direction_check·wheel_push는 포트를 연 다른 프로세스가 있으면 거부한다 — 런치 전에 쓴다. 모든 프로세스는 `source setup/env.sh`(ROS_DOMAIN_ID=42)로 띄운다.
 - Claude가 띄우는 장시간 프로세스(런치·노드)는 **`pid=$(setup/bg.sh <log> <명령…>)`**로 띄우고 **`kill -INT $pid`**로 끈다(사용자 Ctrl-C와 같음). 비대화형 셸의 백그라운드 작업은 SIGINT가 무시로 상속돼 `ros2 launch`가 `kill -INT`를 무시하고, **SIGTERM을 받으면 자식을 정리하지 않고 죽는다**(런치 안전망도 못 돎) — 런치에 SIGTERM 금지. 찾기는 `pgrep -f '[p]attern'`처럼 셸 자신과 일치하지 않는 패턴으로만(`pkill -f` 금지). 시험 전 `ros2 node list`로 중복 노드가 없는지 본다.
 - 시험 하나가 끝나면 `records/tests/tests.csv`에 행을 더하고 `records/tests/T<KST 날짜>-<NN>.md`(+ `records/tests/<ID>/`에 `oroha_versions --out`·로그)를 남긴다. 상태 어휘: 통과/실패/중단/미검증, 종결/열림/다시 열림/재현 실패/미수렴. ID·좌우·부호는 [하드웨어_확인표.md](하드웨어_확인표.md) §2·§5에 시험 ID와 함께 적는다.

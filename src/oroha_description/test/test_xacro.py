@@ -38,7 +38,7 @@ def joint_params(root, name):
 
 REAL = {"use_mock_hardware": "false", "port": "/dev/oroha_md400", "baudrate": "19200",
         "motor_id_L": "2", "motor_id_R": "1", "reverse_L": "true", "reverse_R": "false",
-        "counts_per_rev_L": "30.0", "counts_per_rev_R": "30.0", "use_limit_sw": "0",
+        "counts_per_rev_L": "30.0", "counts_per_rev_R": "30.0", "use_limit_sw": "1",
         "auto_enable": "true"}
 
 
@@ -49,7 +49,7 @@ def test_real_hardware_params_are_exact_strings():
     assert hw["device_type"] == "twin"
     assert hw["port"] == "/dev/oroha_md400"
     assert hw["baudrate"] == "19200"
-    assert hw["use_limit_sw"] == "0"
+    assert hw["use_limit_sw"] == "1"
     assert hw["auto_enable"] == "true"
     left, _, _ = joint_params(root, "motor_L")
     right, _, _ = joint_params(root, "motor_R")
@@ -76,7 +76,7 @@ def test_defaults_match_verified_values():
     """Running xacro by hand (no args) must still give the verified OROHA wiring."""
     root = render()
     _, hw = hw_params(root)
-    assert hw["use_limit_sw"] == "0"
+    assert hw["use_limit_sw"] == "1"
     left, _, _ = joint_params(root, "motor_L")
     right, _, _ = joint_params(root, "motor_R")
     assert (left["motor_id"], left["reverse"]) == ("2", "true")

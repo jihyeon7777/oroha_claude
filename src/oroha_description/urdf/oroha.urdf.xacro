@@ -22,7 +22,7 @@
   <xacro:arg name="reverse_R" default="false"/>
   <xacro:arg name="counts_per_rev_L" default="30.0"/>
   <xacro:arg name="counts_per_rev_R" default="30.0"/>
-  <xacro:arg name="use_limit_sw" default="0"/>
+  <xacro:arg name="use_limit_sw" default="1"/>
   <xacro:arg name="auto_enable" default="true"/>
 
   <!-- measured (2026-09) -->

@@ -1,0 +1,579 @@
+{
+ "timestamp_utc": "2026-09-29T05:17:39Z",
+ "timezone": "KST",
+ "port": "/dev/oroha_md400",
+ "args": {
+  "md_port": "/dev/oroha_md400",
+  "id": "2",
+  "rpm": -500,
+  "sec": 10.0,
+  "resend": true,
+  "use_limit_sw": "1",
+  "yes": true,
+  "observed_side": null,
+  "observed_dir": null,
+  "test_id": "T20260929-01",
+  "note": "V3: E-stop press/release, resend",
+  "force": false
+ },
+ "runs": [
+  {
+   "id": 2,
+   "rpm_cmd": -500,
+   "sec": 10.0,
+   "resend": true,
+   "samples": [
+    {
+     "t": 0.016,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 1136,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.164,
+     "rpm": -296,
+     "current_a": 0.0,
+     "pos": 1127,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.308,
+     "rpm": -431,
+     "current_a": 0.0,
+     "pos": 1100,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.452,
+     "rpm": -474,
+     "current_a": 0.1,
+     "pos": 1068,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.596,
+     "rpm": -487,
+     "current_a": 0.1,
+     "pos": 1034,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.739,
+     "rpm": -493,
+     "current_a": 0.1,
+     "pos": 994,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.899,
+     "rpm": -496,
+     "current_a": 0.1,
+     "pos": 954,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.059,
+     "rpm": -502,
+     "current_a": 0.1,
+     "pos": 914,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.219,
+     "rpm": -493,
+     "current_a": 0.1,
+     "pos": 878,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.363,
+     "rpm": -498,
+     "current_a": 0.1,
+     "pos": 842,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.506,
+     "rpm": -504,
+     "current_a": 0.1,
+     "pos": 803,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.666,
+     "rpm": -504,
+     "current_a": 0.1,
+     "pos": 767,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.81,
+     "rpm": -491,
+     "current_a": 0.1,
+     "pos": 731,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.954,
+     "rpm": -500,
+     "current_a": 0.1,
+     "pos": 690,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.114,
+     "rpm": -511,
+     "current_a": 0.1,
+     "pos": 650,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.273,
+     "rpm": -11,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.417,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.561,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.705,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.865,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.024,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.184,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.328,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.472,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.631,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.775,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.935,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.098,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.255,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.415,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.574,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.718,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.862,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 5.022,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 5.181,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 5.325,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 5.485,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 5.629,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 5.773,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 5.932,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 6.092,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 6.236,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 6.396,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 6.54,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 6.699,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 630,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 6.843,
+     "rpm": -268,
+     "current_a": 0.0,
+     "pos": 621,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 7.003,
+     "rpm": -418,
+     "current_a": 0.1,
+     "pos": 595,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 7.147,
+     "rpm": -468,
+     "current_a": 0.1,
+     "pos": 562,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 7.291,
+     "rpm": -489,
+     "current_a": 0.1,
+     "pos": 524,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 7.45,
+     "rpm": -493,
+     "current_a": 0.1,
+     "pos": 484,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 7.61,
+     "rpm": -493,
+     "current_a": 0.1,
+     "pos": 449,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 7.754,
+     "rpm": -513,
+     "current_a": 0.1,
+     "pos": 409,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 7.914,
+     "rpm": -489,
+     "current_a": 0.1,
+     "pos": 369,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 8.074,
+     "rpm": -496,
+     "current_a": 0.1,
+     "pos": 329,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 8.233,
+     "rpm": -500,
+     "current_a": 0.1,
+     "pos": 293,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 8.377,
+     "rpm": -506,
+     "current_a": 0.1,
+     "pos": 257,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 8.521,
+     "rpm": -498,
+     "current_a": 0.1,
+     "pos": 217,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 8.681,
+     "rpm": -502,
+     "current_a": 0.1,
+     "pos": 181,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 8.825,
+     "rpm": -513,
+     "current_a": 0.1,
+     "pos": 141,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 8.984,
+     "rpm": -491,
+     "current_a": 0.1,
+     "pos": 101,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 9.144,
+     "rpm": -500,
+     "current_a": 0.1,
+     "pos": 61,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 9.304,
+     "rpm": -513,
+     "current_a": 0.1,
+     "pos": 21,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 9.464,
+     "rpm": -491,
+     "current_a": 0.1,
+     "pos": -19,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 9.624,
+     "rpm": -496,
+     "current_a": 0.1,
+     "pos": -55,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 9.767,
+     "rpm": -502,
+     "current_a": 0.1,
+     "pos": -95,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 9.927,
+     "rpm": -502,
+     "current_a": 0.1,
+     "pos": -135,
+     "status": 0,
+     "alarms": []
+    }
+   ],
+   "version": 86,
+   "use_limit_sw_before": 1,
+   "enc_ppr": 1000,
+   "use_eposi": 0,
+   "use_limit_sw_used": 1,
+   "pos_start": 1136,
+   "cmd_wall_utc": "2026-09-29T05:17:40Z",
+   "pos_end": -178,
+   "dpos": -1314,
+   "analysis": {
+    "first_motion_t": 0.164,
+    "stop_segments": [
+     {
+      "stopped_t": 2.417,
+      "resumed_t": 6.843
+     }
+    ],
+    "resumed_after_stop": true,
+    "rpm_cmd": -500
+   },
+   "observed_side": null,
+   "observed_dir": null
+  }
+ ]
+}

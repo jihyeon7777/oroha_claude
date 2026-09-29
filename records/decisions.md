@@ -13,3 +13,4 @@
 | D-09 | 2026-09-28 | mdrobot 플러그인 수정(on_shutdown 정지, status·read_seq 인터페이스)은 `patches/`로 로컬 적용, 업스트림은 나중에 | 사용자 결정. v1.4.0 고정 유지, 재현 가능 |
 | D-10 | 2026-09-28 | 안전 원칙: 모든 모션 명령은 스스로 끝남, 런치 안전망(ros2_control_node 종료 → MD400 정지) + `oroha_md_stop`, E-stop 해제 규칙은 E1 시험으로 확정, Claude는 실시간 정지 경로가 아님 | MD400 통신 워치독 없음, 플러그인 on_shutdown 없음, RS485 분리 시 정지 명령 전달 불가 |
 | D-11 | 2026-09-28 | cmd_vel 발행은 RELIABLE, `diff_cont.base_frame_id = base_footprint`, `max_deceleration` 사용, forward_command_controller 미사용 | QoS 호환(RELIABLE→모든 구독), TF 단일 부모, 4.42 파라미터, 타임아웃 없는 컨트롤러 배제 |
+| D-12 | 2026-09-29 | `use_limit_sw: 1` (E-stop 게이트 사용), E-stop 해제 전 명령 0 확인 | T20260928-06(0이면 E-stop 무효)·T20260929-01(1에서 양방향·정지 확인). D-11의 전제였던 "0 고정" 폐기 |

@@ -36,4 +36,4 @@ oroha_paper_export --runs usable                     # paper_export/<ts>/ + CHEC
 
 ## 안전
 
-모터를 움직이는 시험은 **바퀴를 띄운 상태**에서 먼저 하고, E-stop이 손에 닿는 곳에 있어야 한다. MD400에는 통신 워치독이 없어 호스트가 명령을 못 보내면 마지막 명령이 남는다 — 런치는 `ros2_control_node`가 끝나면 양쪽 MD400을 멈추고, 수동 정지는 `oroha_md_stop`. 모든 모션 명령은 스스로 끝나야 한다. `use_limit_sw`는 0을 유지한다(1이면 왼쪽 바퀴의 음수 명령이 무알람 차단된다). 자세한 규칙은 [CLAUDE.md](CLAUDE.md)와 [docs/operation.md](docs/operation.md).
+모터를 움직이는 시험은 **바퀴를 띄운 상태**에서 먼저 하고, E-stop이 손에 닿는 곳에 있어야 한다. MD400에는 통신 워치독이 없어 호스트가 명령을 못 보내면 마지막 명령이 남는다 — 런치는 `ros2_control_node`가 끝나면 양쪽 MD400을 멈추고, 수동 정지는 `oroha_md_stop`. 모든 모션 명령은 스스로 끝나야 한다. `use_limit_sw`는 1이어야 E-stop이 동작한다(0이면 MD400이 E-stop 입력을 무시). 자세한 규칙은 [CLAUDE.md](CLAUDE.md)와 [docs/operation.md](docs/operation.md).

@@ -1,0 +1,302 @@
+{
+ "timestamp_utc": "2026-09-29T05:16:08Z",
+ "timezone": "KST",
+ "port": "/dev/oroha_md400",
+ "args": {
+  "md_port": "/dev/oroha_md400",
+  "id": "1",
+  "rpm": 500,
+  "sec": 4.0,
+  "resend": false,
+  "use_limit_sw": "1",
+  "yes": true,
+  "observed_side": null,
+  "observed_dir": null,
+  "test_id": "T20260929-01",
+  "note": "",
+  "force": false
+ },
+ "runs": [
+  {
+   "id": 1,
+   "rpm_cmd": 500,
+   "sec": 4.0,
+   "resend": false,
+   "samples": [
+    {
+     "t": 0.016,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 2860,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.148,
+     "rpm": 204,
+     "current_a": 0.1,
+     "pos": 2864,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.276,
+     "rpm": 390,
+     "current_a": 0.2,
+     "pos": 2886,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.404,
+     "rpm": 444,
+     "current_a": 0.2,
+     "pos": 2913,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.532,
+     "rpm": 472,
+     "current_a": 0.2,
+     "pos": 2943,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.66,
+     "rpm": 487,
+     "current_a": 0.2,
+     "pos": 2974,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.787,
+     "rpm": 498,
+     "current_a": 0.2,
+     "pos": 3006,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.915,
+     "rpm": 502,
+     "current_a": 0.2,
+     "pos": 3038,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.043,
+     "rpm": 504,
+     "current_a": 0.2,
+     "pos": 3070,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.171,
+     "rpm": 502,
+     "current_a": 0.2,
+     "pos": 3101,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.299,
+     "rpm": 500,
+     "current_a": 0.2,
+     "pos": 3133,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.426,
+     "rpm": 493,
+     "current_a": 0.2,
+     "pos": 3165,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.554,
+     "rpm": 493,
+     "current_a": 0.2,
+     "pos": 3197,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.682,
+     "rpm": 500,
+     "current_a": 0.2,
+     "pos": 3230,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.81,
+     "rpm": 504,
+     "current_a": 0.2,
+     "pos": 3262,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.938,
+     "rpm": 506,
+     "current_a": 0.2,
+     "pos": 3294,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.066,
+     "rpm": 508,
+     "current_a": 0.2,
+     "pos": 3326,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.193,
+     "rpm": 500,
+     "current_a": 0.2,
+     "pos": 3358,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.321,
+     "rpm": 498,
+     "current_a": 0.2,
+     "pos": 3390,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.449,
+     "rpm": 496,
+     "current_a": 0.2,
+     "pos": 3422,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.577,
+     "rpm": 495,
+     "current_a": 0.1,
+     "pos": 3454,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.705,
+     "rpm": 506,
+     "current_a": 0.2,
+     "pos": 3485,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.833,
+     "rpm": 506,
+     "current_a": 0.2,
+     "pos": 3517,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.96,
+     "rpm": 508,
+     "current_a": 0.2,
+     "pos": 3550,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.088,
+     "rpm": 502,
+     "current_a": 0.2,
+     "pos": 3581,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.216,
+     "rpm": 495,
+     "current_a": 0.2,
+     "pos": 3614,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.344,
+     "rpm": 491,
+     "current_a": 0.2,
+     "pos": 3646,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.472,
+     "rpm": 495,
+     "current_a": 0.2,
+     "pos": 3678,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.6,
+     "rpm": 500,
+     "current_a": 0.2,
+     "pos": 3710,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.727,
+     "rpm": 506,
+     "current_a": 0.2,
+     "pos": 3742,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.855,
+     "rpm": 506,
+     "current_a": 0.2,
+     "pos": 3774,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.983,
+     "rpm": 508,
+     "current_a": 0.2,
+     "pos": 3806,
+     "status": 0,
+     "alarms": []
+    }
+   ],
+   "version": 86,
+   "use_limit_sw_before": 1,
+   "enc_ppr": 1000,
+   "use_eposi": 0,
+   "use_limit_sw_used": 1,
+   "pos_start": 2860,
+   "cmd_wall_utc": "2026-09-29T05:16:09Z",
+   "pos_end": 3847,
+   "dpos": 987,
+   "analysis": {
+    "first_motion_t": 0.148,
+    "stop_segments": [],
+    "resumed_after_stop": false,
+    "rpm_cmd": 500
+   },
+   "observed_side": null,
+   "observed_dir": null
+  }
+ ]
+}

@@ -1,0 +1,358 @@
+{
+ "timestamp_utc": "2026-09-29T05:15:45Z",
+ "timezone": "KST",
+ "port": "/dev/oroha_md400",
+ "args": {
+  "md_port": "/dev/oroha_md400",
+  "id": "2",
+  "rpm": -500,
+  "sec": 5.0,
+  "resend": false,
+  "use_limit_sw": "1",
+  "yes": true,
+  "observed_side": null,
+  "observed_dir": null,
+  "test_id": "T20260929-01",
+  "note": "V1: negative cmd with USE_LIMIT_SW 1",
+  "force": false
+ },
+ "runs": [
+  {
+   "id": 2,
+   "rpm_cmd": -500,
+   "sec": 5.0,
+   "resend": false,
+   "samples": [
+    {
+     "t": 0.016,
+     "rpm": 0,
+     "current_a": 0.0,
+     "pos": 1357,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.148,
+     "rpm": -204,
+     "current_a": 0.1,
+     "pos": 1353,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.276,
+     "rpm": -390,
+     "current_a": 0.1,
+     "pos": 1331,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.404,
+     "rpm": -450,
+     "current_a": 0.0,
+     "pos": 1304,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.532,
+     "rpm": -476,
+     "current_a": 0.1,
+     "pos": 1274,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.659,
+     "rpm": -481,
+     "current_a": 0.1,
+     "pos": 1243,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.787,
+     "rpm": -489,
+     "current_a": 0.1,
+     "pos": 1211,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 0.915,
+     "rpm": -491,
+     "current_a": 0.1,
+     "pos": 1179,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.043,
+     "rpm": -498,
+     "current_a": 0.1,
+     "pos": 1147,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.171,
+     "rpm": -498,
+     "current_a": 0.1,
+     "pos": 1115,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.299,
+     "rpm": -502,
+     "current_a": 0.1,
+     "pos": 1083,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.426,
+     "rpm": -498,
+     "current_a": 0.1,
+     "pos": 1051,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.554,
+     "rpm": -495,
+     "current_a": 0.1,
+     "pos": 1019,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.682,
+     "rpm": -500,
+     "current_a": 0.1,
+     "pos": 987,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.81,
+     "rpm": -502,
+     "current_a": 0.1,
+     "pos": 955,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 1.938,
+     "rpm": -504,
+     "current_a": 0.1,
+     "pos": 923,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.066,
+     "rpm": -511,
+     "current_a": 0.1,
+     "pos": 891,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.193,
+     "rpm": -511,
+     "current_a": 0.1,
+     "pos": 859,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.321,
+     "rpm": -502,
+     "current_a": 0.1,
+     "pos": 827,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.449,
+     "rpm": -500,
+     "current_a": 0.1,
+     "pos": 795,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.577,
+     "rpm": -493,
+     "current_a": 0.1,
+     "pos": 763,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.705,
+     "rpm": -491,
+     "current_a": 0.1,
+     "pos": 731,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.833,
+     "rpm": -495,
+     "current_a": 0.1,
+     "pos": 699,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 2.96,
+     "rpm": -498,
+     "current_a": 0.1,
+     "pos": 667,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.088,
+     "rpm": -500,
+     "current_a": 0.1,
+     "pos": 635,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.216,
+     "rpm": -500,
+     "current_a": 0.1,
+     "pos": 603,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.344,
+     "rpm": -496,
+     "current_a": 0.1,
+     "pos": 571,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.472,
+     "rpm": -500,
+     "current_a": 0.1,
+     "pos": 539,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.6,
+     "rpm": -495,
+     "current_a": 0.1,
+     "pos": 507,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.727,
+     "rpm": -498,
+     "current_a": 0.1,
+     "pos": 475,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.855,
+     "rpm": -502,
+     "current_a": 0.1,
+     "pos": 443,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 3.983,
+     "rpm": -508,
+     "current_a": 0.1,
+     "pos": 411,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.111,
+     "rpm": -511,
+     "current_a": 0.1,
+     "pos": 379,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.239,
+     "rpm": -511,
+     "current_a": 0.1,
+     "pos": 347,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.367,
+     "rpm": -502,
+     "current_a": 0.1,
+     "pos": 315,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.494,
+     "rpm": -496,
+     "current_a": 0.0,
+     "pos": 283,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.622,
+     "rpm": -493,
+     "current_a": 0.0,
+     "pos": 251,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.75,
+     "rpm": -491,
+     "current_a": 0.1,
+     "pos": 219,
+     "status": 0,
+     "alarms": []
+    },
+    {
+     "t": 4.878,
+     "rpm": -498,
+     "current_a": 0.1,
+     "pos": 187,
+     "status": 0,
+     "alarms": []
+    }
+   ],
+   "version": 86,
+   "use_limit_sw_before": 0,
+   "enc_ppr": 1000,
+   "use_eposi": 0,
+   "use_limit_sw_used": 1,
+   "pos_start": 1357,
+   "cmd_wall_utc": "2026-09-29T05:15:45Z",
+   "pos_end": 145,
+   "dpos": -1212,
+   "analysis": {
+    "first_motion_t": 0.148,
+    "stop_segments": [],
+    "resumed_after_stop": false,
+    "rpm_cmd": -500
+   },
+   "observed_side": null,
+   "observed_dir": null
+  }
+ ]
+}

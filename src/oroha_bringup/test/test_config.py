@@ -42,7 +42,7 @@ def test_yaml_to_plugin_params_real():
     assert joints["motor_L"]["motor_id"] == "2"
     assert joints["motor_R"]["motor_id"] == "1"
     hwp = {p.get("name"): p.text for p in root.findall("ros2_control/hardware/param")}
-    assert hwp["use_limit_sw"] == "0", "use_limit_sw must stay 0 (1 blocks the reversed wheel)"
+    assert hwp["use_limit_sw"] == "1", "use_limit_sw must be 1: the E-stop acts only through the CTRL stop gates"
 
 
 def test_base_frame_is_urdf_root():
@@ -72,5 +72,5 @@ def test_controller_rules():
                                  "counts_per_rev_L", "counts_per_rev_R", "use_limit_sw"])
 def test_verified_values_unchanged(key):
     verified = {"motor_id_L": 2, "motor_id_R": 1, "reverse_L": True, "reverse_R": False,
-                "counts_per_rev_L": 30.0, "counts_per_rev_R": 30.0, "use_limit_sw": 0}
+                "counts_per_rev_L": 30.0, "counts_per_rev_R": 30.0, "use_limit_sw": 1}
     assert CFG["mdrobot_hardware"]["ros__parameters"][key] == verified[key]

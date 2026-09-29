@@ -14,7 +14,9 @@ mdrobot_hardware:
     reverse_R: false
     counts_per_rev_L: 30.0          # hall counts per MOTOR-SHAFT revolution (measured 29.97 +- 0.05, n=144)
     counts_per_rev_R: 30.0
-    use_limit_sw: 0                 # MUST stay 0: 1 blocks every negative VEL_CMD -> left wheel dead, no alarm
+    use_limit_sw: 1                 # MUST be 1: enables the CTRL stop gates the E-stop is wired to (pins 6+8, 2-pole NC).
+                                    # With 0 the E-stop does NOTHING (T20260928-06). Both directions run with 1 on the
+                                    # current wiring (T20260929-01); the old "1 blocks reverse" was pin-8-only wiring (07-29).
     auto_enable: true
 
 controller_manager:

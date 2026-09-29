@@ -140,8 +140,8 @@ def main(argv=None) -> int:
     ap.add_argument("--rpm", type=int, default=100)
     ap.add_argument("--sec", type=float, default=3.0)
     ap.add_argument("--resend", action="store_true", help="re-send the command every poll")
-    ap.add_argument("--use-limit-sw", default="0", choices=["0", "1", "keep"],
-                    help="value written before the run (0 = runtime value of the plugin)")
+    ap.add_argument("--use-limit-sw", default="1", choices=["0", "1", "keep"],
+                    help="value written before the run (1 = runtime value: E-stop gates active)")
     ap.add_argument("--yes", action="store_true", help="no prompt (operator said go)")
     ap.add_argument("--observed-side", help="operator report, e.g. right or right,left for --id both")
     ap.add_argument("--observed-dir", help="operator report, e.g. forward or forward,backward")
