@@ -1,0 +1,9 @@
+records/tests/T20261001-03/analysis.txt
+records/tests/T20261001-03/analyze_b2.py
+records/tests/T20261001-03/launch.log
+records/tests/T20261001-03/phases.log
+records/tests/T20261001-03/sequence.sh
+records/tests/T20261001-03/uncommitted.diff
+records/tests/T20261001-03/versions.yaml
+src/oroha_tools/oroha_tools/power_analysis.py
+src/oroha_tools/test/test_power_analysis.py

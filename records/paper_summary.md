@@ -1,18 +1,19 @@
 # 논문용 요약 (작성 중 — 각 수치에 시험 ID를 붙인다)
 
-_HardwareX의 Software description / Operation instructions / Validation & characterization에 옮겨 쓸 수 있게 구성한다. 확인된 범위만 적고, 미검증은 미검증으로 둔다. 마지막 갱신 2026-09-22._
+_HardwareX의 Software description / Operation instructions / Validation & characterization에 옮겨 쓸 수 있게 구성한다. 확인된 범위만 적고, 미검증은 미검증으로 둔다. 마지막 갱신 2026-10-01._
 
 ## 1. 소프트웨어 구성과 역할
 
 | 구성 | 역할 | 근거 |
 |---|---|---|
 | ROS 2 Jazzy 워크스페이스 (`oroha_*` 7 패키지) | 기본 운용·계측·실험·기록 | 이 저장소 |
-| `mdrobot_ros2_control` v1.4.0 (twin) | MD400 ×2 Modbus RTU 하드웨어 인터페이스, `diff_drive_controller`로 skid-steer 주행, 10 Hz | 외부, `oroha.repos` |
-| `oroha_description`·`oroha_bringup` | 4륜 모델(조인트 2), 실측 설정값, 런치 | — (0단계 관문 T-… 예정) |
+| `mdrobot_ros2_control` v1.4.0 (twin) + 로컬 패치 0001·0002 | MD400 ×2 Modbus RTU 하드웨어 인터페이스, `diff_drive_controller`로 skid-steer 주행, 10 Hz(주기 ≈64 ms); 패치: 상태 비트·읽기 순번 노출, 실패 장치 즉시 재시도 | 외부, `oroha.repos`; T20260929-02·07 |
+| `oroha_description`·`oroha_bringup` | 4륜 모델(조인트 2), 실측 설정값, 런치(종료·크래시 시 MD400 정지 안전망) | T20260928-01·02, T20260929-02 |
 | `oroha_power` + Pico 펌웨어 `oroha-bench-1.2` | ACS37030 전류 ×2·버스전압 50 Hz, raw+환산+교정 ID 기록 | T20260922-03/04/05 |
-| `um7_driver` | UM7 IMU (ENU) | 미연결 |
+| `um7_driver` | UM7 IMU (ENU) | T20261001-02(통신, 미고정) |
 | `oroha_experiment` | 시간 기반 개방루프 경로(직선·원·사각·S), 실행기(이벤트·rosbag), CLI | T20260922-06 |
-| `oroha_tools` | preflight, 버전 스냅샷, bag→CSV, 실행/시험 목록, 논문 묶음·검증 | T20260922-03/06/07 |
+| `oroha_tools` | preflight, 버전 스냅샷, bag→CSV(실행별 전류 기준·에너지), 실행/시험 목록, 논문 묶음·검증, RS485 진단(`oroha_bus_probe`) | T20260922-03/06/07, T20261001-03 |
+| `oroha_teleop` | 데드맨 키보드 주행(누르는 동안만) | T20261001-01 |
 
 ## 2. 운용 방법
 
@@ -20,7 +21,7 @@ _HardwareX의 Software description / Operation instructions / Validation & chara
 
 ## 3. 주요 설계 결정
 
-[records/decisions.md](decisions.md) D-01~D-07: 공개판 v1.4.0 기반·외부 소스 고정, MicroPython 펌웨어 유지, 시간 기반 프로파일, 커스텀 계측 메시지, 전용 description, udev 장치명, 단일 시간 기준.
+[records/decisions.md](decisions.md) D-01~D-14: 공개판 v1.4.0 기반·외부 소스 고정(수정은 patches/), MicroPython 펌웨어 유지, 시간 기반 프로파일, 커스텀 계측 메시지, 전용 description, udev 장치명, 단일 시간 기준, 3 m×3 m 시험 공간, 자기 종료 명령·런치 안전망, `use_limit_sw 1`(E-stop), MD400 수신 잠김 재시도, 전류 의미(참 0 A ↔ 실행별 정지 기준).
 
 ## 4. 확인된 기능·성능·한계 (시험 ID)
 
@@ -34,12 +35,22 @@ _HardwareX의 Software description / Operation instructions / Validation & chara
 | MD400 펌웨어 | id1·id2 DL=86 | — | T-03 |
 | 실험 파이프라인 | 실행→bag(mcap)→CSV, 이벤트 8종 | mock | T-06 |
 | 묶음 무결성 | MANIFEST 62/62, 결손 지목 | — | T-07 |
-| 주행(twin diff-drive) | **미검증** (시스템 설치 대기) | — | 1단계 예정 |
+| 주행(twin diff-drive) | 명령 대비 바퀴 속도 ±1 %, 부호·좌우 reverse 정확 | 띄움 | T20260929-02 |
+| E-stop | 0.13~0.14 s 정지(코스팅), 해제 시 다음 명령에 재출발 → 해제 전 명령 0 규칙 | 띄움, 양방향 | T20260929-01·04 |
+| 정지 안전망 | 런치 종료·`ros2_control_node` 크래시 시 양쪽 MD400 정지(없으면 262 rpm 지속), RS485 분리 시 E-stop만 정지 | 띄움 | T20260929-02·04 |
+| RS485 간헐 두절 | MD400 수신 잠김(≈1회/200 s, 출발·감속 순간) — 즉시 재시도 패치로 사각 8/8 완료, 1주기 지연만 | 띄움 | T20260929-07 |
+| 데드맨 텔레옵 | 키를 떼면 0.106~0.153 s에 감속 시작, 즉시 정지 0.24 s | 띄움 | T20261001-01 |
+| 분기 전류(모터 증가분 L/R) | 0.2 m/s 0.23/0.25 A → 0.76 m/s 0.85/0.87 A, 회전 방향 무관 방전 +, MD400 내부 전류는 0.1 A 단위·오프셋으로 대체 불가 | 띄움 | T20261001-03 |
+| 반복성(에너지) | 같은 사각 1.0 m 8회 모터 증가분 0.0845~0.0879 Wh(변동 ≈1.4 %) | 띄움 | T20260929-07 런 재추출 |
+| 전류 기준 | 통전 정지 raw가 날마다 −10~+3 LSB 이동 → 실행별 정지 구간 기준 사용, 앞뒤 차 ≤0.75 LSB | — | T20261001-03 |
 | 오도메트리 정확도, 4륜 유효 트랙 | **미검증** | — | 1단계 예정 |
-| UM7 | **미연결** | — | 2단계 예정 |
+| UM7 | 패킷 83 Hz, 체크섬 오류 0, `/imu/data` 39.7 Hz(수신 시각 기준) | 미고정 | T20261001-02 |
 
 ## 5. 한계·미해결
 
-- 전류 절대값 교정 범위 0~1.2 A(무부하 3000 rpm까지), 게인 ±1.5 %, 런 간 ±2~3 %.
+- 전류 절대값 교정 범위 0~1.2 A(무부하 3000 rpm까지), 게인 ±1.5 %, 런 간 ±2~3 %. 절대값은 대기전류 80 mA 가정에 묶임; 증가분(모터 귀속)이 더 견고하다.
+- Pi에서 프로세스가 뜰 때 측정 접지가 흔들려 세 채널이 함께 −2~−7 LSB(1~2 s) — 실행 중 프로세스 시작 금지, 정지 기준에서 자동 제외.
+- MD400 펌웨어 수신 잠김의 근본 원인 미해결(재시도로 운용).
+- 접지 주행·오도메트리 정확도·IMU 장착은 미검증.
 - 바닥 기울기·질량·적재·공기압·기온은 실행 조건 프롬프트로 기록(미측정 허용).
 - 펌웨어 1.2: 560 s 유휴 후 `t_us` 연속성 확인(T-04b). 1.1 데이터는 스트림 중단 없는 실행에서 얻은 것이라 영향 없음.

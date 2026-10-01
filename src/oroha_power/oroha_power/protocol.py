@@ -90,6 +90,16 @@ class Calibration:
     gp26_b_lsb: float
     scale_v: float = 1.0
     quiet_a: float = 0.0
+    valid_range_a: tuple = (0.0, 1.2)
+
+    def k(self, ch: str) -> float:
+        """Signed A/LSB of channel 'gp27' or 'gp28' at the calibration rail."""
+        return self.a_per_lsb * getattr(self, "scale_" + ch) * getattr(self, "sign_" + ch)
+
+    @property
+    def quiet_lsb(self) -> float:
+        """Controller quiescent current at powered rest, in LSB (firmware QUIET_GP2x = 7.0)."""
+        return self.quiet_a / (self.a_per_lsb * 0.5 * (self.scale_gp27 + self.scale_gp28))
 
     @classmethod
     def from_dict(cls, d: dict) -> "Calibration":
@@ -100,7 +110,8 @@ class Calibration:
                    sign_gp27=float(c["sign_gp27"]), sign_gp28=float(c["sign_gp28"]),
                    zero_gp27=float(c["zero_gp27"]), zero_gp28=float(c["zero_gp28"]),
                    v_per_lsb=float(v["v_per_lsb"]), gp26_b_lsb=float(v["gp26_b_lsb"]),
-                   scale_v=float(v.get("scale_v", 1.0)), quiet_a=float(c.get("quiet_a", 0.0)))
+                   scale_v=float(v.get("scale_v", 1.0)), quiet_a=float(c.get("quiet_a", 0.0)),
+                   valid_range_a=tuple(float(x) for x in c.get("valid_range_a", (0.0, 1.2))))
 
 
 def convert(f: Frame, cal: Calibration, zero_gp27: float, zero_gp28: float,
@@ -110,6 +121,30 @@ def convert(f: Frame, cal: Calibration, zero_gp27: float, zero_gp28: float,
     i_left = (f.gp27 - zero_gp27) * cal.a_per_lsb * cal.scale_gp27 * cal.sign_gp27 * rail_corr
     i_right = (f.gp28 - zero_gp28) * cal.a_per_lsb * cal.scale_gp28 * cal.sign_gp28 * rail_corr
     return v, i_left, i_right
+
+
+def rail_corr_from_rest(cal: Calibration, rest_gp27: float, rest_gp28: float) -> float:
+    """Rail ratio (now / calibration) from a powered-rest raw pair — the firmware's '#ZERO' model.
+
+    The ACS37030 is non-ratiometric: its 0 A output is a fixed voltage, so the raw 0 A point
+    scales as 1/rail. Powered-rest raw = true 0 A raw + controller quiescent (quiet_lsb), hence
+    rail_corr = mean(calibration 0 A raw) / mean(rest raw - quiet). It assumes the quiescent
+    current is the calibrated 80 mA; it cannot tell a rail change from a sensor-offset drift.
+    """
+    q = cal.quiet_lsb
+    z = 0.5 * ((rest_gp27 - q) + (rest_gp28 - q))
+    return 0.5 * (cal.zero_gp27 + cal.zero_gp28) / z
+
+
+def true_zero_raw(cal: Calibration, rail_corr: float) -> tuple:
+    """(gp27, gp28) raw at TRUE 0 A for a given rail_corr."""
+    return cal.zero_gp27 / rail_corr, cal.zero_gp28 / rail_corr
+
+
+def convert_abs(f: Frame, cal: Calibration, rail_corr: float) -> tuple:
+    """(v_bus, i_left, i_right) with currents relative to TRUE 0 A (not the powered-rest baseline)."""
+    z27, z28 = true_zero_raw(cal, rail_corr)
+    return convert(f, cal, z27, z28, rail_corr)
 
 
 class OffsetFilter:

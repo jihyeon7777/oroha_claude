@@ -3,12 +3,21 @@
 Publishes
   ~/sample             oroha_msgs/PowerSample   every firmware window (50 Hz): raw ADC + converted
   ~/battery            sensor_msgs/BatteryState 10 Hz, suppressed while the stream is stale
-  ~/calibration_event  std_msgs/String          latched; '#ZERO ...' replies, calibration load
+  ~/calibration_event  std_msgs/String          latched; calibration load, '#ZERO' replies and what was applied
   /diagnostics         diagnostic_msgs/DiagnosticArray 1 Hz
   ~/measured ~/raw ~/power  geometry_msgs/Vector3Stamped   only with legacy_topics:=true
                        (old 1.x layout: x=GP28 right, y=GP27 left, z=V)
 Services
   ~/zero               std_srvs/Trigger   send 'Z' (motors must be at rest); non-blocking for the rest of the node
+
+Current meaning (H3, 2026-10-01): i_left / i_right are ALWAYS relative to the calibrated TRUE 0 A,
+rail-corrected: raw 0 A = zero_cal / rail_corr. A '#ZERO' reply to an explicit 'Z' (motors at
+powered rest) only updates rail_corr and the powered-rest baseline (reported on
+~/calibration_event); it no longer re-zeroes the currents. The firmware's boot zero is ignored
+(taken whenever the Pico powers up, motor switch on or off). Without a 'Z' this session rail_corr
+stays 1.0 and the absolute current can be off by the rail drift (preflight rest raw moved
+-10..+3 LSB between days = up to ~0.15 A); oroha_export_csv re-derives both from the run's rest
+windows, so recorded runs do not depend on it.
 
 Time base: one clock — the node clock. device_stamp = t_us + min-filter offset.
 Channel/wheel mapping (2026-08-14): GP28 = sensor #1 = id 1 = RIGHT, GP27 = sensor #2 = id 2 = LEFT.
@@ -41,6 +50,7 @@ from std_srvs.srv import Trigger
 from oroha_msgs.msg import PowerSample
 from oroha_power.port_guard import describe, port_holders
 from oroha_power.protocol import (FLAG_BAD_MASK, FLAG_ZERO_VALID, Calibration, Frame,
+                                  rail_corr_from_rest, true_zero_raw,
                                   OffsetFilter, convert, flag_names, parse_data_line, parse_kv)
 
 EXPECTED_FW = "oroha-bench-1.2"
@@ -67,7 +77,7 @@ class SimulatedPico:
             self.streaming = False
             self.pending.append("#STOP seq=%d overruns=0" % self.seq)
         elif c == "Z":
-            self.pending.append("#ZERO gp28=2034.00 gp27=2035.30 rail=3.2887 rail_corr=1.0000 n=1024")
+            self.pending.append("#ZERO gp28=2041.00 gp27=2042.30 rail=3.2887 rail_corr=1.0000 n=1024")  # powered rest
         elif c == "C":
             self.pending.append("#CFG fw=%s smps_pwm=0 (simulated)" % EXPECTED_FW)
 
@@ -131,9 +141,11 @@ class OrohaPowerNode(Node):
         self.expected_fw = str(g("expected_fw"))
 
         self.cal = self._load_calibration(str(g("calibration_file")))
-        self.zero_gp27 = self.cal.zero_gp27
-        self.zero_gp28 = self.cal.zero_gp28
         self.rail_corr = 1.0
+        self.rail_source = "unset (no Z at powered rest this session)"
+        self.zero_gp27, self.zero_gp28 = true_zero_raw(self.cal, self.rail_corr)
+        self.baseline = None            # last explicit powered-rest '#ZERO': raw per channel
+        self.n_above = self.n_below = 0 # samples outside the calibrated range (per channel, summed)
         self.fw_version = ""
 
         # publishers
@@ -279,18 +291,32 @@ class OrohaPowerNode(Node):
 
     def on_meta(self, line: str):
         if line.startswith("#ZERO"):
-            kv = parse_kv(line)
-            try:
-                if "gp27" in kv:
-                    self.zero_gp27 = float(kv["gp27"])
-                if "gp28" in kv:
-                    self.zero_gp28 = float(kv["gp28"])
-                if "rail_corr" in kv:
-                    self.rail_corr = float(kv["rail_corr"])
-            except ValueError:
-                pass
             self.get_logger().info(line)
             self._event(line)
+            if "(boot)" in line:
+                # taken at Pico power-up whatever the motor switch state -> not a powered-rest zero
+                self._event("#ZERO (boot) ignored: currents stay on the calibrated true 0 A")
+                return
+            kv = parse_kv(line)
+            try:
+                r27, r28 = float(kv["gp27"]), float(kv["gp28"])
+            except (KeyError, ValueError):
+                self._event("#ZERO unparsed, nothing applied")
+            else:
+                rc = rail_corr_from_rest(self.cal, r27, r28)
+                if abs(rc - 1.0) < 0.02:      # firmware RAIL_LO/HI is +-10 %; 2 % = 40 LSB of drift
+                    self.rail_corr = rc
+                    self.rail_source = "Z %s" % time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                    self.zero_gp27, self.zero_gp28 = true_zero_raw(self.cal, rc)
+                    self.baseline = (r27, r28)
+                    i27 = (r27 - self.zero_gp27) * self.cal.k("gp27") * rc
+                    i28 = (r28 - self.zero_gp28) * self.cal.k("gp28") * rc
+                    self._event("applied: rail_corr=%.6f baseline(powered rest) gp27=%.3f gp28=%.3f "
+                                "-> %.4f / %.4f A vs true 0 A (quiet %.3f A assumed)"
+                                % (rc, r27, r28, i27, i28, self.cal.quiet_a))
+                else:
+                    self._event("#ZERO rejected: rail_corr %.4f implausible (motors moving or switch off?)" % rc)
+                    self.get_logger().warn("#ZERO rejected: rail_corr %.4f implausible" % rc)
             self.zero_reply = line
             self.zero_event.set()
         elif line.startswith("#CFG"):
@@ -343,6 +369,9 @@ class OrohaPowerNode(Node):
         m.flags = f.flags
         m.zero_valid = f.zero_valid
         m.overrun = f.overrun
+        lo, hi = self.cal.valid_range_a
+        self.n_above += (i_left > hi) + (i_right > hi)
+        self.n_below += (i_left < lo - 0.05) + (i_right < lo - 0.05)   # 0.05 A = ~4 sigma noise
         m.v_bus, m.i_left, m.i_right = v, i_left, i_right
         m.p_left, m.p_right = v * i_left, v * i_right
         m.p_total = m.p_left + m.p_right
@@ -430,6 +459,11 @@ class OrohaPowerNode(Node):
         kv(KeyValue(key="calib_id", value=self.cal.calib_id))
         kv(KeyValue(key="zero_gp28/gp27", value="%.2f / %.2f" % (self.zero_gp28, self.zero_gp27)))
         kv(KeyValue(key="rail_corr", value="%.6f" % self.rail_corr))
+        kv(KeyValue(key="rail_corr_source", value=self.rail_source))
+        kv(KeyValue(key="current_reference", value="true 0 A (calibration), rail-corrected"))
+        kv(KeyValue(key="baseline_gp28/gp27", value="-" if self.baseline is None
+                    else "%.2f / %.2f" % (self.baseline[1], self.baseline[0])))
+        kv(KeyValue(key="samples_above/below_range", value="%d / %d" % (self.n_above, self.n_below)))
         if self.last:
             f = self.last["f"]
             kv(KeyValue(key="sync_residual_ms", value="%.2f" % self.last["resid_ms"]))

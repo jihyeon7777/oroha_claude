@@ -1,11 +1,11 @@
 """ROS-free tests for the Pico line protocol and conversion."""
 
-from oroha_power.protocol import (Calibration, OffsetFilter, convert, flag_names,
-                                  parse_data_line, parse_kv)
+from oroha_power.protocol import (Calibration, OffsetFilter, convert, convert_abs, flag_names,
+                                  parse_data_line, parse_kv, rail_corr_from_rest, true_zero_raw)
 
 CAL = Calibration(calib_id="t", a_per_lsb=12.133e-3, scale_gp27=0.94289, scale_gp28=0.94289,
                   sign_gp27=1, sign_gp28=1, zero_gp27=2035.257, zero_gp28=2033.974,
-                  v_per_lsb=8.913e-3, gp26_b_lsb=-18.7)
+                  v_per_lsb=8.913e-3, gp26_b_lsb=-18.7, quiet_a=0.080)
 
 
 def test_parse_data_line():
@@ -30,6 +30,27 @@ def test_convert_matches_documented_formulas():
     assert abs(il - (2122.7 - 2035.257) * 11.44e-3) < 1e-4       # 11.44 mA/LSB
     assert abs(ir - (2121.4 - 2033.974) * 11.44e-3) < 1e-4
     assert il > 0 and ir > 0                                     # discharge positive
+
+
+def test_rail_corr_matches_firmware_zero_model():
+    # firmware reply on 2026-10-01 (preflight 'Z'): gp28=2035.318 gp27=2037.471 -> rail_corr=1.002571
+    assert abs(CAL.quiet_lsb - 7.0) < 0.01                       # 80 mA = 7.0 LSB (firmware QUIET_GP2x)
+    rc = rail_corr_from_rest(CAL, 2037.471, 2035.318)
+    assert abs(rc - 1.002571) < 2e-5
+    # calibration-day powered rest (true 0 A + 7 LSB) -> rail unchanged
+    assert abs(rail_corr_from_rest(CAL, 2035.257 + 7.0, 2033.974 + 7.0) - 1.0) < 2e-5
+
+
+def test_currents_stay_on_true_zero_after_rail_correction():
+    """H3: a powered-rest frame reads the quiescent 80 mA in absolute terms, whatever the rail."""
+    for rc in (1.0, 1.0026, 0.995):
+        z27, z28 = true_zero_raw(CAL, rc)
+        q = CAL.quiet_lsb / rc                                   # quiescent in raw LSB at this rail
+        f = parse_data_line("D,0,0,32,3123.0,3121,3125,%.3f,0,0,%.3f,0,0,64" % (z27 + q, z28 + q))
+        _, il, ir = convert_abs(f, CAL, rc)
+        assert abs(il - 0.080) < 2e-3 and abs(ir - 0.080) < 2e-3
+        # and the rail estimate from that same frame gives back rc
+        assert abs(rail_corr_from_rest(CAL, f.gp27, f.gp28) - rc) < 1e-4
 
 
 def test_offset_filter_min_and_restart():

@@ -1,0 +1,344 @@
+diff --git a/src/oroha_power/oroha_power/power_node.py b/src/oroha_power/oroha_power/power_node.py
+index 22688b5..b6a985f 100644
+--- a/src/oroha_power/oroha_power/power_node.py
++++ b/src/oroha_power/oroha_power/power_node.py
+@@ -3,13 +3,22 @@
+ Publishes
+   ~/sample             oroha_msgs/PowerSample   every firmware window (50 Hz): raw ADC + converted
+   ~/battery            sensor_msgs/BatteryState 10 Hz, suppressed while the stream is stale
+-  ~/calibration_event  std_msgs/String          latched; '#ZERO ...' replies, calibration load
++  ~/calibration_event  std_msgs/String          latched; calibration load, '#ZERO' replies and what was applied
+   /diagnostics         diagnostic_msgs/DiagnosticArray 1 Hz
+   ~/measured ~/raw ~/power  geometry_msgs/Vector3Stamped   only with legacy_topics:=true
+                        (old 1.x layout: x=GP28 right, y=GP27 left, z=V)
+ Services
+   ~/zero               std_srvs/Trigger   send 'Z' (motors must be at rest); non-blocking for the rest of the node
+ 
++Current meaning (H3, 2026-10-01): i_left / i_right are ALWAYS relative to the calibrated TRUE 0 A,
++rail-corrected: raw 0 A = zero_cal / rail_corr. A '#ZERO' reply to an explicit 'Z' (motors at
++powered rest) only updates rail_corr and the powered-rest baseline (reported on
++~/calibration_event); it no longer re-zeroes the currents. The firmware's boot zero is ignored
++(taken whenever the Pico powers up, motor switch on or off). Without a 'Z' this session rail_corr
++stays 1.0 and the absolute current can be off by the rail drift (preflight rest raw moved
++-10..+3 LSB between days = up to ~0.15 A); oroha_export_csv re-derives both from the run's rest
++windows, so recorded runs do not depend on it.
++
+ Time base: one clock — the node clock. device_stamp = t_us + min-filter offset.
+ Channel/wheel mapping (2026-08-14): GP28 = sensor #1 = id 1 = RIGHT, GP27 = sensor #2 = id 2 = LEFT.
+ """
+@@ -41,6 +50,7 @@ from std_srvs.srv import Trigger
+ from oroha_msgs.msg import PowerSample
+ from oroha_power.port_guard import describe, port_holders
+ from oroha_power.protocol import (FLAG_BAD_MASK, FLAG_ZERO_VALID, Calibration, Frame,
++                                  rail_corr_from_rest, true_zero_raw,
+                                   OffsetFilter, convert, flag_names, parse_data_line, parse_kv)
+ 
+ EXPECTED_FW = "oroha-bench-1.2"
+@@ -67,7 +77,7 @@ class SimulatedPico:
+             self.streaming = False
+             self.pending.append("#STOP seq=%d overruns=0" % self.seq)
+         elif c == "Z":
+-            self.pending.append("#ZERO gp28=2034.00 gp27=2035.30 rail=3.2887 rail_corr=1.0000 n=1024")
++            self.pending.append("#ZERO gp28=2041.00 gp27=2042.30 rail=3.2887 rail_corr=1.0000 n=1024")  # powered rest
+         elif c == "C":
+             self.pending.append("#CFG fw=%s smps_pwm=0 (simulated)" % EXPECTED_FW)
+ 
+@@ -131,9 +141,11 @@ class OrohaPowerNode(Node):
+         self.expected_fw = str(g("expected_fw"))
+ 
+         self.cal = self._load_calibration(str(g("calibration_file")))
+-        self.zero_gp27 = self.cal.zero_gp27
+-        self.zero_gp28 = self.cal.zero_gp28
+         self.rail_corr = 1.0
++        self.rail_source = "unset (no Z at powered rest this session)"
++        self.zero_gp27, self.zero_gp28 = true_zero_raw(self.cal, self.rail_corr)
++        self.baseline = None            # last explicit powered-rest '#ZERO': raw per channel
++        self.n_above = self.n_below = 0 # samples outside the calibrated range (per channel, summed)
+         self.fw_version = ""
+ 
+         # publishers
+@@ -279,18 +291,32 @@ class OrohaPowerNode(Node):
+ 
+     def on_meta(self, line: str):
+         if line.startswith("#ZERO"):
+-            kv = parse_kv(line)
+-            try:
+-                if "gp27" in kv:
+-                    self.zero_gp27 = float(kv["gp27"])
+-                if "gp28" in kv:
+-                    self.zero_gp28 = float(kv["gp28"])
+-                if "rail_corr" in kv:
+-                    self.rail_corr = float(kv["rail_corr"])
+-            except ValueError:
+-                pass
+             self.get_logger().info(line)
+             self._event(line)
++            if "(boot)" in line:
++                # taken at Pico power-up whatever the motor switch state -> not a powered-rest zero
++                self._event("#ZERO (boot) ignored: currents stay on the calibrated true 0 A")
++                return
++            kv = parse_kv(line)
++            try:
++                r27, r28 = float(kv["gp27"]), float(kv["gp28"])
++            except (KeyError, ValueError):
++                self._event("#ZERO unparsed, nothing applied")
++            else:
++                rc = rail_corr_from_rest(self.cal, r27, r28)
++                if abs(rc - 1.0) < 0.02:      # firmware RAIL_LO/HI is +-10 %; 2 % = 40 LSB of drift
++                    self.rail_corr = rc
++                    self.rail_source = "Z %s" % time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
++                    self.zero_gp27, self.zero_gp28 = true_zero_raw(self.cal, rc)
++                    self.baseline = (r27, r28)
++                    i27 = (r27 - self.zero_gp27) * self.cal.k("gp27") * rc
++                    i28 = (r28 - self.zero_gp28) * self.cal.k("gp28") * rc
++                    self._event("applied: rail_corr=%.6f baseline(powered rest) gp27=%.3f gp28=%.3f "
++                                "-> %.4f / %.4f A vs true 0 A (quiet %.3f A assumed)"
++                                % (rc, r27, r28, i27, i28, self.cal.quiet_a))
++                else:
++                    self._event("#ZERO rejected: rail_corr %.4f implausible (motors moving or switch off?)" % rc)
++                    self.get_logger().warn("#ZERO rejected: rail_corr %.4f implausible" % rc)
+             self.zero_reply = line
+             self.zero_event.set()
+         elif line.startswith("#CFG"):
+@@ -343,6 +369,9 @@ class OrohaPowerNode(Node):
+         m.flags = f.flags
+         m.zero_valid = f.zero_valid
+         m.overrun = f.overrun
++        lo, hi = self.cal.valid_range_a
++        self.n_above += (i_left > hi) + (i_right > hi)
++        self.n_below += (i_left < lo - 0.05) + (i_right < lo - 0.05)   # 0.05 A = ~4 sigma noise
+         m.v_bus, m.i_left, m.i_right = v, i_left, i_right
+         m.p_left, m.p_right = v * i_left, v * i_right
+         m.p_total = m.p_left + m.p_right
+@@ -430,6 +459,11 @@ class OrohaPowerNode(Node):
+         kv(KeyValue(key="calib_id", value=self.cal.calib_id))
+         kv(KeyValue(key="zero_gp28/gp27", value="%.2f / %.2f" % (self.zero_gp28, self.zero_gp27)))
+         kv(KeyValue(key="rail_corr", value="%.6f" % self.rail_corr))
++        kv(KeyValue(key="rail_corr_source", value=self.rail_source))
++        kv(KeyValue(key="current_reference", value="true 0 A (calibration), rail-corrected"))
++        kv(KeyValue(key="baseline_gp28/gp27", value="-" if self.baseline is None
++                    else "%.2f / %.2f" % (self.baseline[1], self.baseline[0])))
++        kv(KeyValue(key="samples_above/below_range", value="%d / %d" % (self.n_above, self.n_below)))
+         if self.last:
+             f = self.last["f"]
+             kv(KeyValue(key="sync_residual_ms", value="%.2f" % self.last["resid_ms"]))
+diff --git a/src/oroha_power/oroha_power/protocol.py b/src/oroha_power/oroha_power/protocol.py
+index d96d6aa..5771372 100644
+--- a/src/oroha_power/oroha_power/protocol.py
++++ b/src/oroha_power/oroha_power/protocol.py
+@@ -90,6 +90,16 @@ class Calibration:
+     gp26_b_lsb: float
+     scale_v: float = 1.0
+     quiet_a: float = 0.0
++    valid_range_a: tuple = (0.0, 1.2)
++
++    def k(self, ch: str) -> float:
++        """Signed A/LSB of channel 'gp27' or 'gp28' at the calibration rail."""
++        return self.a_per_lsb * getattr(self, "scale_" + ch) * getattr(self, "sign_" + ch)
++
++    @property
++    def quiet_lsb(self) -> float:
++        """Controller quiescent current at powered rest, in LSB (firmware QUIET_GP2x = 7.0)."""
++        return self.quiet_a / (self.a_per_lsb * 0.5 * (self.scale_gp27 + self.scale_gp28))
+ 
+     @classmethod
+     def from_dict(cls, d: dict) -> "Calibration":
+@@ -100,7 +110,8 @@ class Calibration:
+                    sign_gp27=float(c["sign_gp27"]), sign_gp28=float(c["sign_gp28"]),
+                    zero_gp27=float(c["zero_gp27"]), zero_gp28=float(c["zero_gp28"]),
+                    v_per_lsb=float(v["v_per_lsb"]), gp26_b_lsb=float(v["gp26_b_lsb"]),
+-                   scale_v=float(v.get("scale_v", 1.0)), quiet_a=float(c.get("quiet_a", 0.0)))
++                   scale_v=float(v.get("scale_v", 1.0)), quiet_a=float(c.get("quiet_a", 0.0)),
++                   valid_range_a=tuple(float(x) for x in c.get("valid_range_a", (0.0, 1.2))))
+ 
+ 
+ def convert(f: Frame, cal: Calibration, zero_gp27: float, zero_gp28: float,
+@@ -112,6 +123,30 @@ def convert(f: Frame, cal: Calibration, zero_gp27: float, zero_gp28: float,
+     return v, i_left, i_right
+ 
+ 
++def rail_corr_from_rest(cal: Calibration, rest_gp27: float, rest_gp28: float) -> float:
++    """Rail ratio (now / calibration) from a powered-rest raw pair — the firmware's '#ZERO' model.
++
++    The ACS37030 is non-ratiometric: its 0 A output is a fixed voltage, so the raw 0 A point
++    scales as 1/rail. Powered-rest raw = true 0 A raw + controller quiescent (quiet_lsb), hence
++    rail_corr = mean(calibration 0 A raw) / mean(rest raw - quiet). It assumes the quiescent
++    current is the calibrated 80 mA; it cannot tell a rail change from a sensor-offset drift.
++    """
++    q = cal.quiet_lsb
++    z = 0.5 * ((rest_gp27 - q) + (rest_gp28 - q))
++    return 0.5 * (cal.zero_gp27 + cal.zero_gp28) / z
++
++
++def true_zero_raw(cal: Calibration, rail_corr: float) -> tuple:
++    """(gp27, gp28) raw at TRUE 0 A for a given rail_corr."""
++    return cal.zero_gp27 / rail_corr, cal.zero_gp28 / rail_corr
++
++
++def convert_abs(f: Frame, cal: Calibration, rail_corr: float) -> tuple:
++    """(v_bus, i_left, i_right) with currents relative to TRUE 0 A (not the powered-rest baseline)."""
++    z27, z28 = true_zero_raw(cal, rail_corr)
++    return convert(f, cal, z27, z28, rail_corr)
++
++
+ class OffsetFilter:
+     """NTP-style minimum filter: offset = min(rx_time - device_time) over a window.
+ 
+diff --git a/src/oroha_power/test/test_protocol.py b/src/oroha_power/test/test_protocol.py
+index 65fab50..b0ee7af 100644
+--- a/src/oroha_power/test/test_protocol.py
++++ b/src/oroha_power/test/test_protocol.py
+@@ -1,11 +1,11 @@
+ """ROS-free tests for the Pico line protocol and conversion."""
+ 
+-from oroha_power.protocol import (Calibration, OffsetFilter, convert, flag_names,
+-                                  parse_data_line, parse_kv)
++from oroha_power.protocol import (Calibration, OffsetFilter, convert, convert_abs, flag_names,
++                                  parse_data_line, parse_kv, rail_corr_from_rest, true_zero_raw)
+ 
+ CAL = Calibration(calib_id="t", a_per_lsb=12.133e-3, scale_gp27=0.94289, scale_gp28=0.94289,
+                   sign_gp27=1, sign_gp28=1, zero_gp27=2035.257, zero_gp28=2033.974,
+-                  v_per_lsb=8.913e-3, gp26_b_lsb=-18.7)
++                  v_per_lsb=8.913e-3, gp26_b_lsb=-18.7, quiet_a=0.080)
+ 
+ 
+ def test_parse_data_line():
+@@ -32,6 +32,27 @@ def test_convert_matches_documented_formulas():
+     assert il > 0 and ir > 0                                     # discharge positive
+ 
+ 
++def test_rail_corr_matches_firmware_zero_model():
++    # firmware reply on 2026-10-01 (preflight 'Z'): gp28=2035.318 gp27=2037.471 -> rail_corr=1.002571
++    assert abs(CAL.quiet_lsb - 7.0) < 0.01                       # 80 mA = 7.0 LSB (firmware QUIET_GP2x)
++    rc = rail_corr_from_rest(CAL, 2037.471, 2035.318)
++    assert abs(rc - 1.002571) < 2e-5
++    # calibration-day powered rest (true 0 A + 7 LSB) -> rail unchanged
++    assert abs(rail_corr_from_rest(CAL, 2035.257 + 7.0, 2033.974 + 7.0) - 1.0) < 2e-5
++
++
++def test_currents_stay_on_true_zero_after_rail_correction():
++    """H3: a powered-rest frame reads the quiescent 80 mA in absolute terms, whatever the rail."""
++    for rc in (1.0, 1.0026, 0.995):
++        z27, z28 = true_zero_raw(CAL, rc)
++        q = CAL.quiet_lsb / rc                                   # quiescent in raw LSB at this rail
++        f = parse_data_line("D,0,0,32,3123.0,3121,3125,%.3f,0,0,%.3f,0,0,64" % (z27 + q, z28 + q))
++        _, il, ir = convert_abs(f, CAL, rc)
++        assert abs(il - 0.080) < 2e-3 and abs(ir - 0.080) < 2e-3
++        # and the rail estimate from that same frame gives back rc
++        assert abs(rail_corr_from_rest(CAL, f.gp27, f.gp28) - rc) < 1e-4
++
++
+ def test_offset_filter_min_and_restart():
+     flt = OffsetFilter(window=5)
+     # device 10.00, 10.02, ... arriving with jitter 10..30 ms: offset = min(rx - dev)
+diff --git a/src/oroha_tools/oroha_tools/export_csv.py b/src/oroha_tools/oroha_tools/export_csv.py
+index 72123eb..d075a13 100644
+--- a/src/oroha_tools/oroha_tools/export_csv.py
++++ b/src/oroha_tools/oroha_tools/export_csv.py
+@@ -22,6 +22,8 @@ from pathlib import Path
+ 
+ import yaml
+ 
++from oroha_tools.power_analysis import analyse, load_calibration, rest_windows
++
+ TOPIC_FILES = {
+     "/diff_cont/cmd_vel": "cmd_vel", "/diff_cont/cmd_vel_out": "cmd_vel_out", "/diff_cont/odom": "odom", "/joint_states": "joint_states",
+     "/oroha_power/sample": "power", "/oroha_power/battery": "battery", "/imu/data": "imu",
+@@ -157,15 +159,10 @@ def export(run_dir: Path, out: Path) -> dict:
+ 
+     w = Writers(out)
+     odom_samples = []
+-    power_prev_dev = None
+-    energy_wh = 0.0
+-    gap_count = 0
+-    gap_time = 0.0
++    prows = []         # power rows, written after the run-level current reference is known
+     n_power = n_overrun = 0
+     seq_prev = None
+     seq_gaps = 0
+-    i_left_max = i_right_max = 0.0
+-    i_left_sum = i_right_sum = 0.0
+     calib_ids = set()
+     imu_yaw_first = imu_yaw_last = None
+     gyro_int = 0.0
+@@ -228,18 +225,8 @@ def export(run_dir: Path, out: Path) -> dict:
+                 seq_gaps += msg.seq - seq_prev - 1
+             seq_prev = msg.seq
+             calib_ids.add(msg.calib_id)
+-            i_left_max, i_right_max = max(i_left_max, msg.i_left), max(i_right_max, msg.i_right)
+-            i_left_sum += msg.i_left
+-            i_right_sum += msg.i_right
+-            if power_prev_dev is not None:
+-                dt = (dev_ns - power_prev_dev) * 1e-9
+-                if 0.0 < dt <= 0.060:
+-                    energy_wh += msg.p_total * dt / 3600.0
+-                else:
+-                    gap_count += 1
+-                    gap_time += max(dt, 0.0)
+-            power_prev_dev = dev_ns
+-            w.row(name, {**base, "device_stamp_ns": dev_ns, "seq": msg.seq, "t_us": msg.t_us,
++            prows.append({**base, "t_dev": round((dev_ns - t0) * 1e-9, 6), "device_stamp_ns": dev_ns,
++                         "dev_ns": dev_ns, "seq": msg.seq, "t_us": msg.t_us,
+                          "n_rounds": msg.n_rounds,
+                          "gp26_mean": msg.gp26_mean, "gp26_min": msg.gp26_min, "gp26_max": msg.gp26_max,
+                          "gp27_mean": msg.gp27_mean, "gp27_min": msg.gp27_min, "gp27_max": msg.gp27_max,
+@@ -287,18 +274,25 @@ def export(run_dir: Path, out: Path) -> dict:
+                              "values": json.dumps({kv.key: kv.value for kv in st.values}, ensure_ascii=False)})
+         elif name == "calibration_events":
+             w.row(name, {**base, "data": msg.data})
++
++    prof = run_dir / "profile.csv"
++    prof_rows = list(csv.DictReader(open(prof))) if prof.exists() else []
++    power_block = None
++    if prows:
++        cid = sorted(calib_ids)[0]
++        power_block = analyse(prows, load_calibration(cid), rest_windows(prof_rows))
++        for r in prows:
++            r.pop("dev_ns", None)
++            w.row("power", r)
+     w.close()
+ 
+     gt = None
+     if (run_dir / "manual_gt.yaml").exists():
+         gt = yaml.safe_load(open(run_dir / "manual_gt.yaml"))
+     ideal_end = None
+-    prof = run_dir / "profile.csv"
+-    if prof.exists():
+-        rows = list(csv.DictReader(open(prof)))
+-        if rows:
+-            r = rows[-1]
+-            ideal_end = {"x": float(r["x_ideal"]), "y": float(r["y_ideal"]), "yaw": float(r["yaw_ideal"])}
++    if prof_rows:
++        r = prof_rows[-1]
++        ideal_end = {"x": float(r["x_ideal"]), "y": float(r["y_ideal"]), "yaw": float(r["yaw_ideal"])}
+     summary = {
+         "run_id": meta.get("run_id", run_dir.name),
+         "status": meta.get("status"),
+@@ -309,12 +303,7 @@ def export(run_dir: Path, out: Path) -> dict:
+         "odometry": None if len(odom_samples) < 2 else odom_summary(odom_samples, ideal_end, gt),
+         "power": None if n_power == 0 else {
+             "samples": n_power, "overrun_samples": n_overrun, "seq_gaps": seq_gaps,
+-            "energy_wh": round(energy_wh, 5),
+-            "energy_method": "sum(p_total*dt) on device_stamp; intervals > 60 ms excluded",
+-            "excluded_intervals": gap_count, "excluded_time_s": round(gap_time, 3),
+-            "i_left_mean_a": round(i_left_sum / n_power, 4), "i_right_mean_a": round(i_right_sum / n_power, 4),
+-            "i_left_max_a": round(i_left_max, 4), "i_right_max_a": round(i_right_max, 4),
+-            "calib_ids": sorted(calib_ids),
++            "calib_ids": sorted(calib_ids), **power_block,
+         },
+         "joint_diag": None if not diag else {
+             jn: {"samples": d["n"], "stale_samples": d["stale"], "max_consecutive_stale": d["stale_run_max"],
+@@ -350,8 +339,11 @@ oroha_power the host receive time, for um7 the receive time, for controllers the
+ | joint_states.csv | <joint>_pos, _vel, _eff | rad, rad/s at the MOTOR SHAFT (34.615:1 to the wheel), A (MD400 internal, unsigned) |
+ | joint_diag.csv | <joint>_status, _status2, _read_seq | MD400 status bytes as read (raw bits, see MD400 manual PID_MONITOR) and the plugin's successful-read counter; a repeated read_seq = the value was NOT re-read that cycle (comm failure, last value republished) |
+ | power.csv | device_stamp_ns, seq, t_us, n_rounds, gp2x_mean/min/max, flags, zero_valid, overrun | Pico window (20 ms): raw 12-bit ADC; t_us = device monotonic us; device_stamp_ns = t_us mapped to ROS time |
+-| power.csv | v_bus, i_left, i_right, p_left, p_right, p_total | V, A (discharge positive; LEFT=GP27=id2, RIGHT=GP28=id1), W; converted with calib_id |
+-| power.csv | zero_gp27, zero_gp28, rail_corr, sync_offset_s, sync_residual_ms, calib_id, fw_version | conversion inputs actually applied |
++| power.csv | v_bus, i_left, i_right, p_left, p_right, p_total | AS PUBLISHED live by oroha_power: V, A (discharge positive; LEFT=GP27=id2, RIGHT=GP28=id1), W. Nodes before 2026-10-01 switched to "increase over the last '#ZERO'" after any zero; newer nodes are always vs true 0 A with the session's rail_corr — use the *_run/_abs/di columns for analysis |
++| power.csv | zero_gp27, zero_gp28, rail_corr, sync_offset_s, sync_residual_ms, calib_id, fw_version | live conversion inputs actually applied |
++| power.csv | t_dev | s, device time (device_stamp) relative to START — the time base of the columns below and of the energies |
++| power.csv | rail_corr_run, base_gp27, base_gp28 | run-level reference from this run's rest windows (rest_pre/rest_post, trimmed; linear between): powered-rest raw baseline per channel and the rail ratio derived from it (summary.yaml power.current_reference) |
++| power.csv | v_bus_run, i_left_abs, i_right_abs, di_left, di_right, p_total_abs, p_total_inc | V; A vs TRUE 0 A (= di + calibrated quiescent 0.080 A); A increase over powered rest (motor-attributable); W = v_bus_run x (i_left+i_right) for abs / (di_left+di_right) for inc. Empty when the run has no rest window |
+ | battery.csv | voltage, current | V, A (ROS convention: discharge negative) |
+ | imu.csv | qx..qw, yaw, gx, gy, gz, ax, ay, az | ENU orientation, rad, rad/s, m/s^2 (um7_driver) |
+ | mag.csv | mx, my, mz | unit-norm direction (NOT tesla) |

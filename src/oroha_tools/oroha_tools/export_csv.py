@@ -22,6 +22,8 @@ from pathlib import Path
 
 import yaml
 
+from oroha_tools.power_analysis import analyse, load_calibration, rest_windows
+
 TOPIC_FILES = {
     "/diff_cont/cmd_vel": "cmd_vel", "/diff_cont/cmd_vel_out": "cmd_vel_out", "/diff_cont/odom": "odom", "/joint_states": "joint_states",
     "/oroha_power/sample": "power", "/oroha_power/battery": "battery", "/imu/data": "imu",
@@ -157,15 +159,10 @@ def export(run_dir: Path, out: Path) -> dict:
 
     w = Writers(out)
     odom_samples = []
-    power_prev_dev = None
-    energy_wh = 0.0
-    gap_count = 0
-    gap_time = 0.0
+    prows = []         # power rows, written after the run-level current reference is known
     n_power = n_overrun = 0
     seq_prev = None
     seq_gaps = 0
-    i_left_max = i_right_max = 0.0
-    i_left_sum = i_right_sum = 0.0
     calib_ids = set()
     imu_yaw_first = imu_yaw_last = None
     gyro_int = 0.0
@@ -228,18 +225,8 @@ def export(run_dir: Path, out: Path) -> dict:
                 seq_gaps += msg.seq - seq_prev - 1
             seq_prev = msg.seq
             calib_ids.add(msg.calib_id)
-            i_left_max, i_right_max = max(i_left_max, msg.i_left), max(i_right_max, msg.i_right)
-            i_left_sum += msg.i_left
-            i_right_sum += msg.i_right
-            if power_prev_dev is not None:
-                dt = (dev_ns - power_prev_dev) * 1e-9
-                if 0.0 < dt <= 0.060:
-                    energy_wh += msg.p_total * dt / 3600.0
-                else:
-                    gap_count += 1
-                    gap_time += max(dt, 0.0)
-            power_prev_dev = dev_ns
-            w.row(name, {**base, "device_stamp_ns": dev_ns, "seq": msg.seq, "t_us": msg.t_us,
+            prows.append({**base, "t_dev": round((dev_ns - t0) * 1e-9, 6), "device_stamp_ns": dev_ns,
+                         "dev_ns": dev_ns, "seq": msg.seq, "t_us": msg.t_us,
                          "n_rounds": msg.n_rounds,
                          "gp26_mean": msg.gp26_mean, "gp26_min": msg.gp26_min, "gp26_max": msg.gp26_max,
                          "gp27_mean": msg.gp27_mean, "gp27_min": msg.gp27_min, "gp27_max": msg.gp27_max,
@@ -287,18 +274,25 @@ def export(run_dir: Path, out: Path) -> dict:
                              "values": json.dumps({kv.key: kv.value for kv in st.values}, ensure_ascii=False)})
         elif name == "calibration_events":
             w.row(name, {**base, "data": msg.data})
+
+    prof = run_dir / "profile.csv"
+    prof_rows = list(csv.DictReader(open(prof))) if prof.exists() else []
+    power_block = None
+    if prows:
+        cid = sorted(calib_ids)[0]
+        power_block = analyse(prows, load_calibration(cid), rest_windows(prof_rows))
+        for r in prows:
+            r.pop("dev_ns", None)
+            w.row("power", r)
     w.close()
 
     gt = None
     if (run_dir / "manual_gt.yaml").exists():
         gt = yaml.safe_load(open(run_dir / "manual_gt.yaml"))
     ideal_end = None
-    prof = run_dir / "profile.csv"
-    if prof.exists():
-        rows = list(csv.DictReader(open(prof)))
-        if rows:
-            r = rows[-1]
-            ideal_end = {"x": float(r["x_ideal"]), "y": float(r["y_ideal"]), "yaw": float(r["yaw_ideal"])}
+    if prof_rows:
+        r = prof_rows[-1]
+        ideal_end = {"x": float(r["x_ideal"]), "y": float(r["y_ideal"]), "yaw": float(r["yaw_ideal"])}
     summary = {
         "run_id": meta.get("run_id", run_dir.name),
         "status": meta.get("status"),
@@ -309,12 +303,7 @@ def export(run_dir: Path, out: Path) -> dict:
         "odometry": None if len(odom_samples) < 2 else odom_summary(odom_samples, ideal_end, gt),
         "power": None if n_power == 0 else {
             "samples": n_power, "overrun_samples": n_overrun, "seq_gaps": seq_gaps,
-            "energy_wh": round(energy_wh, 5),
-            "energy_method": "sum(p_total*dt) on device_stamp; intervals > 60 ms excluded",
-            "excluded_intervals": gap_count, "excluded_time_s": round(gap_time, 3),
-            "i_left_mean_a": round(i_left_sum / n_power, 4), "i_right_mean_a": round(i_right_sum / n_power, 4),
-            "i_left_max_a": round(i_left_max, 4), "i_right_max_a": round(i_right_max, 4),
-            "calib_ids": sorted(calib_ids),
+            "calib_ids": sorted(calib_ids), **power_block,
         },
         "joint_diag": None if not diag else {
             jn: {"samples": d["n"], "stale_samples": d["stale"], "max_consecutive_stale": d["stale_run_max"],
@@ -350,8 +339,11 @@ oroha_power the host receive time, for um7 the receive time, for controllers the
 | joint_states.csv | <joint>_pos, _vel, _eff | rad, rad/s at the MOTOR SHAFT (34.615:1 to the wheel), A (MD400 internal, unsigned) |
 | joint_diag.csv | <joint>_status, _status2, _read_seq | MD400 status bytes as read (raw bits, see MD400 manual PID_MONITOR) and the plugin's successful-read counter; a repeated read_seq = the value was NOT re-read that cycle (comm failure, last value republished) |
 | power.csv | device_stamp_ns, seq, t_us, n_rounds, gp2x_mean/min/max, flags, zero_valid, overrun | Pico window (20 ms): raw 12-bit ADC; t_us = device monotonic us; device_stamp_ns = t_us mapped to ROS time |
-| power.csv | v_bus, i_left, i_right, p_left, p_right, p_total | V, A (discharge positive; LEFT=GP27=id2, RIGHT=GP28=id1), W; converted with calib_id |
-| power.csv | zero_gp27, zero_gp28, rail_corr, sync_offset_s, sync_residual_ms, calib_id, fw_version | conversion inputs actually applied |
+| power.csv | v_bus, i_left, i_right, p_left, p_right, p_total | AS PUBLISHED live by oroha_power: V, A (discharge positive; LEFT=GP27=id2, RIGHT=GP28=id1), W. Nodes before 2026-10-01 switched to "increase over the last '#ZERO'" after any zero; newer nodes are always vs true 0 A with the session's rail_corr — use the *_run/_abs/di columns for analysis |
+| power.csv | zero_gp27, zero_gp28, rail_corr, sync_offset_s, sync_residual_ms, calib_id, fw_version | live conversion inputs actually applied |
+| power.csv | t_dev | s, device time (device_stamp) relative to START — the time base of the columns below and of the energies |
+| power.csv | rail_corr_run, base_gp27, base_gp28 | run-level reference from this run's rest windows (rest_pre/rest_post, trimmed; linear between): powered-rest raw baseline per channel and the rail ratio derived from it (summary.yaml power.current_reference) |
+| power.csv | v_bus_run, i_left_abs, i_right_abs, di_left, di_right, p_total_abs, p_total_inc | V; A vs TRUE 0 A (= di + calibrated quiescent 0.080 A); A increase over powered rest (motor-attributable); W = v_bus_run x (i_left+i_right) for abs / (di_left+di_right) for inc. Empty when the run has no rest window |
 | battery.csv | voltage, current | V, A (ROS convention: discharge negative) |
 | imu.csv | qx..qw, yaw, gx, gy, gz, ax, ay, az | ENU orientation, rad, rad/s, m/s^2 (um7_driver) |
 | mag.csv | mx, my, mz | unit-norm direction (NOT tesla) |

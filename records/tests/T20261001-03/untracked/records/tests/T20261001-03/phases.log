@@ -1,0 +1,29 @@
+torque_off_rest_start 1790844923.556546283
+torque_off_rest_end 1790844935.562250327
+diff_cont               diff_drive_controller/DiffDriveController      active
+joint_state_broadcaster joint_state_broadcaster/JointStateBroadcaster  active
+enabled_rest_start 1790844951.390503235
+enabled_rest_end 1790844963.395686445
+waiting for service to become available...
+requester: making request: std_srvs.srv.Trigger_Request()
+
+response:
+std_srvs.srv.Trigger_Response(success=True, message='#ZERO gp28=2034.842 gp27=2036.793 rail=3.2981 rail_corr=1.002856 n=1024')
+
+step_v0.2_start 1790844967.728290029
+step_v0.2_end 1790844976.461042465
+step_v0.4_start 1790844982.466439359
+step_v0.4_end 1790844991.362780263
+step_v0.6_start 1790844997.368375139
+step_v0.6_end 1790845005.985398791
+step_v0.76_start 1790845011.990584184
+step_v0.76_end 1790845020.623540633
+step_v-0.4_start 1790845026.629012526
+step_v-0.4_end 1790845036.839538648
+step_w2.0_start 1790845042.844333893
+step_w2.0_end 1790845051.465556470
+step_w-2.0_start 1790845057.471096825
+step_w-2.0_end 1790845066.091529736
+final_rest_end 1790845072.096914166
+[INFO] [launch.user]: [oroha safety] ros2_control_node exited -> MD400 stop: id 2 (LEFT): set_velocity(0) + stop() + torque_off() -> ok; id 1 (RIGHT): set_velocity(0) + stop() + torque_off() -> ok
+DONE

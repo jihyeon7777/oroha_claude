@@ -1,0 +1,33 @@
+== calibration events
+   calibration_loaded calib_id=sensing-20260828
+   #ZERO gp28=2034.842 gp27=2036.793 rail=3.2981 rail_corr=1.002856 n=1024
+   applied: rail_corr=1.002854 baseline(powered rest) gp27=2036.793 gp28=2034.842 -> 0.0841 / 0.0764 A vs true 0 A (quiet 0.080 A assumed)
+
+== rest raw (LSB)          gp27(L)   gp28(R)   n
+   torque off            2036.677  2034.754  525
+   enabled (0 rpm)       2036.519  2034.598  525
+   enabled - off           -0.158    -0.156  (x 11.44 mA/LSB)
+
+== run reference: [('enabled_rest', 2036.951, 2035.021, 1.002771), ('final_rest', 2037.127, 2035.04, 1.002723)] drift {'gp27': 0.176, 'gp28': 0.019}
+   node after ~/zero at rest: i_left +0.0861 i_right +0.0777 A (rail_corr 1.002854)
+   node before ~/zero at rest: i_left +0.0144 i_right +0.0071 A (rail_corr 1.000000)
+
+== plateaus (last 3 s)   wheel L/R rad/s     Pico di L/R A      Pico abs L/R A    MD400 effort L/R A   V
+   v=+0.20 w=+0.0    +54.9   +54.9   +0.2265 +0.2497   +0.3065 +0.3297    0.10  0.20   28.54
+   v=+0.40 w=+0.0   +108.9  +111.0   +0.4640 +0.4970   +0.5440 +0.5770    0.30  0.40   28.51
+   v=+0.60 w=+0.0   +165.0  +165.1   +0.6809 +0.7145   +0.7609 +0.7945    0.51  0.61   28.47
+   v=+0.76 w=+0.0   +209.0  +209.0   +0.8497 +0.8686   +0.9297 +0.9486    0.69  0.78   28.45
+   v=-0.40 w=+0.0   -109.2  -110.4   +0.3572 +0.4499   +0.4372 +0.5299    0.20  0.37   28.51
+   v=+0.00 w=+2.0   -124.3  +123.5   +0.4111 +0.4960   +0.4911 +0.5760    0.26  0.40   28.51
+   v=+0.00 w=-2.0   +123.3  -124.4   +0.4820 +0.5103   +0.5620 +0.5903    0.31  0.40   28.50
+
+== decel transients (min di within 2 s after each step's command end)
+   step_v0.2_end    min di L -0.049  R -0.047 A;  min v_bus 28.47 max 28.60 V
+   step_v0.4_end    min di L -0.040  R -0.055 A;  min v_bus 28.46 max 28.59 V
+   step_v0.6_end    min di L -0.058  R -0.058 A;  min v_bus 28.44 max 28.59 V
+   step_v0.76_end   min di L -0.115  R -0.108 A;  min v_bus 28.40 max 28.58 V
+   step_v-0.4_end   min di L -0.046  R -0.054 A;  min v_bus 28.47 max 28.59 V
+   step_w2.0_end    min di L -0.093  R -0.100 A;  min v_bus 28.46 max 28.58 V
+   step_w-2.0_end   min di L -0.096  R -0.095 A;  min v_bus 28.47 max 28.58 V
+
+== energy / range: {'abs_left': 0.27805, 'abs_right': 0.29569, 'abs_total': 0.57374, 'inc_left': 0.18367, 'inc_right': 0.20131, 'inc_total': 0.38498, 'node_total': 0.53652} {'left': 0.0001, 'right': 0.0001} {'left': 0.0001, 'right': 0.0}
