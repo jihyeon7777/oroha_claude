@@ -1,0 +1,29 @@
+cmd_vel 632 msgs over 39.1 s; joint_states 2304; teleop logs 9
+
+== release events (log -> cmd ramp -> wheel speed)
+t=   4.32  ramp to 0 starts 0.106 s after the last key (armed)     cmd before v=+0.150 w=+0.000 | wheel L  +41.8 R  +41.2 rad/s -> <5 % after 0.36 s
+t=   7.49  ramp to 0 starts 0.128 s after the last key (armed)     cmd before v=-0.150 w=+0.000 | wheel L  -41.8 R  -41.8 rad/s -> <5 % after 0.39 s
+t=   9.73  ramp to 0 starts 0.151 s after the last key (armed)     cmd before v=+0.000 w=+0.500 | wheel L  -31.0 R  +30.6 rad/s -> <5 % after 0.46 s
+t=  12.22  ramp to 0 starts 0.147 s after the last key (armed)     cmd before v=+0.000 w=-0.500 | wheel L  +31.7 R  -30.8 rad/s -> <5 % after 0.47 s
+t=  14.31  ramp to 0 starts 0.805 s after the last key (single press) cmd before v=+0.150 w=+0.000 | wheel L  +40.0 R  +40.4 rad/s -> <5 % after 0.38 s
+t=  21.10  ramp to 0 starts 0.113 s after the last key (armed)     cmd before v=+0.022 w=+0.000 | wheel L   -0.0 R   +0.0 rad/s -> <5 % after 0.08 s
+t=  26.33  ramp to 0 starts 0.153 s after the last key (armed)     cmd before v=+0.210 w=+0.000 | wheel L  +59.1 R  +57.3 rad/s -> <5 % after 0.45 s
+t=  29.94  ramp to 0 starts 0.112 s after the last key (armed)     cmd before v=+0.150 w=+0.000 | wheel L  +40.6 R  +40.9 rad/s -> <5 % after 0.34 s
+t=  31.75  ramp to 0 starts 0.147 s after the last key (armed)     cmd before v=+0.150 w=+0.000 | wheel L  +40.2 R  +40.4 rad/s -> <5 % after 0.34 s
+
+== hard stops (non-zero -> exact zero in one step)
+t=   4.51  from v=+0.022 w=+0.000 -> 0 | wheel <5 % after 0.17 s
+t=  14.52  from v=+0.021 w=+0.000 -> 0 | wheel <5 % after 0.16 s
+t=  16.55  from v=+0.150 w=+0.000 -> 0 | wheel <5 % after 0.24 s
+t=  30.15  from v=+0.021 w=+0.000 -> 0 | wheel <5 % after 0.13 s
+t=  31.96  from v=+0.021 w=+0.000 -> 0 | wheel <5 % after 0.12 s
+
+== direction samples (steady segments): sign of wheel L/R per command
+v+    t=   0.6 cmd v=+0.064 w=+0.000 -> wheel L  +39.4 R  +40.4 rad/s
+v-    t=   5.9 cmd v=-0.064 w=+0.000 -> wheel L  -38.6 R  -39.1 rad/s
+w+    t=   8.2 cmd v=+0.000 w=+0.242 -> wheel L  -30.2 R  +29.8 rad/s
+w-    t=  10.7 cmd v=+0.000 w=-0.242 -> wheel L  +29.6 R  -29.2 rad/s
+
+max |v| 0.210 m/s, max |w| 0.500 rad/s
+
+/imu/data 9163 msgs, 39.7 Hz; dt median 0.3 ms, p99 97.4 ms, max 608.9 ms; gaps>100 ms: 1

@@ -47,3 +47,9 @@
 - T20260929-06: 두절은 간헐(사각 3회 중 2회, side3 감속 직후, 왼쪽 MD400 무전력 정황). 직접 정지 보완 동작 확인. 정지 규칙 kill -INT -- -$pid(ros2 run 래퍼 뒤 노드 잔존).
 - **T20260929-07 통과(종결)**: 통신 두절 원인 = **MD400 수신 잠김**. 신규 `oroha_bus_probe`(런치 없이 두 MD400 직접 폴링, 트랜잭션 전수 기록, 잠김 진단 단계)로 ros2_control 없이 5회 재현. 잠긴 장치는 다른 장치 통신 직후의 요청을 모두 무시(무응답·명령 미실행, status 0, 카운터 유지), 휴지 뒤 요청 하나에 복구. 전원 문제 정황 없음(Pico). 프레임 간격 5 ms로도 발생. T-05·06의 "왼쪽 무전력" 해석 대체.
 - 패치 `patches/external/mdrobot_motor_driver/0001`(joint별 `status`·`status2`·`read_seq` 상태 인터페이스 → `/dynamic_joint_states`, export `joint_diag.csv`), `0002`(실패 장치 즉시 재시도 `resync_retry`, `inter_frame_delay` 파라미터). xacro: 새 상태 인터페이스, `timeout 0.1`, `resync_retry true`. 재시도 후 띄운 사각 8/8 DONE(잠김 3회 복구). `.gitignore`: `data/tests/*/bag*/`.
+
+## 2026-10-01 (KST)
+
+- Pi 재부팅 후 preflight GO 28/28(장치 링크 유지, ttyUSB 번호는 바뀜 — 링크만 사용).
+- **T20261001-01 통과**: 데드맨 텔레옵(띄움), 사용자 7항목 정상. bag: 해제→감속 0.106~0.153 s(≤0.3 s), 방향·크기 이론값 일치. 텔레옵에 해제 로그 추가. 종료 시 이중 SIGINT(그룹 Ctrl-C = 직접 + launch/`ros2 run` 전달)가 정리 단계를 끊는 문제 → `power_node`·`runner_node`·`deadman_teleop`이 정리 중 추가 신호 무시(재시험 통과). `um7_node`(외부)는 5 s 뒤 SIGTERM으로 끝남 — 안전 무관, 보류.
+- **T20261001-02 통과**: UM7 통신(미고정) — 패킷 83 Hz, 체크섬 0, `/imu/data` 39.7 Hz, header stamp는 수신 시각 묶음. 세션 A 완료.

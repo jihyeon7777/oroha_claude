@@ -1,0 +1,53 @@
+diff --git a/src/oroha_experiment/oroha_experiment/runner_node.py b/src/oroha_experiment/oroha_experiment/runner_node.py
+index d48da0e..8554dd7 100644
+--- a/src/oroha_experiment/oroha_experiment/runner_node.py
++++ b/src/oroha_experiment/oroha_experiment/runner_node.py
+@@ -659,6 +659,10 @@ def main(args=None):
+     except (KeyboardInterrupt, ExternalShutdownException):
+         pass
+     finally:
++        # Ctrl-C of a process group arrives twice (directly + via the `ros2 run` wrapper /
++        # launch): ignore further signals so zero cmd -> bag stop -> meta finalize completes
++        signal.signal(signal.SIGINT, signal.SIG_IGN)
++        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+         try:
+             node.shutdown_cleanup("runner stopped (SIGINT/SIGTERM)")
+         finally:
+diff --git a/src/oroha_power/oroha_power/power_node.py b/src/oroha_power/oroha_power/power_node.py
+index e9b72f1..22688b5 100644
+--- a/src/oroha_power/oroha_power/power_node.py
++++ b/src/oroha_power/oroha_power/power_node.py
+@@ -488,6 +488,10 @@ def main(args=None):
+     except (KeyboardInterrupt, ExternalShutdownException):
+         pass
+     finally:
++        # a terminal/process-group Ctrl-C reaches us twice (directly + forwarded by launch):
++        # the second must not abort the cleanup (T20261001-01)
++        signal.signal(signal.SIGINT, signal.SIG_IGN)
++        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+         node.destroy_node()
+         rclpy.try_shutdown()
+ 
+diff --git a/src/oroha_teleop/oroha_teleop/deadman_teleop.py b/src/oroha_teleop/oroha_teleop/deadman_teleop.py
+index bf25a28..db27a56 100644
+--- a/src/oroha_teleop/oroha_teleop/deadman_teleop.py
++++ b/src/oroha_teleop/oroha_teleop/deadman_teleop.py
+@@ -98,6 +98,9 @@ class DeadmanTeleop(Node):
+             self.cmd = [0.0, 0.0]
+         else:
+             if self.last_key_t and now - self.last_key_t > grace and self.target != (0.0, 0.0):
++                # /rosout evidence for the release latency (last key -> ramp start)
++                self.get_logger().info("released: ramp to 0 starts %.3f s after the last key (%s)"
++                                       % (now - self.last_key_t, "armed" if self.hold_armed else "single press"))
+                 self.target = (0.0, 0.0)
+                 self.hold_armed = False
+                 self.last_key_t = 0.0      # next press starts un-armed (0.8 s grace) — no stutter
+@@ -153,6 +156,8 @@ def main(args=None):
+     except KeyboardInterrupt:
+         pass
+     finally:
++        signal.signal(signal.SIGINT, signal.SIG_IGN)      # a second Ctrl-C must not skip the zeros
++        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+         termios.tcsetattr(fd, termios.TCSADRAIN, saved)     # terminal first, whatever happens next
+         sent = 0
+         for _ in range(5):

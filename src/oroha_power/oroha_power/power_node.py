@@ -488,6 +488,10 @@ def main(args=None):
     except (KeyboardInterrupt, ExternalShutdownException):
         pass
     finally:
+        # a terminal/process-group Ctrl-C reaches us twice (directly + forwarded by launch):
+        # the second must not abort the cleanup (T20261001-01)
+        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
         node.destroy_node()
         rclpy.try_shutdown()
 

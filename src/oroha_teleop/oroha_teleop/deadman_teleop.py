@@ -98,6 +98,9 @@ class DeadmanTeleop(Node):
             self.cmd = [0.0, 0.0]
         else:
             if self.last_key_t and now - self.last_key_t > grace and self.target != (0.0, 0.0):
+                # /rosout evidence for the release latency (last key -> ramp start)
+                self.get_logger().info("released: ramp to 0 starts %.3f s after the last key (%s)"
+                                       % (now - self.last_key_t, "armed" if self.hold_armed else "single press"))
                 self.target = (0.0, 0.0)
                 self.hold_armed = False
                 self.last_key_t = 0.0      # next press starts un-armed (0.8 s grace) — no stutter
@@ -153,6 +156,8 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
+        signal.signal(signal.SIGINT, signal.SIG_IGN)      # a second Ctrl-C must not skip the zeros
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
         termios.tcsetattr(fd, termios.TCSADRAIN, saved)     # terminal first, whatever happens next
         sent = 0
         for _ in range(5):

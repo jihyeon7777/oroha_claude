@@ -659,6 +659,10 @@ def main(args=None):
     except (KeyboardInterrupt, ExternalShutdownException):
         pass
     finally:
+        # Ctrl-C of a process group arrives twice (directly + via the `ros2 run` wrapper /
+        # launch): ignore further signals so zero cmd -> bag stop -> meta finalize completes
+        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
         try:
             node.shutdown_cleanup("runner stopped (SIGINT/SIGTERM)")
         finally:
