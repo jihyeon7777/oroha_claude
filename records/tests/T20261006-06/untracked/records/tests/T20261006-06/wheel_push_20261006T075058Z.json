@@ -1,0 +1,27 @@
+{
+ "start_utc": "2026-10-06T07:50:06Z",
+ "end_utc": "2026-10-06T07:50:58Z",
+ "timezone": "KST",
+ "mode": "dist",
+ "dist_m": 1.5,
+ "revs": null,
+ "pos_start": {
+  "1": 7297,
+  "2": -3642
+ },
+ "pos_end": {
+  "1": 9298,
+  "2": -5652
+ },
+ "note": "B4 push 3 (leg 1), wall-parallel, front-centre reference, pre-marked 1.500 m, ~50 kg, 10 psi / leg 1 forward? front-centre 1.500 m pre-marked",
+ "d1": 2001,
+ "d2": -2010,
+ "lin_counts": 2005.5,
+ "rot_counts": -9,
+ "lr_ratio_abs_d1_d2": 0.9955223880597015,
+ "mirror_sign_ok": true,
+ "m_per_count": 0.0007479431563201197,
+ "counts_per_m": 1337.0,
+ "wheel_radius_effective": 0.003571165514403037,
+ "diff_vs_ref_pct": -1.7544783501747485
+}

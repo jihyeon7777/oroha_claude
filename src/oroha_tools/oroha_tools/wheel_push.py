@@ -10,8 +10,10 @@ Two phases so it can be driven from a non-interactive shell while the operator p
 
 Both controllers are read (id 1 = RIGHT, id 2 = LEFT). After `start` the wheels roll
 freely — chock the robot before and after. Results go to records/measure/ (or
-records/tests/<test-id>/); compare with records/calibration/wheel-20260909.yaml
-(0.7613 mm/count, 1038.46 counts/wheel rev). Re-run after re-inflating or loading.
+records/tests/<test-id>/); compare with records/calibration/wheel-20261006.yaml
+(0.7497 mm/count, 1038.46 counts/wheel rev). Re-run after re-inflating or loading.
+Best practice (T20261006-06): reference the robot's FRONT-CENTRE to floor marks a known distance
+apart (tyre contact points cannot be located to better than ~1 cm), and push there and back.
 """
 
 from __future__ import annotations
@@ -25,7 +27,7 @@ import time
 from oroha_tools.ws import records_dir
 
 MD_PORT = "/dev/oroha_md400"
-REF_M_PER_COUNT = 0.0007613
+REF_M_PER_COUNT = 0.0007497          # wheel-20261006 (0.7613 = wheel-20260909, no payload)
 REF_COUNTS_PER_WHEEL_REV = 1038.46
 
 
@@ -121,7 +123,7 @@ def main(argv=None) -> int:
            **res}
     print(f"   delta id1 {res['d1']:+d}  id2 {res['d2']:+d}  (mirror signs {'OK' if res['mirror_sign_ok'] else 'SAME SIGN?'})")
     if a.dist:
-        print(f"   {res['m_per_count'] * 1e3:.4f} mm/count ({res['diff_vs_ref_pct']:+.2f} % vs 0.7613), "
+        print(f"   {res['m_per_count'] * 1e3:.4f} mm/count ({res['diff_vs_ref_pct']:+.2f} % vs {REF_M_PER_COUNT * 1e3:.4f}), "
               f"diff_cont wheel_radius {res['wheel_radius_effective']:.6f} m")
     if a.revs:
         print(f"   {res['counts_per_wheel_rev']:.2f} counts/wheel rev ({res['cpr_diff_vs_ref_pct']:+.2f} % vs 1038.46)")

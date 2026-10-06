@@ -1,0 +1,27 @@
+{
+ "start_utc": "2026-10-06T07:51:18Z",
+ "end_utc": "2026-10-06T07:55:28Z",
+ "timezone": "KST",
+ "mode": "dist",
+ "dist_m": 1.5,
+ "revs": null,
+ "pos_start": {
+  "1": 9298,
+  "2": -5652
+ },
+ "pos_end": {
+  "1": 7309,
+  "2": -3649
+ },
+ "note": "B4 push 4 (leg 2, return), front-centre reference, pre-marked 1.500 m / leg 2 return, front-centre 1.500 m",
+ "d1": -1989,
+ "d2": 2003,
+ "lin_counts": 1996.0,
+ "rot_counts": -14,
+ "lr_ratio_abs_d1_d2": 0.9930104842735896,
+ "mirror_sign_ok": true,
+ "m_per_count": 0.000751503006012024,
+ "counts_per_m": 1330.6666666666667,
+ "wheel_radius_effective": 0.0035881625446569586,
+ "diff_vs_ref_pct": -1.2868769194766871
+}

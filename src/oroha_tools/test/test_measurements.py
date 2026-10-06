@@ -58,4 +58,5 @@ def test_wheel_push_revs_and_dist_together():
     assert r["counts_per_wheel_rev"] == pytest.approx(1038.33, abs=0.01)
     assert r["m_per_count"] == pytest.approx(2.372 / 3115)
     assert r["rolling_circumference_m"] == pytest.approx(2.372 / 3)
-    assert r["diff_vs_ref_pct"] == pytest.approx((2.372 / 3115 / 0.0007613 - 1) * 100)
+    from oroha_tools.wheel_push import REF_M_PER_COUNT
+    assert r["diff_vs_ref_pct"] == pytest.approx((2.372 / 3115 / REF_M_PER_COUNT - 1) * 100)

@@ -1,0 +1,30 @@
+{
+ "start_utc": "2026-10-06T07:39:13Z",
+ "end_utc": "2026-10-06T07:40:44Z",
+ "timezone": "KST",
+ "mode": "revs+dist",
+ "dist_m": 1.575,
+ "revs": 2.0,
+ "pos_start": {
+  "1": 9353,
+  "2": -5728
+ },
+ "pos_end": {
+  "1": 7297,
+  "2": -3642
+ },
+ "note": "B4 push 2 (return), wall-parallel, 2 revs, ~50 kg, 10 psi; push 1 (no start record) tape 1.575 m / 2 revs / return push, tape 1.575 m (same as push 1)",
+ "d1": -2056,
+ "d2": 2086,
+ "lin_counts": 2071.0,
+ "rot_counts": -30,
+ "lr_ratio_abs_d1_d2": 0.9856184084372004,
+ "mirror_sign_ok": true,
+ "m_per_count": 0.000760502172863351,
+ "counts_per_m": 1314.920634920635,
+ "wheel_radius_effective": 0.0036311304012998816,
+ "diff_vs_ref_pct": -0.10479799509378607,
+ "counts_per_wheel_rev": 1035.5,
+ "cpr_diff_vs_ref_pct": -0.2850374593147631,
+ "rolling_circumference_m": 0.7875
+}

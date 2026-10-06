@@ -25,7 +25,7 @@ SIDES = ("left", "right")
 
 @dataclass
 class WheelGuard:
-    wheel_radius: float = 0.003635     # m per motor rad (diff_cont wheel_radius)
+    wheel_radius: float = 0.003580     # m per motor rad (diff_cont wheel_radius, wheel-20261006)
     wheel_separation: float = 0.451
     min_expected: float = 10.0         # motor rad/s (~0.036 m/s): smaller demands are not checked
     still: float = 2.0                 # motor rad/s: below = not turning

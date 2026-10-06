@@ -41,11 +41,12 @@ diff_cont:
     left_wheel_names: ["motor_L"]
     right_wheel_names: ["motor_R"]
 
-    # EFFECTIVE radius at the motor shaft, not the tyre: 0.7613 mm/count (6.000 m
-    # torque-off hand push, 2026-09-05) x 30 counts/rev / 2pi. Physical rolling
-    # radius is 0.1258 m; total drivetrain ratio 34.615 (gearbox 30:1 x belt 26T:30T).
+    # EFFECTIVE radius at the motor shaft, not the tyre: 0.7497 mm/count x 30 counts/rev / 2pi
+    # (calib wheel-20261006: robot ~50 kg, tyres 10 psi, torque-off push 2 x 1.500 m,
+    # T20261006-06; was 0.003635 from the no-payload 0.7613 mm/count). Physical rolling
+    # radius 0.1239 m; total drivetrain ratio 34.615 (gearbox 30:1 x belt 26T:30T).
     # Re-measure after re-inflating tyres or changing payload.
-    wheel_radius: 0.003635
+    wheel_radius: 0.003580
     wheel_separation: 0.451         # tape, 2026-09-05. 4-wheel skid-steer: effective track for yaw may be larger
     base_frame_id: base_footprint   # URDF root; odom -> base_footprint -> base_link (single TF parent)
     odom_frame_id: odom

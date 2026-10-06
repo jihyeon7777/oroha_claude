@@ -1,0 +1,117 @@
+diff --git a/records/calibration/README.md b/records/calibration/README.md
+index 0cb0668..973a3a7 100644
+--- a/records/calibration/README.md
++++ b/records/calibration/README.md
+@@ -3,4 +3,5 @@
+ | calib_id | 대상 | 파일 | 상태 |
+ |---|---|---|---|
+ | `sensing-20260828` | ACS37030 전류 ×2, 버스전압 분압 (Pi 호스트) | `sensing-20260828.yaml` → `src/oroha_power/config/calibration/`(단일 출처, 심볼릭 링크) | 확정, 0~1.2 A 범위 |
+-| `wheel-20260909` | 바퀴·구동계 상수 | `wheel-20260909.yaml` | 초기값, 1단계에서 실물 대조 |
++| `wheel-20260909` | 바퀴·구동계 상수 | `wheel-20260909.yaml` | **대체됨**(무적재·공기압 미상, 0.7613 mm/count) |
++| `wheel-20261006` | 바퀴·구동계 상수 (약 50 kg, 10 psi) | `wheel-20261006.yaml` | **확정**, 0.7497 mm/count ±0.3 %, diff_cont 0.003580 (T20261006-06) |
+diff --git a/src/oroha_bringup/config/oroha_controllers.yaml b/src/oroha_bringup/config/oroha_controllers.yaml
+index 6112fc8..d0b6ff5 100644
+--- a/src/oroha_bringup/config/oroha_controllers.yaml
++++ b/src/oroha_bringup/config/oroha_controllers.yaml
+@@ -41,11 +41,12 @@ diff_cont:
+     left_wheel_names: ["motor_L"]
+     right_wheel_names: ["motor_R"]
+ 
+-    # EFFECTIVE radius at the motor shaft, not the tyre: 0.7613 mm/count (6.000 m
+-    # torque-off hand push, 2026-09-05) x 30 counts/rev / 2pi. Physical rolling
+-    # radius is 0.1258 m; total drivetrain ratio 34.615 (gearbox 30:1 x belt 26T:30T).
++    # EFFECTIVE radius at the motor shaft, not the tyre: 0.7497 mm/count x 30 counts/rev / 2pi
++    # (calib wheel-20261006: robot ~50 kg, tyres 10 psi, torque-off push 2 x 1.500 m,
++    # T20261006-06; was 0.003635 from the no-payload 0.7613 mm/count). Physical rolling
++    # radius 0.1239 m; total drivetrain ratio 34.615 (gearbox 30:1 x belt 26T:30T).
+     # Re-measure after re-inflating tyres or changing payload.
+-    wheel_radius: 0.003635
++    wheel_radius: 0.003580
+     wheel_separation: 0.451         # tape, 2026-09-05. 4-wheel skid-steer: effective track for yaw may be larger
+     base_frame_id: base_footprint   # URDF root; odom -> base_footprint -> base_link (single TF parent)
+     odom_frame_id: odom
+diff --git a/src/oroha_experiment/oroha_experiment/guards.py b/src/oroha_experiment/oroha_experiment/guards.py
+index 2e0de26..4e225a3 100644
+--- a/src/oroha_experiment/oroha_experiment/guards.py
++++ b/src/oroha_experiment/oroha_experiment/guards.py
+@@ -25,7 +25,7 @@ SIDES = ("left", "right")
+ 
+ @dataclass
+ class WheelGuard:
+-    wheel_radius: float = 0.003635     # m per motor rad (diff_cont wheel_radius)
++    wheel_radius: float = 0.003580     # m per motor rad (diff_cont wheel_radius, wheel-20261006)
+     wheel_separation: float = 0.451
+     min_expected: float = 10.0         # motor rad/s (~0.036 m/s): smaller demands are not checked
+     still: float = 2.0                 # motor rad/s: below = not turning
+diff --git a/src/oroha_experiment/oroha_experiment/runner_node.py b/src/oroha_experiment/oroha_experiment/runner_node.py
+index a5225b6..1b12850 100644
+--- a/src/oroha_experiment/oroha_experiment/runner_node.py
++++ b/src/oroha_experiment/oroha_experiment/runner_node.py
+@@ -111,7 +111,7 @@ class ExperimentRunner(Node):
+         d("stall_motor_rad_s", 2.0)     # measured motor-shaft speed below this = not turning
+         d("left_joint", "motor_L")
+         d("right_joint", "motor_R")
+-        d("wheel_radius", 0.003635)     # defaults; replaced by diff_cont's values at ARM when readable
++        d("wheel_radius", 0.003580)     # defaults; replaced by diff_cont's values at ARM when readable
+         d("wheel_separation", 0.451)
+         d("log_mirror_max", 50)         # NOTE events from /rosout per run
+         d("abort_zero_s", 1.0)
+diff --git a/src/oroha_experiment/test/test_guards.py b/src/oroha_experiment/test/test_guards.py
+index 6f204ad..639f3c1 100644
+--- a/src/oroha_experiment/test/test_guards.py
++++ b/src/oroha_experiment/test/test_guards.py
+@@ -12,7 +12,7 @@ def _run(g, v, w, ml, mr, secs=2.0, dt=0.05):
+ 
+ 
+ def test_expected_matches_diff_drive():
+-    g = WheelGuard()
++    g = WheelGuard(wheel_radius=0.003635)       # radius in use on 2026-10-01 (T20261001-03)
+     l, r = g.expected(0.2, 0.0)
+     assert abs(l - 55.02) < 0.05 and abs(r - l) < 1e-9            # T20261001-03: 54.9 rad/s measured
+     l, r = g.expected(0.0, 2.0)
+diff --git a/src/oroha_tools/oroha_tools/wheel_push.py b/src/oroha_tools/oroha_tools/wheel_push.py
+index d48bebf..21d039b 100644
+--- a/src/oroha_tools/oroha_tools/wheel_push.py
++++ b/src/oroha_tools/oroha_tools/wheel_push.py
+@@ -10,8 +10,10 @@ Two phases so it can be driven from a non-interactive shell while the operator p
+ 
+ Both controllers are read (id 1 = RIGHT, id 2 = LEFT). After `start` the wheels roll
+ freely — chock the robot before and after. Results go to records/measure/ (or
+-records/tests/<test-id>/); compare with records/calibration/wheel-20260909.yaml
+-(0.7613 mm/count, 1038.46 counts/wheel rev). Re-run after re-inflating or loading.
++records/tests/<test-id>/); compare with records/calibration/wheel-20261006.yaml
++(0.7497 mm/count, 1038.46 counts/wheel rev). Re-run after re-inflating or loading.
++Best practice (T20261006-06): reference the robot's FRONT-CENTRE to floor marks a known distance
++apart (tyre contact points cannot be located to better than ~1 cm), and push there and back.
+ """
+ 
+ from __future__ import annotations
+@@ -25,7 +27,7 @@ import time
+ from oroha_tools.ws import records_dir
+ 
+ MD_PORT = "/dev/oroha_md400"
+-REF_M_PER_COUNT = 0.0007613
++REF_M_PER_COUNT = 0.0007497          # wheel-20261006 (0.7613 = wheel-20260909, no payload)
+ REF_COUNTS_PER_WHEEL_REV = 1038.46
+ 
+ 
+@@ -121,7 +123,7 @@ def main(argv=None) -> int:
+            **res}
+     print(f"   delta id1 {res['d1']:+d}  id2 {res['d2']:+d}  (mirror signs {'OK' if res['mirror_sign_ok'] else 'SAME SIGN?'})")
+     if a.dist:
+-        print(f"   {res['m_per_count'] * 1e3:.4f} mm/count ({res['diff_vs_ref_pct']:+.2f} % vs 0.7613), "
++        print(f"   {res['m_per_count'] * 1e3:.4f} mm/count ({res['diff_vs_ref_pct']:+.2f} % vs {REF_M_PER_COUNT * 1e3:.4f}), "
+               f"diff_cont wheel_radius {res['wheel_radius_effective']:.6f} m")
+     if a.revs:
+         print(f"   {res['counts_per_wheel_rev']:.2f} counts/wheel rev ({res['cpr_diff_vs_ref_pct']:+.2f} % vs 1038.46)")
+diff --git a/src/oroha_tools/test/test_measurements.py b/src/oroha_tools/test/test_measurements.py
+index e279266..2c50ffe 100644
+--- a/src/oroha_tools/test/test_measurements.py
++++ b/src/oroha_tools/test/test_measurements.py
+@@ -58,4 +58,5 @@ def test_wheel_push_revs_and_dist_together():
+     assert r["counts_per_wheel_rev"] == pytest.approx(1038.33, abs=0.01)
+     assert r["m_per_count"] == pytest.approx(2.372 / 3115)
+     assert r["rolling_circumference_m"] == pytest.approx(2.372 / 3)
+-    assert r["diff_vs_ref_pct"] == pytest.approx((2.372 / 3115 / 0.0007613 - 1) * 100)
++    from oroha_tools.wheel_push import REF_M_PER_COUNT
++    assert r["diff_vs_ref_pct"] == pytest.approx((2.372 / 3115 / REF_M_PER_COUNT - 1) * 100)
