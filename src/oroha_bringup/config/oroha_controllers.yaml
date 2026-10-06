@@ -65,12 +65,18 @@ diff_cont:
       x:
         max_velocity: 0.8           # m/s hard cap (3000 rpm = 1.14 m/s); runner/teleop use lower limits
         min_velocity: -0.8
-        max_acceleration: 1.0       # m/s^2
-        max_deceleration: -1.0      # m/s^2, <= 0 (min_acceleration is deprecated in 4.42)
+        # Gentle ramps (D-16, T20261006-09): on the ground a wheel that the 50 kg body drives
+        # faster than commanded gets NO braking torque from the MD400 and its speed loop then
+        # stays at zero output for 0.3-3 s (windup) before snapping back -> OVER_LOAD alarm.
+        # 0.3 m/s^2 = ~800 rpm/s at the motor (bringup team: 667 rpm/s soft ramp, no trouble);
+        # same as the runner's profile ramps. Every stop ramps too (0.15 m/s -> 0 in 0.5 s);
+        # the E-stop is the hard stop.
+        max_acceleration: 0.3       # m/s^2
+        max_deceleration: -0.3      # m/s^2, <= 0 (min_acceleration is deprecated in 4.42)
     angular:
       z:
         max_velocity: 2.0
         min_velocity: -2.0
-        max_acceleration: 3.0
-        max_deceleration: -3.0
+        max_acceleration: 1.0       # rad/s^2 (= 0.23 m/s^2 per side), runner ang_accel
+        max_deceleration: -1.0
 

@@ -16,7 +16,7 @@
 1. 전원: 배터리 XT60 → 모터 차단기 ON → E-stop 해제(명령 0 상태). Pi 부팅 후 `ls /dev/oroha_*`, `timedatectl`(NTP 동기).
 2. `source setup/env.sh` → `oroha_preflight` (모터 무동작, 포트를 연 다른 프로세스가 있으면 거부 — 런치 전에).
 3. `ros2 launch oroha_bringup robot.launch.py` (+ `imu:=true`, `rviz:=true`). `ros2 control list_controllers`로 `diff_cont` active 확인.
-4. 키보드 주행(사용자 터미널): `ros2 run oroha_teleop deadman_teleop` — 누르고 있는 동안만 주행, space/Esc 즉시 정지. 실험 전에는 종료(실행기가 다른 cmd_vel 발행자를 거부).
+4. 키보드 주행(사용자 터미널): `ros2 run oroha_teleop deadman_teleop` — 누르고 있는 동안만 주행, space/Esc 정지(명령 즉시 0, diff_cont가 0.3 m/s²로 감속 — D-16). 급정지는 E-stop. 실험 전에는 종료(실행기가 다른 cmd_vel 발행자를 거부).
 5. 실험: `ros2 run oroha_experiment runner`(별도 터미널) → `oroha_exp run --path square --side 1.0 --v 0.2 --rig-state on_ground` → 조건 확인 → 안내된 시작 위치에 로봇 → Enter 시작, space/Esc/Ctrl-C 중단, n 메모 → 종점 줄자 측정 → `oroha_exp gt --run <RUN_ID> --x … --y …`.
 6. 추출·기록: `oroha_export_csv data/runs/<RUN_ID>` → `oroha_ledger --check` → 시험 기록(`records/tests/`).
 7. 논문 묶음: `oroha_paper_export --runs usable` → `paper_export/<ts>/CHECK.md` 확인.

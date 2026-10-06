@@ -6,7 +6,7 @@
 Keys (terminal auto-repeat is the dead-man signal):
   w / s   forward / backward      a / d   turn left (ccw) / right
   q / e   forward+left / forward+right          k   keepalive (hold current command)
-  space or Esc   HARD STOP (zeros immediately, no ramp)     + / -   speed scale
+  space or Esc   STOP (zeros immediately; diff_cont still ramps at 0.3 m/s^2)     + / -   speed scale
   x or Ctrl-C    quit (zeros sent)
 
 Ported from the bringup campaign's test/load_manual.py: a key sets the target; while keys keep
@@ -33,7 +33,10 @@ from rclpy.qos import QoSProfile, ReliabilityPolicy
 from rclpy.signals import SignalHandlerOptions
 
 KEYMAP = {  # key -> (v_dir, w_dir)
-    "w": (1, 0), "s": (-1, 0), "a": (0, 1), "d": (0, -1), "q": (1, 1), "e": (1, -1),
+    # q/e at half the turn rate: radius v/w = 0.6 m instead of 0.3 m, so the inner side keeps
+    # ~45 % of the outer speed (at 0.3 m the inner wheels nearly stop and are dragged ahead of
+    # their command -> MD400 zero output / OVER_LOAD, T20261006-07/09)
+    "w": (1, 0), "s": (-1, 0), "a": (0, 1), "d": (0, -1), "q": (1, 0.5), "e": (1, -0.5),
 }
 
 
@@ -46,9 +49,9 @@ class DeadmanTeleop(Node):
         d("rate", 20.0)
         d("v_max", 0.3)
         d("w_max", 1.0)
-        d("accel", 0.4)          # m/s^2
-        d("decel", 0.6)          # m/s^2 on release (ramped stop)
-        d("ang_accel", 1.5)      # rad/s^2
+        d("accel", 0.3)          # m/s^2   (D-16: gentle ramps, same as diff_cont limits)
+        d("decel", 0.3)          # m/s^2 on release (ramped stop)
+        d("ang_accel", 1.0)      # rad/s^2
         d("hold_arm", 0.8)       # s grace before auto-repeat is observed
         d("release_stop", 0.1)   # s grace once auto-repeat is armed
         g = lambda k: self.get_parameter(k).value  # noqa: E731
