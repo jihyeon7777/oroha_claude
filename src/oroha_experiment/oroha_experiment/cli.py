@@ -7,12 +7,12 @@
   oroha_exp conditions            # edit records/conditions_latest.yaml interactively
   oroha_exp conditions --set surface="epoxy floor" --set floor_slope_deg=0.2     # non-interactive
   oroha_exp gt --run R20260930-101500-straight --x 1.47 --y -0.03 --yaw-deg -1.5  # tape ground truth
-  oroha_exp status | abort | note "text"
+  oroha_exp status | abort | note "text" | note --manual-move "pushed back 10 cm"
 
 --rig-state (mock | lifted | on_ground) is required for `run` and written into the conditions.
 On the ground: start runs from your own terminal, one run per invocation (--yes with
 --repeats > 1 is refused there), keep the E-stop in hand. During a run: [space]/[Esc] or
-Ctrl-C abort, [n] note. The runner node (ros2 run oroha_experiment runner) and the robot
+Ctrl-C abort, [n] note, [m] manual move (the robot was touched/moved by hand -> MANUAL_MOVE event). The runner node (ros2 run oroha_experiment runner) and the robot
 (robot.launch.py) must be up; run oroha_preflight first.
 """
 
@@ -105,7 +105,8 @@ class Client(Node):
         self.status_t = time.monotonic()
 
     def call(self, cli, req, timeout=20.0):
-        if not cli.wait_for_service(timeout_sec=3.0):
+        # 10 s: right after the runner (or the Pi) starts, DDS discovery can take > 3 s (2026-10-06)
+        if not cli.wait_for_service(timeout_sec=10.0):
             raise RuntimeError(f"service {cli.srv_name} unavailable — is the runner node up?")
         fut = cli.call_async(req)
         rclpy.spin_until_future_complete(self, fut, timeout_sec=timeout)
@@ -234,7 +235,7 @@ def run(a) -> int:
 
 
 def monitor(node: Client) -> str:
-    """Spin until the runner returns to IDLE; keys: space/Esc abort, n note."""
+    """Spin until the runner returns to IDLE; keys: space/Esc abort, n note, m manual move."""
     last_print = 0.0
     final = "?"
     t_enter = time.monotonic()
@@ -263,12 +264,12 @@ def monitor(node: Client) -> str:
             if k in (" ", "\x1b"):
                 print("\n   ABORT requested")
                 node.call(node.cli_abort, Trigger.Request())
-            elif k == "n":
+            elif k in ("n", "m"):
                 keys.__exit__(None, None, None)
-                text = input("\n   note: ")
+                text = input("\n   %s: " % ("note" if k == "n" else "manual move (what was done)"))
                 keys.__enter__()
-                if text:
-                    rq = AddNote.Request(); rq.text = text
+                if text or k == "m":
+                    rq = AddNote.Request(); rq.text = text if k == "n" else "MANUAL_MOVE " + text
                     node.call(node.cli_note, rq)
     print()
     return final
@@ -308,7 +309,7 @@ def simple(a) -> int:
             r = node.call(node.cli_abort, Trigger.Request())
             print(r.message)
         elif a.cmd == "note":
-            rq = AddNote.Request(); rq.text = a.text
+            rq = AddNote.Request(); rq.text = ("MANUAL_MOVE " if a.manual_move else "") + a.text
             print("ok" if node.call(node.cli_note, rq).ok else "refused (no active run)")
     finally:
         node.destroy_node()
@@ -358,6 +359,8 @@ def main(argv=None) -> int:
     sub.add_parser("abort")
     n = sub.add_parser("note")
     n.add_argument("text")
+    n.add_argument("--manual-move", action="store_true",
+                   help="the robot was moved/held by hand during the run (MANUAL_MOVE event)")
     a = ap.parse_args(argv)
     if a.cmd == "run":
         return run(a)
@@ -370,5 +373,13 @@ def main(argv=None) -> int:
     return simple(a)
 
 
+def entry() -> int:
+    try:
+        return main()
+    except RuntimeError as e:          # runner not reachable / timed out: one line, no traceback
+        print(f"oroha_exp: {e}")
+        return 2
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(entry())

@@ -54,3 +54,8 @@
 - **T20261001-01 통과**: 데드맨 텔레옵(띄움), 사용자 7항목 정상. bag: 해제→감속 0.106~0.153 s(≤0.3 s), 방향·크기 이론값 일치. 텔레옵에 해제 로그 추가. 종료 시 이중 SIGINT(그룹 Ctrl-C = 직접 + launch/`ros2 run` 전달)가 정리 단계를 끊는 문제 → `power_node`·`runner_node`·`deadman_teleop`이 정리 중 추가 신호 무시(재시험 통과). `um7_node`(외부)는 5 s 뒤 SIGTERM으로 끝남 — 안전 무관, 보류.
 - **T20261001-02 통과**: UM7 통신(미고정) — 패킷 83 Hz, 체크섬 0, `/imu/data` 39.7 Hz, header stamp는 수신 시각 묶음. 세션 A 완료.
 - **T20261001-03 통과(B2, H3)**: 전류 의미 분리. 노드 `i_*`는 항상 참 0 A 기준(+`rail_corr`, 명시적 `Z`에서만), boot zero 무시, 적용 내용은 `~/calibration_event`, 진단에 기준·baseline·범위 밖 수. `PowerSample`은 유지(기존 bag 호환). 신규 `power_analysis.py`: 실행의 정지 구간 → `rail_corr_run`·baseline → `di_*`·`i_*_abs`·분기별/합계 에너지(절대·증가분)·범위 밖 비율, 공통 모드(프로세스 시작 시 세 채널 동반 하강) 표본 제외. 띄운 계단 0.2~0.76 m/s 실측, MD400 effort는 Pico 대체 불가. 09-29 사각 8회 재추출: 증가분 에너지 변동 1.4 %.
+
+## 2026-10-06 (KST)
+
+- 모터 전원 OFF(preflight NO-GO: 버스 0.17 V, MD400 무응답) — 그 상태의 정지 raw(GP27 2030.65·GP28 2028.69)를 참 0 A 직접 측정값으로 보존.
+- **T20261006-01 (mock 통과, 실물 열림)**: M2 바퀴별 가드(`guards.py`, FAIL 문구에 Pico 전류·MD400 status·원인 힌트), M3 ARM 때 `params.yaml`(노드 파라미터·URDF·하드웨어 컴포넌트, 서비스 호출), M4 이벤트(`PREFLIGHT_OK`·`ZERO`·`MANUAL_MOVE`·`/rosout` WARN 이상 미러), M7 `oroha_hw_recover`, CLI 서비스 대기 10 s·한 줄 오류, preflight USE_LIMIT_SW 문구 정정.

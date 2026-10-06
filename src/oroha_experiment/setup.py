@@ -20,7 +20,7 @@ setup(
     entry_points={
         "console_scripts": [
             "runner = oroha_experiment.runner_node:main",
-            "oroha_exp = oroha_experiment.cli:main",
+            "oroha_exp = oroha_experiment.cli:entry",
             "oroha_profile = oroha_experiment.profiles:main",
         ],
     },

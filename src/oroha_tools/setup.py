@@ -29,6 +29,7 @@ setup(
             "oroha_paper_export = oroha_tools.paper_export:main",
             "oroha_verify_export = oroha_tools.verify_export:main",
             "oroha_bus_probe = oroha_tools.bus_probe:main",
+            "oroha_hw_recover = oroha_tools.hw_recover:main",
         ],
     },
 )

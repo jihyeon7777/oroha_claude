@@ -1,0 +1,170 @@
+{
+ "timestamp_utc": "2026-10-06T06:25:29Z",
+ "timezone": "KST",
+ "args": {
+  "md_port": "/dev/oroha_md400",
+  "pico_port": "/dev/oroha_pico",
+  "sec": 5.0,
+  "polls": 10,
+  "rate": 50,
+  "no_zero": false,
+  "skip_md400": false,
+  "skip_pico": false,
+  "out_dir": "/home/oroha/oroha_claude/records/preflight"
+ },
+ "host": {
+  "ntp_synchronized": "yes",
+  "timezone": "Asia/Seoul",
+  "ftdi_latency_timer_ms": 1
+ },
+ "md400": {
+  "1": {
+   "n": 0,
+   "volt": [],
+   "rpm": [],
+   "alarm": 0,
+   "pos": null,
+   "ver": null,
+   "err": "IncompleteResponseError: short read: got 0 want 2: ",
+   "status": []
+  },
+  "2": {
+   "n": 0,
+   "volt": [],
+   "rpm": [],
+   "alarm": 0,
+   "pos": null,
+   "ver": null,
+   "err": "IncompleteResponseError: short read: got 0 want 2: ",
+   "status": []
+  }
+ },
+ "calib_id": "sensing-20260828",
+ "pico": {
+  "fw": "oroha-bench-1.2",
+  "zero": "#ZERO gp28=2028.719 gp27=2030.804 rail=3.3080 rail_corr=1.005859 n=1024",
+  "samples": 255,
+  "dt_ms": 19.993728346457022,
+  "seq_gaps": 0,
+  "overrun_pct": 0.39215686274509803,
+  "stats": {
+   "gp26": {
+    "mean": 0.0015686274509803923,
+    "sd": 0.019800232620896134,
+    "min": 0.0,
+    "max": 0.31,
+    "v_bus": 0.16668708117647058
+   },
+   "gp27": {
+    "mean": 2030.6547843137257,
+    "sd": 1.6951841396157894,
+    "min": 2021.09,
+    "max": 2033.0
+   },
+   "gp28": {
+    "mean": 2028.6942745098038,
+    "sd": 1.7653668627054464,
+    "min": 2018.5,
+    "max": 2030.75
+   }
+  }
+ },
+ "checks": [
+  {
+   "ok": true,
+   "msg": "clock NTP-synchronized: yes (timezone Asia/Seoul)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "FTDI latency_timer 1 ms (want 1: twin cycle ~66 ms instead of ~96 ms at 10 Hz)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "MD400: /dev/oroha_md400 -> /dev/ttyUSB1 writable",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "MD400: not open by another process",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "Pico: /dev/oroha_pico -> /dev/ttyACM0 writable",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "Pico: not open by another process",
+   "blocking": true
+  },
+  {
+   "ok": false,
+   "msg": "id=1 (RIGHT): no answer — IncompleteResponseError: short read: got 0 want 2:  (power / A-B wiring / GND)",
+   "blocking": true
+  },
+  {
+   "ok": false,
+   "msg": "id=2 (LEFT): no answer — IncompleteResponseError: short read: got 0 want 2:  (power / A-B wiring / GND)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "firmware oroha-bench-1.2 (expected oroha-bench-1.2)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "sample interval 19.994 ms (rate 50 Hz)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "seq gaps 0 / 255 samples",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "overrun 1/255 (0.39 %)",
+   "blocking": false
+  },
+  {
+   "ok": false,
+   "msg": "all channels inside the linear range (raw 410..3686)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "zero_valid set",
+   "blocking": false
+  },
+  {
+   "ok": false,
+   "msg": "GP26 bus voltage 0.167 V in range",
+   "blocking": true
+  },
+  {
+   "ok": false,
+   "msg": "gp27 rest raw 2030.65 within 2042.2..2043.3 (+11.5 LSB)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "gp27 noise 19.4 mA (target < 30 mA)",
+   "blocking": false
+  },
+  {
+   "ok": false,
+   "msg": "gp28 rest raw 2028.69 within 2039.6..2040.7 (+10.9 LSB)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "gp28 noise 20.2 mA (target < 30 mA)",
+   "blocking": false
+  }
+ ],
+ "ok": false
+}

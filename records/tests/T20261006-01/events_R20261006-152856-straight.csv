@@ -1,0 +1,8 @@
+stamp_ns,t_run,event,segment_index,detail
+1791268142000085604,-1.0,ARMED,-1,"straight {'length': 1.0, 'v': 0.2}"
+1791268143015789669,-1.0,BAG_STARTED,-1,/home/oroha/oroha_claude/data/runs/R20261006-152856-straight/bag
+1791268143034652367,0.0088,START,-1,t_total=11.67
+1791268143037465692,0.0116,SEGMENT,0,rest_pre
+1791268146039273576,3.0135,SEGMENT,1,straight
+1791268147233431620,4.2076,FAIL,1,"LEFT wheel not turning: expected +55.0 rad/s, measured +0.0 for 1.1 s; Pico I L 0.08 R 0.08 A; MD400 status L 0x00 R 0x00 (both branches at quiescent -> drive power cut (E-stop?))"
+1791268148549710199,-1.0,BAG_STOPPED,-1,rc=0

@@ -1,0 +1,10 @@
+stamp_ns,t_run,event,segment_index,detail
+1791268018813718074,-1.0,ARMED,-1,"straight {'length': 1.0, 'v': 0.2}"
+1791268021156265507,-1.0,BAG_STARTED,-1,/home/oroha/oroha_claude/data/runs/R20261006-152653-straight/bag
+1791268021159887980,-1.0,NOTE,-1,log diff_cont WARN: Velocity command timed out. Braking.
+1791268021177402085,0.0145,START,-1,t_total=11.67
+1791268021179354414,0.0165,SEGMENT,0,rest_pre
+1791268024173662217,3.0108,SEGMENT,1,straight
+1791268029873962168,8.711,SEGMENT,2,rest_post
+1791268032873896994,11.711,END,2,profile complete
+1791268034197180114,-1.0,BAG_STOPPED,-1,rc=0

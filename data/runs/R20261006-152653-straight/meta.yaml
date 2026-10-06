@@ -1,0 +1,146 @@
+run_id: R20261006-152653-straight
+series_id: M-guard
+repeat_index: 0
+repeats: 1
+path: straight
+params:
+  length: 1.0
+  v: 0.2
+profile:
+  name: straight
+  params:
+    length: 1.0
+    v: 0.2
+  duration_s: 11.667
+  limits:
+    v_max: 0.35
+    w_max: 1.2
+    accel: 0.3
+    ang_accel: 1.0
+    wheel_v_max: 1.0
+    half_track: 0.2255
+  segments:
+  - label: rest_pre
+    kind: rest
+    duration: 3.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+  - label: straight
+    kind: straight
+    duration: 5.666666666666667
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+  - label: rest_post
+    kind: rest
+    duration: 3.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+timezone: KST
+armed_utc: '2026-10-06T06:26:56Z'
+armed_ros_ns: 1791268016866187797
+armed_local: 2026-10-06 15:26:56 KST
+status: DONE
+conditions:
+  updated_utc: '2026-10-06T06:26:52Z'
+  rig_state: mock
+  surface: lifted
+  note: T20260929-06 square repeat
+versions:
+  workspace:
+    path: /home/oroha/oroha_claude
+    head: 387dd4295a80a026f46a9d714db3e75476e385b1
+    describe: 387dd42-dirty
+    branch: main
+    dirty: true
+  external:
+    mdrobot_motor_driver:
+      head: c5c1f3f5613bd72a607d0724e8bc58902497b720
+      describe: v1.4.0-dirty
+      branch: HEAD
+      dirty: true
+    um7_driver:
+      head: 9a342584bf985d9e5af265d99aa64bb3eb47f29f
+      describe: 9a34258
+      branch: HEAD
+      dirty: false
+  firmware_sha256: bace95054b5498fcc5d8acb95ff797909c4857f53977f9990579aca3b7884483
+  calibration:
+    sensing-20260828.yaml: sensing-20260828
+    wheel-20260909.yaml: wheel-20260909
+  uncommitted_diff_bytes: 22121
+  untracked_files: 3
+cmd_topic: /diff_cont/cmd_vel
+cmd_rate_hz: 20.0
+bag:
+  path: bag
+  bytes: 600671
+  topics:
+  - /diff_cont/cmd_vel
+  - /diff_cont/cmd_vel_out
+  - /diff_cont/odom
+  - /joint_states
+  - /dynamic_joint_states
+  - /tf
+  - /tf_static
+  - /robot_description
+  - /oroha_power/sample
+  - /oroha_power/battery
+  - /oroha_power/calibration_event
+  - /imu/data
+  - /imu/mag
+  - /imu/temperature
+  - /diagnostics
+  - /oroha_experiment/event
+  - /oroha_experiment/status
+  - /rosout
+manual_gt: null
+notes: []
+rig_state: mock
+arena:
+  room_m: 3.0
+  margin_m: 0.3
+  needed_m:
+  - 1.72
+  - 0.72
+  placement: wall
+  start_offset_m:
+  - 0.66
+  - 0.66
+params_file: params.yaml
+params_absent:
+- /um7_node
+hardware_components:
+- name: oroha_base
+  plugin: mock_components/GenericSystem
+  state: active
+  command_interfaces:
+  - motor_R/velocity
+  - motor_L/velocity
+  state_interfaces:
+  - motor_R/read_seq
+  - motor_L/status2
+  - motor_R/position
+  - motor_L/status
+  - motor_L/position
+  - motor_L/velocity
+  - motor_L/read_seq
+  - motor_R/velocity
+  - motor_R/effort
+  - motor_R/status
+  - motor_L/effort
+  - motor_R/status2
+guard:
+  wheel_radius: 0.003635
+  wheel_separation: 0.451
+  source: diff_cont
+  min_expected: 10.0
+  still: 2.0
+  timeout_s: 1.0
+log_warnings: 1
+start_utc: '2026-10-06T06:27:01Z'
+start_ros_ns: 1791268021162734269
+end_utc: '2026-10-06T06:27:14Z'
+t_run_end: 13.036

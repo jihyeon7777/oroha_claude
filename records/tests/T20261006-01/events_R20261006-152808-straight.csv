@@ -1,0 +1,13 @@
+stamp_ns,t_run,event,segment_index,detail
+1791268094333281688,-1.0,ARMED,-1,"straight {'length': 1.0, 'v': 0.2}"
+1791268095240597882,-1.0,BAG_STARTED,-1,/home/oroha/oroha_claude/data/runs/R20261006-152808-straight/bag
+1791268095263368662,0.0184,START,-1,t_total=11.67
+1791268095279050150,0.0343,NOTE,-1,log diff_cont WARN: Velocity command timed out. Braking.
+1791268095286472978,0.0418,SEGMENT,0,rest_pre
+1791268098285565209,3.041,SEGMENT,1,straight
+1791268098544109219,3.2995,ZERO,1,#ZERO gp28=2041.00 gp27=2042.30 rail=3.2887 rail_corr=1.0000 n=1024
+1791268098547558361,3.303,ZERO,1,applied: rail_corr=0.999980 baseline(powered rest) gp27=2042.300 gp28=2041.000 -> 0.0801 / 0.0799 A vs true 0 A (quiet 0.080 A assumed)
+1791268103935072843,8.6905,SEGMENT,2,rest_post
+1791268103966486235,8.7219,MANUAL_MOVE,2,mock test: chassis touched
+1791268106935340555,11.6908,END,2,profile complete
+1791268108253042213,-1.0,BAG_STOPPED,-1,rc=0

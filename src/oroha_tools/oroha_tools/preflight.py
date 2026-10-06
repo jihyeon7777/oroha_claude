@@ -160,7 +160,7 @@ def check_md400(r: Report, md_port: str, polls: int) -> dict:
         # intended setting per hardware_test_20260809.md; 0 = hall speed loop.
         print(f"      id={sid}: ENC_PPR {rec.get('enc_ppr')} (velocity loop: "
               f"{'encoder' if rec.get('enc_ppr') else 'hall'}; 1000 = intended per 2026-08-09) · "
-              f"USE_LIMIT_SW {rec.get('use_limit_sw')} (plugin and direction_check write 0 before driving)")
+              f"USE_LIMIT_SW {rec.get('use_limit_sw')} (plugin and direction_check write 1 before driving: E-stop gate, D-12)")
     if all("v" in out[s] for s in (1, 2)):
         gap = out[2]["v"] - out[1]["v"]
         r.ok(abs(gap - VOLT_GAP) < 0.25,

@@ -1,0 +1,9 @@
+[INFO] [1791268131.008619190] [oroha_experiment]: experiment runner ready; runs -> /home/oroha/oroha_claude/data/runs
+[INFO] [1791268142.001105978] [oroha_experiment]: [R20261006-152856-straight] ARMED straight {'length': 1.0, 'v': 0.2}
+[INFO] [1791268143.017355452] [oroha_experiment]: [R20261006-152856-straight] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261006-152856-straight/bag
+[INFO] [1791268143.036401632] [oroha_experiment]: [R20261006-152856-straight] START t_total=11.67
+[INFO] [1791268143.041124261] [oroha_experiment]: [R20261006-152856-straight] SEGMENT rest_pre
+[INFO] [1791268146.041214990] [oroha_experiment]: [R20261006-152856-straight] SEGMENT straight
+[INFO] [1791268147.235300812] [oroha_experiment]: [R20261006-152856-straight] FAIL LEFT wheel not turning: expected +55.0 rad/s, measured +0.0 for 1.1 s; Pico I L 0.08 R 0.08 A; MD400 status L 0x00 R 0x00 (both branches at quiescent -> drive power cut (E-stop?))
+[INFO] [1791268148.550958315] [oroha_experiment]: [R20261006-152856-straight] BAG_STOPPED rc=0
+[INFO] [1791268148.561314408] [oroha_experiment]: run R20261006-152856-straight finished: FAILED
