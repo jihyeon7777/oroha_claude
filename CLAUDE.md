@@ -43,7 +43,7 @@ OROHA는 HardwareX 논문으로 공개할 4륜 skid-steer 연구 플랫폼이다
 
 ```
 oroha.repos            외부 소스 고정: TaesuYim/mdrobot_motor_driver v1.4.0 (c5c1f3f), jihyeon7777/um7_driver (9a34258)
-src/external/          위 checkout — 커밋하지 않음, 직접 수정 금지(patches/ 로만: mdrobot 0001 status·read_seq, 0002 즉시 재시도)
+src/external/          위 checkout — 커밋하지 않음, 직접 수정 금지(patches/ 로만: mdrobot 0001 status·read_seq, 0002 즉시 재시도, 0003 DI)
 src/oroha_msgs         PowerSample·ExperimentEvent/Status·ArmExperiment/AddNote
 src/oroha_description  4륜(조인트 motor_L/motor_R 2개) xacro, use_mock_hardware 스위치, test/test_xacro.py
 src/oroha_bringup      robot.launch.py(종료·크래시 시 MD400 정지 안전망), config/oroha_controllers.yaml(실측값), test/test_config.py

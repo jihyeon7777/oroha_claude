@@ -46,6 +46,7 @@
         <state_interface name="status"/>
         <state_interface name="status2"/>
         <state_interface name="read_seq"/>
+        <state_interface name="di"/>       <!-- patch 0003: PID_DI (CTRL gates), each side every 2nd cycle -->
         <param name="motor_id">$(arg motor_id_L)</param>
         <param name="reverse">$(arg reverse_L)</param>
         <param name="counts_per_rev">$(arg counts_per_rev_L)</param>
@@ -58,6 +59,7 @@
         <state_interface name="status"/>
         <state_interface name="status2"/>
         <state_interface name="read_seq"/>
+        <state_interface name="di"/>
         <param name="motor_id">$(arg motor_id_R)</param>
         <param name="reverse">$(arg reverse_R)</param>
         <param name="counts_per_rev">$(arg counts_per_rev_R)</param>

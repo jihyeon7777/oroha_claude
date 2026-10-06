@@ -56,7 +56,7 @@ from control_msgs.msg import DynamicJointState
 from oroha_msgs.msg import ExperimentEvent, ExperimentStatus
 from oroha_msgs.srv import AddNote, ArmExperiment
 from oroha_experiment import profiles as P
-from oroha_experiment.guards import WheelGuard, describe
+from oroha_experiment.guards import WheelGuard, describe, gate_open
 
 DEFAULT_BAG_TOPICS = [
     "/diff_cont/cmd_vel", "/diff_cont/cmd_vel_out", "/diff_cont/odom", "/joint_states",
@@ -154,6 +154,8 @@ class ExperimentRunner(Node):
         self.power_ok_ns = 0
         self.currents = None            # (i_left, i_right) latest Pico sample, A vs true 0 A
         self.md_status = {}             # joint -> MD400 status byte (patch 0001)
+        self.md_di = {}                 # joint -> PID_DI word (patch 0003; 0 = not read yet)
+        self.gate_open_since = {}       # joint -> ns the gate was first seen open
         self.guard = WheelGuard()
         self.log_seen: dict = {}
         self.n_log_mirrored = 0
@@ -244,6 +246,8 @@ class ExperimentRunner(Node):
             vals = dict(zip(iv.interface_names, iv.values))
             if "status" in vals:
                 self.md_status[jn] = int(vals["status"])
+            if "di" in vals:
+                self.md_di[jn] = int(vals["di"])
 
     def on_power(self, msg):
         self.currents = (float(msg.i_left), float(msg.i_right))
@@ -455,6 +459,7 @@ class ExperimentRunner(Node):
             self.t_start_ns = self.now_ns()
             self.stall_since_ns = 0
             self.guard.reset()
+            self.gate_open_since.clear()
             self.state = "RUNNING"
             self.meta["start_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
             self.meta["start_ros_ns"] = self.t_start_ns
@@ -516,6 +521,22 @@ class ExperimentRunner(Node):
                 self.event(ExperimentEvent.FAIL, "bag process exited (%s)" % self.bag_proc.returncode, idx)
                 self._begin_stop("FAILED", "bag died")
                 return
+            # CTRL gate (E-stop / limit input) open on a side: that MD400 stops driving without
+            # an alarm (T20261006-07). DI refreshes every 2nd cycle per side -> 0.25 s = 2 reads.
+            jl, jr = str(self.get_parameter("left_joint").value), str(self.get_parameter("right_joint").value)
+            for jn, name in ((jl, "LEFT"), (jr, "RIGHT")):
+                if gate_open(self.md_di.get(jn)):
+                    t0 = self.gate_open_since.setdefault(jn, self.now_ns())
+                    if (self.now_ns() - t0) * 1e-9 > 0.25:
+                        opened = [n for j, n in ((jl, "LEFT"), (jr, "RIGHT")) if gate_open(self.md_di.get(j))]
+                        why = "CTRL gate open on %s (DI L 0x%02x R 0x%02x): %s" % (
+                            "+".join(opened), self.md_di.get(jl, 0), self.md_di.get(jr, 0),
+                            "E-stop pressed" if len(opened) == 2 else "one-side gate drop, MD400 stops without alarm")
+                        self.event(ExperimentEvent.FAIL, why, idx)
+                        self._begin_stop("FAILED", why)
+                        return
+                else:
+                    self.gate_open_since.pop(jn, None)
             if self.get_parameter("stall_enable").value:
                 g = self.guard
                 el, er = g.expected(v, w)
@@ -533,11 +554,11 @@ class ExperimentRunner(Node):
                     return
                 self.stall_since_ns = 0
                 if fresh:
-                    jl, jr = str(self.get_parameter("left_joint").value), str(self.get_parameter("right_joint").value)
                     verdict = g.update(t, v, w, self.joint_vel.get(jl, 0.0), self.joint_vel.get(jr, 0.0))
                     if verdict:
                         st = (self.md_status.get(jl, 0), self.md_status.get(jr, 0)) if self.md_status else None
-                        why = describe(verdict, self.currents, st)
+                        di = (self.md_di.get(jl, 0), self.md_di.get(jr, 0)) if self.md_di else None
+                        why = describe(verdict, self.currents, st, di=di)
                         self.event(ExperimentEvent.FAIL, why, idx)
                         self._begin_stop("FAILED", why)
                         return

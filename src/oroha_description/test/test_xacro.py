@@ -63,7 +63,7 @@ def test_interfaces(mode):
     for name in ("motor_L", "motor_R"):
         _, cmds, states = joint_params(root, name)
         assert cmds == ["velocity"]
-        assert states == ["position", "velocity", "effort", "status", "status2", "read_seq"]
+        assert states == ["position", "velocity", "effort", "status", "status2", "read_seq", "di"]
 
 
 def test_mock_plugin():

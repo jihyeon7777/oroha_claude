@@ -6,7 +6,7 @@
 
 | 항목 | 상태 |
 |---|---|
-| 빌드 | v1.4.0 + `patches/external/mdrobot_motor_driver/0001`(status·status2·read_seq) + `0002`(즉시 재시도·inter_frame_delay). `bash patches/apply_patches.sh` 후 빌드 |
+| 빌드 | v1.4.0 + `patches/external/mdrobot_motor_driver/0001`(status·status2·read_seq) + `0002`(즉시 재시도·inter_frame_delay) + `0003`(DI: CTRL 게이트). `bash patches/apply_patches.sh` 후 빌드 |
 | 세션 A (띄움) | **완료**: 방향(T20260928-05), E-stop(T20260929-01, `use_limit_sw 1`), ros2_control 주행·정지 행렬(T20260929-02·04), 실행기+계측(T-05~07), 텔레옵(T20261001-01), UM7 통신(T20261001-02) |
 | 통신 두절 | **원인 확인·운용 복구**(T20260929-07): MD400 수신 잠김, 패치 0002로 사각 8/8 DONE. 근본 원인(펌웨어)은 미해결 — 재발 빈도는 로그 `immediate retry ok`로 추적 |
 | 계측 의미 | ✅ D-14: 노드 = 참 0 A 기준, 논문 값 = 추출기의 실행별 정지 구간 기준(`di_*`·`i_*_abs`·에너지). 공통 모드 흔들림(프로세스 시작 시) — 실행 중 다른 프로세스를 띄우지 않는다 |

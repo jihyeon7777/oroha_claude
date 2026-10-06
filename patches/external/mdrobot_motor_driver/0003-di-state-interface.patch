@@ -1,0 +1,62 @@
+Subject: mdrobot_ros2_control: optional "di" state interface (CTRL inputs, round-robin)
+
+With use_limit_sw=1 an open CTRL gate (DIR / START_STOP: E-stop or a glitch) stops
+that MD400 without an alarm (T20261006-07). Poll PID_DI of one driver per cycle
+(+1 transaction) and export it as <joint>/di. A failed DI read is not a comm error.
+Applies after 0001, 0002. Base: v1.4.0 c5c1f3f.
+---
+diff --git a/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp b/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp
+index 2d5cb47..1c51479 100644
+--- a/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp
++++ b/src/mdrobot_ros2_control/include/mdrobot_ros2_control/mdrobot_system.hpp
+@@ -87,6 +87,7 @@ class MdrobotSystemHardware : public hardware_interface::SystemInterface {
+     bool has_status_state = false;   ///< "status": MD400 status byte (raw bits).
+     bool has_status2_state = false;  ///< "status2": MD400 status2 byte (raw bits).
+     bool has_read_seq_state = false; ///< "read_seq": count of successful reads.
++    bool has_di_state = false;       ///< "di": PID_DI word (CTRL inputs), polled round-robin.
+     double read_seq = 0.0;           ///< advances only on a fresh read (stale = unchanged).
+     CmdMode mode = CmdMode::kNone;       ///< current active command interface.
+     double last_position_cmd = 0.0;      ///< last issued position goal (cmd units).
+@@ -129,6 +130,7 @@ class MdrobotSystemHardware : public hardware_interface::SystemInterface {
+   // transient-fault tolerance: a single serial hiccup shouldn't deactivate the
+   // hardware. Count consecutive failures; only surface ERROR past the threshold.
+   int read_errors_ = 0;
++  std::size_t di_rr_ = 0;   ///< next driver whose PID_DI is polled (one extra read per cycle)
+   int write_errors_ = 0;
+ 
+   // --- communication stack (built in on_configure) ---
+diff --git a/src/mdrobot_ros2_control/src/mdrobot_system.cpp b/src/mdrobot_ros2_control/src/mdrobot_system.cpp
+index 385c803..0112bc8 100644
+--- a/src/mdrobot_ros2_control/src/mdrobot_system.cpp
++++ b/src/mdrobot_ros2_control/src/mdrobot_system.cpp
+@@ -133,6 +133,9 @@ CallbackReturn MdrobotSystemHardware::on_init(
+     cfg.has_status_state = has_interface(j.state_interfaces, "status");
+     cfg.has_status2_state = has_interface(j.state_interfaces, "status2");
+     cfg.has_read_seq_state = has_interface(j.state_interfaces, "read_seq");
++    // CTRL digital inputs (DIR / START_STOP gates; with use_limit_sw=1 an open gate stops
++    // that controller without an alarm). One driver per cycle -> +1 transaction per cycle.
++    cfg.has_di_state = has_interface(j.state_interfaces, "di");
+ 
+     if (!cfg.has_velocity_cmd && !cfg.has_position_cmd) {
+       RCLCPP_ERROR(get_logger(),
+@@ -493,6 +496,20 @@ return_type MdrobotSystemHardware::read(const rclcpp::Time& /*time*/,
+         }
+       }
+     }
++    // CTRL inputs: one driver per cycle, only on a healthy bus. A failed DI read is not a
++    // comm error for the component (the value just stays at its last reading).
++    if (!any_fail && !drivers_.empty()) {
++      const std::size_t i = di_rr_++ % drivers_.size();
++      if (joints_[i].has_di_state) {
++        try {
++          const uint16_t di = drivers_[i]->client().read_register(mdrobot::PID_DI);
++          set_state(joints_[i].name + "/di", static_cast<double>(di));
++        } catch (const std::exception& e) {
++          RCLCPP_DEBUG(rclcpp::get_logger(kLogger), "DI read '%s' failed: %s",
++                       joints_[i].name.c_str(), e.what());
++        }
++      }
++    }
+   }
+   if (any_fail) {
+     if (++read_errors_ >= max_comm_errors_) {

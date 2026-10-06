@@ -204,7 +204,13 @@ def export(run_dir: Path, out: Path) -> dict:
                 st, st2, seq = int(vals.get("status", 0)), int(vals.get("status2", 0)), vals["read_seq"]
                 row[f"{jn}_status"], row[f"{jn}_status2"], row[f"{jn}_read_seq"] = st, st2, int(seq)
                 d = diag.setdefault(jn, {"n": 0, "stale": 0, "stale_run": 0, "stale_run_max": 0,
-                                         "seq": None, "status": {}})
+                                         "seq": None, "status": {}, "gate_open": 0, "di_seen": False})
+                if "di" in vals:
+                    di = int(vals["di"])
+                    row[f"{jn}_di"] = di
+                    if di:                        # 0 = not read yet (patch 0003 polls each side every 2nd cycle)
+                        d["di_seen"] = True
+                        d["gate_open"] += (di & 0x14) != 0x14   # DIR (b2) / START_STOP (b4) low
                 d["n"] += 1
                 if d["seq"] is not None and seq == d["seq"]:
                     d["stale"] += 1
@@ -307,7 +313,8 @@ def export(run_dir: Path, out: Path) -> dict:
         },
         "joint_diag": None if not diag else {
             jn: {"samples": d["n"], "stale_samples": d["stale"], "max_consecutive_stale": d["stale_run_max"],
-                 "status/status2 counts": d["status"]} for jn, d in diag.items()},
+                 "status/status2 counts": d["status"],
+                 "gate_open_samples": d["gate_open"] if d["di_seen"] else None} for jn, d in diag.items()},
         "imu": None if imu_yaw_first is None else {
             "fused_yaw_change_rad": round(imu_yaw_last - imu_yaw_first, 4),
             "gyro_integrated_yaw_rad": round(gyro_int, 4),
@@ -337,6 +344,7 @@ oroha_power the host receive time, for um7 the receive time, for controllers the
 | cmd_vel_out.csv | v, w | m/s, rad/s command actually applied by diff_cont after its speed/acceleration limits |
 | odom.csv | x, y, yaw, vx, wz | m, m, rad (odom frame), m/s, rad/s — wheel odometry, no-slip assumption |
 | joint_states.csv | <joint>_pos, _vel, _eff | rad, rad/s at the MOTOR SHAFT (34.615:1 to the wheel), A (MD400 internal, unsigned) |
+| joint_diag.csv | <joint>_di | MD400 PID_DI word (CTRL inputs; b2 DIR, b4 START_STOP = the E-stop gates, both set = run allowed; b5/b6 encoder), patch 0003, refreshed every 2nd cycle per side, 0 = not read yet. summary `gate_open_samples` counts samples with b2 or b4 low |
 | joint_diag.csv | <joint>_status, _status2, _read_seq | MD400 status bytes as read (raw bits, see MD400 manual PID_MONITOR) and the plugin's successful-read counter; a repeated read_seq = the value was NOT re-read that cycle (comm failure, last value republished) |
 | power.csv | device_stamp_ns, seq, t_us, n_rounds, gp2x_mean/min/max, flags, zero_valid, overrun | Pico window (20 ms): raw 12-bit ADC; t_us = device monotonic us; device_stamp_ns = t_us mapped to ROS time |
 | power.csv | v_bus, i_left, i_right, p_left, p_right, p_total | AS PUBLISHED live by oroha_power: V, A (discharge positive; LEFT=GP27=id2, RIGHT=GP28=id1), W. Nodes before 2026-10-01 switched to "increase over the last '#ZERO'" after any zero; newer nodes are always vs true 0 A with the session's rail_corr — use the *_run/_abs/di columns for analysis |
