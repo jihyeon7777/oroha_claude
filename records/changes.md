@@ -59,3 +59,6 @@
 
 - 모터 전원 OFF(preflight NO-GO: 버스 0.17 V, MD400 무응답) — 그 상태의 정지 raw(GP27 2030.65·GP28 2028.69)를 참 0 A 직접 측정값으로 보존.
 - **T20261006-01 (mock 통과, 실물 열림)**: M2 바퀴별 가드(`guards.py`, FAIL 문구에 Pico 전류·MD400 status·원인 힌트), M3 ARM 때 `params.yaml`(노드 파라미터·URDF·하드웨어 컴포넌트, 서비스 호출), M4 이벤트(`PREFLIGHT_OK`·`ZERO`·`MANUAL_MOVE`·`/rosout` WARN 이상 미러), M7 `oroha_hw_recover`, CLI 서비스 대기 10 s·한 줄 오류, preflight USE_LIMIT_SW 문구 정정.
+- **T20261006-02 통과**: 모터 전원 OFF(참 0 A) ↔ ON 정지 raw 차 +6.49/+6.60 LSB = 74/76 mA → 대기전류 가정 80 mA 유효(−5 mA).
+- **T20261006-03 통과**: 실물 실행에서 `PREFLIGHT_OK`, `params.yaml` 노드 6개(UM7 포함)·URDF 하드웨어 설정, 가드 기하 diff_cont. T20261006-01 종결.
+- **T20261006-04 통과**: RS485 0xFF 주입 2 s → 2.3 s에 ERROR(컴포넌트 unconfigured·컨트롤러 inactive) → `oroha_hw_recover` 0.4 s 복구 → 정상 주행. `docs/operation.md` 갱신.

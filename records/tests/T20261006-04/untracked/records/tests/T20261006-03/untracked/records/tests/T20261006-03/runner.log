@@ -1,0 +1,25 @@
+[INFO] [1791268570.245772253] [oroha_experiment]: experiment runner ready; runs -> /home/oroha/oroha_claude/data/runs
+[INFO] [1791268580.766973685] [oroha_experiment]: [R20261006-153616-square] ARMED square {'side': 1.0, 'v': 0.2}
+[INFO] [1791268580.767971294] [oroha_experiment]: [R20261006-153616-square] PREFLIGHT_OK 20261006T063539Z.json
+[INFO] [1791268582.603478622] [oroha_experiment]: [R20261006-153616-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261006-153616-square/bag
+[INFO] [1791268582.619420566] [oroha_experiment]: [R20261006-153616-square] START t_total=50.23
+[INFO] [1791268582.623729463] [oroha_experiment]: [R20261006-153616-square] SEGMENT rest_pre
+[INFO] [1791268585.622645715] [oroha_experiment]: [R20261006-153616-square] SEGMENT side1
+[INFO] [1791268591.322093519] [oroha_experiment]: [R20261006-153616-square] SEGMENT dwell1
+[INFO] [1791268592.322054534] [oroha_experiment]: [R20261006-153616-square] SEGMENT turn1
+[INFO] [1791268595.922151026] [oroha_experiment]: [R20261006-153616-square] SEGMENT dwell2
+[INFO] [1791268596.922049708] [oroha_experiment]: [R20261006-153616-square] SEGMENT side2
+[INFO] [1791268602.622621639] [oroha_experiment]: [R20261006-153616-square] SEGMENT dwell3
+[INFO] [1791268603.622554673] [oroha_experiment]: [R20261006-153616-square] SEGMENT turn2
+[INFO] [1791268607.271861807] [oroha_experiment]: [R20261006-153616-square] SEGMENT dwell4
+[INFO] [1791268608.273990632] [oroha_experiment]: [R20261006-153616-square] SEGMENT side3
+[INFO] [1791268613.922109354] [oroha_experiment]: [R20261006-153616-square] SEGMENT dwell5
+[INFO] [1791268614.921891796] [oroha_experiment]: [R20261006-153616-square] SEGMENT turn3
+[INFO] [1791268618.574428885] [oroha_experiment]: [R20261006-153616-square] SEGMENT dwell6
+[INFO] [1791268619.573917327] [oroha_experiment]: [R20261006-153616-square] SEGMENT side4
+[INFO] [1791268625.222728826] [oroha_experiment]: [R20261006-153616-square] SEGMENT dwell7
+[INFO] [1791268626.222575508] [oroha_experiment]: [R20261006-153616-square] SEGMENT turn4
+[INFO] [1791268629.879653308] [oroha_experiment]: [R20261006-153616-square] SEGMENT rest_post
+[INFO] [1791268632.874296718] [oroha_experiment]: [R20261006-153616-square] END profile complete
+[INFO] [1791268634.189897262] [oroha_experiment]: [R20261006-153616-square] BAG_STOPPED rc=0
+[INFO] [1791268634.203856414] [oroha_experiment]: run R20261006-153616-square finished: DONE

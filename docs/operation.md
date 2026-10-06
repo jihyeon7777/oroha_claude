@@ -25,6 +25,6 @@
 
 **간헐 두절(MD400 수신 잠김, T20260929-07)**: 한 MD400이 가끔 요청을 무시하는 상태에 빠진다. 플러그인 패치 0002가 실패한 장치를 즉시 재시도해 같은 주기에 복구한다(로그 `immediate retry ok`, 주기 1회 ≈0.1 s 지연). 재시도도 실패가 5회 이어지면 아래 절차.
 
-**제자리 복구(M7, `oroha_hw_recover`)**: 재시도도 5회 연속 실패해 하드웨어가 ERROR로 내려간 경우, 런치를 다시 띄우지 않고 복구한다. ① E-stop 누른 채 유지 → ② 원인 해결(케이블·전원) → ③ `oroha_hw_recover`(컴포넌트 configure·activate, 컨트롤러 재활성화, `/joint_states` 복귀 확인; 종료코드 0 = 복구) → ④ 바퀴 0 확인 후 E-stop 해제. mock 확인(T20261006-01), 실물 고장 주입 시험 예정. 실패하면 아래처럼 런치를 다시 띄운다.
+**제자리 복구(M7, `oroha_hw_recover`)**: 재시도도 5회 연속 실패해 하드웨어가 ERROR로 내려간 경우, 런치를 다시 띄우지 않고 복구한다. ① E-stop 누른 채 유지 → ② 원인 해결(케이블·전원) → ③ `oroha_hw_recover`(컴포넌트 configure·activate, 컨트롤러 재활성화, `/joint_states` 복귀 확인; 종료코드 0 = 복구) → ④ 바퀴 0 확인 후 E-stop 해제. 실물 고장 주입(RS485에 0xFF 2 s)으로 확인: 2.3 s에 ERROR(컴포넌트 `unconfigured`, 컨트롤러 `inactive`) → 복구 0.4 s → 정상 주행(T20261006-04). 실패하면 아래처럼 런치를 다시 띄운다.
 
 RS485가 끊기면 플러그인은 약 0.4 s(5회 실패) 뒤 하드웨어를 ERROR → unconfigured로 내리고 컨트롤러를 끄지만, **MD400은 마지막 명령으로 계속 돈다 — E-stop만이 멈춘다.** 복구: E-stop 누른 채 유지 → 케이블 재연결(링크 `/dev/oroha_md400`·latency 1 ms는 udev가 자동 적용) → 런치 Ctrl-C(안전망이 양쪽 정지) 또는 `oroha_md_stop` → E-stop 해제 → 런치 재기동.
