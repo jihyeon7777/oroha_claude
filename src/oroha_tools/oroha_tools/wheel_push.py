@@ -6,6 +6,7 @@ Two phases so it can be driven from a non-interactive shell while the operator p
       ... operator pushes the robot straight (3 m x 3 m room: along the diagonal) ...
   oroha_wheel_push --phase end --revs 3        # exactly 3 wheel revolutions (tyre mark) -> counts/wheel-rev
   oroha_wheel_push --phase end --dist 2.380    # tape-measured distance -> m/count, diff_cont wheel_radius
+  oroha_wheel_push --phase end --revs 3 --dist 2.375   # both: + rolling circumference under load
 
 Both controllers are read (id 1 = RIGHT, id 2 = LEFT). After `start` the wheels roll
 freely — chock the robot before and after. Results go to records/measure/ (or
@@ -62,7 +63,11 @@ def compute(p0: dict, p1: dict, dist=None, revs=None) -> dict:
     if revs:
         cpr = lin / revs
         res.update({"counts_per_wheel_rev": cpr,
-                    "diff_vs_ref_pct": (cpr / REF_COUNTS_PER_WHEEL_REV - 1.0) * 100.0})
+                    "cpr_diff_vs_ref_pct": (cpr / REF_COUNTS_PER_WHEEL_REV - 1.0) * 100.0})
+        if not dist:
+            res["diff_vs_ref_pct"] = res["cpr_diff_vs_ref_pct"]
+    if dist and revs:
+        res["rolling_circumference_m"] = dist / revs          # ref 0.7906 m (no payload)
     return res
 
 
@@ -70,9 +75,8 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--md-port", default=MD_PORT)
     ap.add_argument("--phase", required=True, choices=["start", "end", "status"])
-    g = ap.add_mutually_exclusive_group()
-    g.add_argument("--dist", type=float, help="tape-measured straight push distance [m] (phase end)")
-    g.add_argument("--revs", type=float, help="whole wheel revolutions pushed (phase end)")
+    ap.add_argument("--dist", type=float, help="tape-measured straight push distance [m] (phase end)")
+    ap.add_argument("--revs", type=float, help="whole wheel revolutions pushed (phase end; may be combined with --dist)")
     ap.add_argument("--note", default="", help="conditions: payload, tyre pressure, floor")
     ap.add_argument("--test-id", help="save the result into records/tests/<test-id>/")
     ap.add_argument("--force", action="store_true", help="ignore that the port is open elsewhere")
@@ -111,15 +115,18 @@ def main(argv=None) -> int:
         print(f"a wheel did not move (d1 {res['d1']}, d2 {res['d2']}) — nothing saved, start is kept")
         return 1
     out = {"start_utc": start["start_utc"], "end_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-           "timezone": time.strftime("%Z"), "mode": "dist" if a.dist else "revs", "dist_m": a.dist,
+           "timezone": time.strftime("%Z"),
+           "mode": "+".join(k for k, v in (("revs", a.revs), ("dist", a.dist)) if v), "dist_m": a.dist,
            "revs": a.revs, "pos_start": p0, "pos_end": p1, "note": " / ".join(x for x in (start.get("note"), a.note) if x),
            **res}
     print(f"   delta id1 {res['d1']:+d}  id2 {res['d2']:+d}  (mirror signs {'OK' if res['mirror_sign_ok'] else 'SAME SIGN?'})")
     if a.dist:
         print(f"   {res['m_per_count'] * 1e3:.4f} mm/count ({res['diff_vs_ref_pct']:+.2f} % vs 0.7613), "
               f"diff_cont wheel_radius {res['wheel_radius_effective']:.6f} m")
-    else:
-        print(f"   {res['counts_per_wheel_rev']:.2f} counts/wheel rev ({res['diff_vs_ref_pct']:+.2f} % vs 1038.46)")
+    if a.revs:
+        print(f"   {res['counts_per_wheel_rev']:.2f} counts/wheel rev ({res['cpr_diff_vs_ref_pct']:+.2f} % vs 1038.46)")
+    if a.dist and a.revs:
+        print(f"   rolling circumference {res['rolling_circumference_m']:.4f} m (0.7906 without payload)")
     print(f"   |d1|/|d2| = {res['lr_ratio_abs_d1_d2']:.5f} (pusher steering, not geometry)")
     out_dir = (records_dir() / "tests" / a.test_id) if a.test_id else (records_dir() / "measure")
     out_dir.mkdir(parents=True, exist_ok=True)

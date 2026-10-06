@@ -122,7 +122,8 @@ class ExperimentRunner(Node):
         d("w_max", 1.2)
         d("arena_m", 3.0)               # square room side
         d("arena_margin_m", 0.3)        # drift allowance at every wall
-        d("robot_half_diag_m", 0.36)    # body half-diagonal; set from the measured body size
+        d("robot_length_m", P.BODY_LENGTH)   # outer footprint incl. tyres, measured (T20261006-05)
+        d("robot_width_m", P.BODY_WIDTH)
 
         g = lambda k: self.get_parameter(k).value  # noqa: E731
         self.cmd_topic = str(g("cmd_topic"))
@@ -378,7 +379,8 @@ class ExperimentRunner(Node):
                 return res
             arena = float(self.get_parameter("arena_m").value)
             margin = float(self.get_parameter("arena_margin_m").value)
-            fp = P.footprint(profile, float(self.get_parameter("robot_half_diag_m").value))
+            body = (float(self.get_parameter("robot_length_m").value), float(self.get_parameter("robot_width_m").value))
+            fp = P.footprint(profile, body)
             placement = fp.placement(arena, margin)
             if rig_state == "on_ground" and placement == "none":
                 dx, dy = fp.size
@@ -417,7 +419,8 @@ class ExperimentRunner(Node):
                 "versions": versions, "cmd_topic": self.cmd_topic, "cmd_rate_hz": self.cmd_rate,
                 "bag": None, "manual_gt": None, "notes": [],
                 "rig_state": rig_state,
-                "arena": {"room_m": arena, "margin_m": margin, "needed_m": [round(x, 3) for x in fp.size],
+                "arena": {"room_m": arena, "margin_m": margin, "body_m": list(body),
+                          "needed_m": [round(x, 3) for x in fp.size],
                           "placement": placement,
                           "start_offset_m": [round(x, 3) for x in fp.start_offset(margin)]},
             })

@@ -29,7 +29,8 @@
   <xacro:property name="track" value="0.451"/>          <!-- wheel-center to wheel-center -->
   <xacro:property name="wheel_radius" value="0.1258"/>  <!-- rolling diameter 251.6 mm under load -->
   <xacro:property name="wheel_width" value="0.080"/>    <!-- 3.00-4 pneumatic tyre -->
-  <!-- PLACEHOLDER until measured -->
+  <!-- PLACEHOLDER until measured. Outer footprint incl. tyres measured 0.80 x 0.53 m
+       (T20261006-05); the chassis box and wheelbase themselves are still unmeasured -->
   <xacro:property name="wheelbase" value="0.400"/>      <!-- front-to-rear axle distance -->
   <xacro:property name="body_len" value="0.600"/>
   <xacro:property name="body_wid" value="0.350"/>

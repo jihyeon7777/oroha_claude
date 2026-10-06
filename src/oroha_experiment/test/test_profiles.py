@@ -134,3 +134,18 @@ def test_footprint_and_arena():
     ox, oy = fp.start_offset(0.3)
     assert fp.xmin + ox == pytest.approx(0.3) and fp.ymin + oy == pytest.approx(0.3)
     assert fp.xmax + ox <= 2.7 + 1e-9 and fp.ymax + oy <= 2.7 + 1e-9
+
+
+def test_body_rectangle_footprint_measured_robot():
+    """0.80 x 0.53 m body (T20261006-05) in the 3 m room with 0.3 m margins (2.4 m usable)."""
+    body = (0.80, 0.53)
+    fp = P.footprint(P.straight(1.5, 0.2), body)
+    assert fp.size == pytest.approx((1.5 + 0.80, 0.53), abs=3e-3)    # no half-diagonal waste
+    assert fp.placement(3.0, 0.3) == "wall"
+    assert P.footprint(P.straight(2.0, 0.2), body).placement(3.0, 0.3) == "diagonal"
+    sp = P.footprint(P.spot(360.0), body)                           # a full turn sweeps the circle
+    d = math.hypot(0.80, 0.53)
+    assert sp.size == pytest.approx((d, d), abs=5e-3)
+    assert P.footprint(P.square(1.0, 0.2), body).placement(3.0, 0.3) == "wall"
+    # the circle model is still available and more conservative
+    assert P.footprint(P.straight(1.5, 0.2), 0.48).placement(3.0, 0.3) == "none"

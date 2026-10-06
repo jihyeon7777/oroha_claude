@@ -416,14 +416,35 @@ class Footprint:
         return margin - self.xmin, margin - self.ymin
 
 
-def footprint(profile: Profile, half_diag: float, dt: float = DT_DEFAULT) -> Footprint:
-    """Ideal path swept by a circle of radius `half_diag` (robot body half-diagonal).
+# measured outer footprint incl. tyres (T20261006-05): 0.80 m long x 0.53 m wide (= track 0.451
+# + tyre 0.080), taken as centred on base_footprint (centre of the four contact points)
+BODY_LENGTH = 0.80
+BODY_WIDTH = 0.53
+
+
+def footprint(profile: Profile, body=(BODY_LENGTH, BODY_WIDTH), dt: float = DT_DEFAULT) -> Footprint:
+    """Room space swept by the robot body along the ideal path.
+
+    body = (length, width): the body rectangle (centred on the robot origin, x forward) is
+    placed at every pose and its four corners bound the space — exact for straight segments
+    (no 2 x half-diagonal waste) and for turns (corners swept at <= w*dt per sample).
+    body = float: the old rotation-safe circle of that radius (half-diagonal).
     Open-loop runs drift, which is what the arena margin is for."""
     poses = profile.ideal_path(dt)
-    xs = [p.x for p in poses]
-    ys = [p.y for p in poses]
-    return Footprint(min(xs) - half_diag, max(xs) + half_diag,
-                     min(ys) - half_diag, max(ys) + half_diag)
+    if isinstance(body, (int, float)):
+        r = float(body)
+        xs = [p.x for p in poses]
+        ys = [p.y for p in poses]
+        return Footprint(min(xs) - r, max(xs) + r, min(ys) - r, max(ys) + r)
+    hl, hw = 0.5 * float(body[0]), 0.5 * float(body[1])
+    corners = ((hl, hw), (hl, -hw), (-hl, hw), (-hl, -hw))
+    xs, ys = [], []
+    for p in poses:
+        c, s = math.cos(p.yaw), math.sin(p.yaw)
+        for bx, by in corners:
+            xs.append(p.x + c * bx - s * by)
+            ys.append(p.y + s * bx + c * by)
+    return Footprint(min(xs), max(xs), min(ys), max(ys))
 
 
 def build(name: str, **params) -> Profile:
@@ -447,7 +468,9 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--first", default="left")
     ap.add_argument("--join", default="continuous")
     ap.add_argument("--angle-deg", type=float, default=360.0)
-    ap.add_argument("--half-diag", type=float, default=0.36, help="robot body half-diagonal [m]")
+    ap.add_argument("--body", type=float, nargs=2, default=[BODY_LENGTH, BODY_WIDTH], metavar=("L", "W"),
+                    help="robot outer length and width [m] (measured 0.80 x 0.53)")
+    ap.add_argument("--half-diag", type=float, help="use the rotation-safe circle of this radius instead")
     ap.add_argument("--arena", type=float, default=3.0)
     ap.add_argument("--margin", type=float, default=0.3)
     ap.add_argument("--dt", type=float, default=DT_DEFAULT)
@@ -470,14 +493,15 @@ def main(argv: Iterable[str] | None = None) -> int:
     print(f"{p.name} {p.params}")
     print(f"duration {p.duration:.2f} s, path length {p.path_length(a.dt):.3f} m, "
           f"end pose x={end.x:.3f} y={end.y:.3f} yaw={math.degrees(end.yaw):.1f} deg")
-    fp = footprint(p, a.half_diag, a.dt)
+    body = a.half_diag if a.half_diag is not None else tuple(a.body)
+    fp = footprint(p, body, a.dt)
     dx, dy = fp.size
     ox, oy = fp.start_offset(a.margin)
     place = fp.placement(a.arena, a.margin)
     msg = {"wall": f"fits along the walls; start {ox:.2f} m from the wall behind, {oy:.2f} m from the wall on the right",
            "diagonal": "fits only along the room diagonal (start near a corner, heading to the opposite corner)",
            "none": "DOES NOT FIT the room"}[place]
-    print(f"room needed {dx:.2f} x {dy:.2f} m (arena {a.arena} m, margin {a.margin} m, half-diag {a.half_diag} m): {msg}")
+    print(f"room needed {dx:.2f} x {dy:.2f} m (arena {a.arena} m, margin {a.margin} m, body {body} m): {msg}")
     for i, s in enumerate(p.segments):
         print(f"  [{i}] {s.label:10s} {s.kind:8s} {s.duration:6.2f} s  v={s.v_peak:+.3f} w={s.w_peak:+.3f} ramp={s.ramp:.2f}")
     if a.csv:
