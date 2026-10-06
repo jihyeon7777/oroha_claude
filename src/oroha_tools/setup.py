@@ -30,6 +30,7 @@ setup(
             "oroha_verify_export = oroha_tools.verify_export:main",
             "oroha_bus_probe = oroha_tools.bus_probe:main",
             "oroha_hw_recover = oroha_tools.hw_recover:main",
+            "oroha_di_watch = oroha_tools.di_watch:main",
         ],
     },
 )
