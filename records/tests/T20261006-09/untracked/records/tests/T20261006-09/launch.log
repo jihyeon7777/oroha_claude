@@ -1,0 +1,292 @@
+[INFO] [launch]: All log files can be found below /home/oroha/.ros/log/2026-10-06-17-20-27-698460-pi-29121
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [ros2_control_node-1]: process started with pid [29133]
+[INFO] [robot_state_publisher-2]: process started with pid [29134]
+[INFO] [spawner-3]: process started with pid [29135]
+[INFO] [spawner-4]: process started with pid [29136]
+[INFO] [power_node-5]: process started with pid [29137]
+[robot_state_publisher-2] [INFO] [1791274828.101092140] [robot_state_publisher]: Robot initialized
+[ros2_control_node-1] [INFO] [1791274828.109180642] [controller_manager]: Using Steady (Monotonic) clock for triggering controller manager cycles.
+[ros2_control_node-1] [INFO] [1791274828.124447777] [controller_manager]: Subscribing to '/robot_description' topic for robot description.
+[ros2_control_node-1] [INFO] [1791274828.125163665] [controller_manager]: update rate is 10 Hz
+[ros2_control_node-1] [INFO] [1791274828.125208276] [controller_manager]: Overruns handling is : enabled
+[ros2_control_node-1] [INFO] [1791274828.125225776] [controller_manager]: Spawning controller_manager RT thread with scheduler priority: 50
+[ros2_control_node-1] [WARN] [1791274828.125503275] [controller_manager]: Could not enable FIFO RT scheduling policy: with error number <1>(Operation not permitted). See [https://control.ros.org/master/doc/ros2_control/controller_manager/doc/userdoc.html] for details on how to enable realtime scheduling.
+[ros2_control_node-1] [INFO] [1791274828.428215788] [controller_manager]: Received robot description from topic.
+[ros2_control_node-1] [INFO] [1791274828.428308195] [controller_manager]: Enforcing command limits is disabled. Command limits from URDF will be ignored.
+[ros2_control_node-1] [INFO] [1791274828.439553950] [controller_manager]: Loading hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1791274828.443746904] [controller_manager]: Loaded hardware 'oroha_base' from plugin 'mdrobot_ros2_control/MdrobotSystemHardware'
+[ros2_control_node-1] [INFO] [1791274828.444518977] [controller_manager]: Initialize hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1791274828.465137842] [controller_manager.hardware_component.system.oroha_base]: init: port=/dev/oroha_md400 baud=19200 type=twin joints=2
+[ros2_control_node-1] [INFO] [1791274828.465232879] [controller_manager.hardware_component.system.oroha_base]:   joint 'motor_L' slave_id=2 direction=-1 SI counts_per_rev=30.000
+[ros2_control_node-1] [INFO] [1791274828.465255249] [controller_manager.hardware_component.system.oroha_base]:   joint 'motor_R' slave_id=1 direction=+1 SI counts_per_rev=30.000
+[ros2_control_node-1] [INFO] [1791274828.465295045] [controller_manager]: Successful initialization of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1791274828.465569193] [controller_manager]: Activating component 'oroha_base'.
+[ros2_control_node-1] [INFO] [1791274828.465606563] [resource_manager]: 'configure' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1791274828.709072308] [controller_manager.hardware_component.system.oroha_base]: opened /dev/oroha_md400 slave_id=2: version=86 voltage=27.5V
+[ros2_control_node-1] [INFO] [1791274828.749992576] [controller_manager.hardware_component.system.oroha_base]: opened /dev/oroha_md400 slave_id=1: version=86 voltage=26.9V
+[ros2_control_node-1] [INFO] [1791274828.777952853] [controller_manager.hardware_component.system.oroha_base]: USE_LIMIT_SW set to 1
+[ros2_control_node-1] [INFO] [1791274828.778068408] [resource_manager]: Successful 'configure' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1791274828.778100519] [resource_manager]: 'activate' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1791274828.861887015] [controller_manager.hardware_component.system.oroha_base]: enabled (UI_COM=1 + START_STOP arm)
+[ros2_control_node-1] [INFO] [1791274828.862042626] [resource_manager]: Successful 'activate' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1791274828.862252996] [controller_manager]: Registering statistics for : oroha_base
+[ros2_control_node-1] [INFO] [1791274828.862474717] [controller_manager]: Resource Manager has been successfully initialized. Starting Controller Manager services...
+[spawner-3] [INFO] [1791274829.018598084] [spawner_joint_state_broadcaster]: waiting for service /controller_manager/list_controllers to become available...
+[power_node-5] [INFO] [1791274829.726278364] [oroha_power]: oroha_power: /dev/oroha_pico @ 115200, calib sensing-20260828
+[ros2_control_node-1] [INFO] [1791274831.773554599] [controller_manager]: Loading controller : 'joint_state_broadcaster' of type 'joint_state_broadcaster/JointStateBroadcaster'
+[ros2_control_node-1] [INFO] [1791274831.773624081] [controller_manager]: Loading controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1791274831.779207569] [controller_manager]: Controller 'joint_state_broadcaster' node arguments: --ros-args --params-file /home/oroha/oroha_claude/install/oroha_bringup/share/oroha_bringup/config/oroha_controllers.yaml 
+[spawner-3] [INFO] [1791274831.878383682] [spawner_joint_state_broadcaster]: Loaded joint_state_broadcaster
+[ros2_control_node-1] [INFO] [1791274831.961516401] [controller_manager]: Configuring controller: 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1791274831.961775216] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published
+[ros2_control_node-1] [INFO] [1791274831.978616515] [controller_manager]: Activating controllers: [ joint_state_broadcaster ]
+[ros2_control_node-1] [INFO] [1791274832.074884041] [controller_manager]: Successfully switched controllers!
+[spawner-3] [INFO] [1791274832.178206626] [spawner_joint_state_broadcaster]: Configured and activated joint_state_broadcaster
+[spawner-4] [INFO] [1791274832.366145206] [spawner_diff_cont]: waiting for service /controller_manager/list_controllers to become available...
+[INFO] [spawner-3]: process has finished cleanly [pid 29135]
+[ros2_control_node-1] [INFO] [1791274834.870885101] [controller_manager]: Loading controller : 'diff_cont' of type 'diff_drive_controller/DiffDriveController'
+[ros2_control_node-1] [INFO] [1791274834.870982101] [controller_manager]: Loading controller 'diff_cont'
+[ros2_control_node-1] [INFO] [1791274834.875384981] [controller_manager]: Controller 'diff_cont' node arguments: --ros-args --params-file /home/oroha/oroha_claude/install/oroha_bringup/share/oroha_bringup/config/oroha_controllers.yaml 
+[spawner-4] [INFO] [1791274834.978594456] [spawner_diff_cont]: Loaded diff_cont
+[ros2_control_node-1] [INFO] [1791274834.980953377] [controller_manager]: Configuring controller: 'diff_cont'
+[ros2_control_node-1] [INFO] [1791274835.079034585] [controller_manager]: Activating controllers: [ diff_cont ]
+[ros2_control_node-1] [INFO] [1791274835.176059405] [controller_manager]: Successfully switched controllers!
+[spawner-4] [INFO] [1791274835.284155389] [spawner_diff_cont]: Configured and activated diff_cont
+[INFO] [spawner-4]: process has finished cleanly [pid 29136]
+[ros2_control_node-1] [WARN] [1791274835.575590443] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274836.575930552] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274837.576317495] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274838.675633421] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274839.676011179] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274840.676379177] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274841.776676749] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274842.875050418] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274843.875415546] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274844.875822729] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274845.876191857] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274846.975589116] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274847.975937281] [diff_cont]: Velocity command timed out. Braking.
+[power_node-5] [INFO] [1791274848.099372030] [oroha_power]: #ZERO gp28=2032.270 gp27=2034.785 rail=3.3018 rail_corr=1.003989 n=1024
+[ros2_control_node-1] [WARN] [1791274848.976331928] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274850.076256982] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274851.175998833] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274852.176384665] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274853.275714572] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274854.276102145] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274855.276451439] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274856.375802625] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274857.376181104] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274858.476479954] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274859.575842955] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274860.576198360] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274861.675560731] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274862.675971451] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274863.676316764] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274864.775708338] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274865.776080392] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274866.876398279] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274867.975717576] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274868.976107666] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274870.076443905] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274871.175775869] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274872.176134663] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274873.274430795] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274874.274855941] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274875.276194234] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274876.276609769] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274877.375915103] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274878.376271230] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274879.475628286] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274880.575985710] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274881.576328023] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274882.675659024] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274883.676051725] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274884.776366557] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274885.874696467] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274886.876104352] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274887.975423259] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274888.975823850] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274889.976197756] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274891.075588589] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274892.075916198] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274893.076312474] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274894.175653049] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274895.176018862] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274896.176383434] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274897.275724064] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274898.276118284] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274899.277625317] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274900.375852634] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274901.376234892] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274902.474504598] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274903.475934724] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274904.476340499] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274905.575676166] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274906.576113887] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274907.576427292] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274908.675759996] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274909.676159865] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274910.775478587] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274911.775850993] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274912.776243491] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274913.874573549] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274914.875980323] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274915.876336340] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274916.975723080] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274917.976074393] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274919.076404095] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274920.175733707] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274921.176129483] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274922.276458666] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274923.375821222] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274924.376194757] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274925.475521257] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274926.475913274] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274927.476318383] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274928.575624920] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274929.575980678] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274930.576364991] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274931.675717954] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274932.676120323] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274933.676488302] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274934.775833969] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791274935.776214875] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275033.475578534] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275034.475991236] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275035.476362382] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275036.575688901] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275037.576065158] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275038.675382955] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275039.775702582] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275040.776094525] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275041.876411690] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275042.975758523] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275043.976146892] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275045.075471966] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275046.175817076] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275047.176201963] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275048.274505872] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275049.277273940] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275050.376222515] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275051.475552108] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275052.475956458] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275053.576265715] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275054.675648215] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275055.775952454] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275056.776333193] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275057.875694564] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275058.876066599] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275059.876495171] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275060.975792505] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275061.976198336] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275063.075525077] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275064.075962816] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275065.076302055] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275066.175641722] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275067.176018535] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275068.176423292] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275069.275762978] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275070.276149902] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275071.375498624] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275072.375899826] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275073.376263565] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275074.475610454] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275075.575960360] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275076.576324487] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275077.674646008] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275078.675048673] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275079.675432597] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275080.775766577] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275081.776201130] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275082.875758093] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275083.875859573] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275084.976187146] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275086.076504514] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275100.575653040] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275101.576051805] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275102.675427335] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275103.775713547] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275104.776070109] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275105.875410694] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275106.875797608] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275107.976121543] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275109.074467778] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275110.074873118] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275111.075248161] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275112.175585762] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275113.175992879] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275114.176352126] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275115.274688177] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275116.275091535] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275117.275514726] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275118.275879195] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275119.276377701] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275120.375624231] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275121.375990904] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275122.376392947] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275123.475732458] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275124.476113038] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275125.576456214] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275126.675775262] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275127.676152490] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275128.775482001] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275129.775875748] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275130.776254291] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275131.875588765] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275132.875970420] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275133.876360111] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275134.975676067] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275135.976110517] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275136.976463060] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275138.075781460] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275139.076170059] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275140.175545848] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275141.175899576] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275142.176297231] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275143.275628020] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275144.375959751] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275145.376339590] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275146.475656360] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275147.476035941] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275148.576382727] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275149.675726238] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275150.776069673] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275151.776440698] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275152.875755931] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275153.876124771] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275154.976457002] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275156.075797661] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275157.076194889] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275158.175582160] [diff_cont]: Velocity command timed out. Braking.
+[ros2_control_node-1] [WARN] [1791275159.175932740] [diff_cont]: Velocity command timed out. Braking.
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[ros2_control_node-1] [INFO] [1791275159.567106381] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-1] [INFO] [1791275159.567198973] [controller_manager]: Shutdown request received....
+[ros2_control_node-1] [INFO] [1791275159.567271417] [controller_manager]: Shutting down all controllers in the controller manager.
+[ros2_control_node-1] [INFO] [1791275159.567304028] [controller_manager]: Deactivating controller 'diff_cont'
+[ros2_control_node-1] [INFO] [1791275159.567392936] [controller_manager]: Shutting down controller 'diff_cont'
+[ros2_control_node-1] [INFO] [1791275159.567625565] [controller_manager]: Deactivating controller 'joint_state_broadcaster'
+[ros2_control_node-1] [INFO] [1791275159.567697490] [controller_manager]: Shutting down controller 'joint_state_broadcaster'
+[INFO] [power_node-5]: sending signal 'SIGINT' to process[power_node-5]
+[INFO] [robot_state_publisher-2]: sending signal 'SIGINT' to process[robot_state_publisher-2]
+[INFO] [ros2_control_node-1]: sending signal 'SIGINT' to process[ros2_control_node-1]
+[robot_state_publisher-2] [INFO] [1791275159.567866212] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[robot_state_publisher-2] [INFO] [1791275159.573837495] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-1] [INFO] [1791275159.575694251] [resource_manager]: 'deactivate' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1791275159.631619276] [controller_manager.hardware_component.system.oroha_base]: deactivate: stop + torque_off
+[ros2_control_node-1] [INFO] [1791275159.631728257] [resource_manager]: Successful 'deactivate' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1791275159.631742516] [resource_manager]: 'shutdown' hardware 'oroha_base' 
+[ros2_control_node-1] [INFO] [1791275159.631752553] [resource_manager]: Successful 'shutdown' of hardware 'oroha_base'
+[ros2_control_node-1] [INFO] [1791275159.631838331] [controller_manager]: Shutting down the controller manager.
+[ros2_control_node-1] [ERROR] [1791275159.631994738] [controller_manager.pal_statistics]: Exception in publisher thread: context cannot be slept with because it's invalid!. Aborting!
+[ros2_control_node-1] [ERROR] [1791275159.631994812] [controller_manager.pal_statistics]: Exception in publisher thread: context cannot be slept with because it's invalid!. Aborting!
+[ros2_control_node-1] [INFO] [1791275159.635105472] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 29134]
+[ros2_control_node-1] [INFO] [1791275159.726457660] [controller_manager.pal_statistics]: Async messages lost 0
+[ros2_control_node-1] [INFO] [1791275159.726496493] [controller_manager.pal_statistics]: publish_async_failures_ 0
+[ros2_control_node-1] [INFO] [1791275159.728829359] [controller_manager.pal_statistics]: Async messages lost 0
+[ros2_control_node-1] [INFO] [1791275159.728856859] [controller_manager.pal_statistics]: publish_async_failures_ 0
+[INFO] [ros2_control_node-1]: process has finished cleanly [pid 29133]
+[INFO] [launch.user]: [oroha safety] ros2_control_node exited -> MD400 stop: id 2 (LEFT): set_velocity(0) + stop() + torque_off() -> ok; id 1 (RIGHT): set_velocity(0) + stop() + torque_off() -> ok
+[INFO] [power_node-5]: process has finished cleanly [pid 29137]

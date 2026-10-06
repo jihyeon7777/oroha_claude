@@ -1,0 +1,4 @@
+records/tests/T20261006-08/di_watch_estop.csv
+records/tests/T20261006-09/launch.log
+records/tests/T20261006-09/uncommitted.diff
+records/tests/T20261006-09/versions.yaml
