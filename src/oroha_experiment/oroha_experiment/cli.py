@@ -2,7 +2,9 @@
 
   oroha_exp run --path square --side 1.5 --v 0.3 --repeats 3 [--series S20260925-01] [--yes]
   oroha_exp run --path straight --length 2.0 --v 0.2
-  oroha_exp run --path circle --radius 0.75 --v 0.3 --direction cw
+  oroha_exp run --path circle --radius 0.75 --v 0.15 --sides 12        # polygon O (D-17)
+  oroha_exp run --path s_curve --radius 0.38 --v 0.15 --sides 12       # polygon S (D-17)
+  oroha_exp run --path circle --radius 0.75 --v 0.3 --direction cw    # true arc (lifted only)
   oroha_exp run --path s_curve --radius 0.6 --v 0.25 --arc-deg 180
   oroha_exp conditions            # edit records/conditions_latest.yaml interactively
   oroha_exp conditions --set surface="epoxy floor" --set floor_slope_deg=0.2     # non-interactive
@@ -152,6 +154,7 @@ def path_params(a) -> dict:
             "angle_deg": getattr(a, "angle_deg", None),
             "turn_w": a.turn_w, "corner_radius": a.corner_radius, "direction": a.direction,
             "arc_deg": a.arc_deg, "first": a.first, "join": a.join, "dwell": a.dwell, "v": a.v,
+            "sides": a.sides,
             "pre_rest": a.pre_rest, "post_rest": a.post_rest}
     return {k: v for k, v in cand.items() if k in accepted and v is not None}
 
@@ -332,6 +335,8 @@ def main(argv=None) -> int:
     r.add_argument("--corner", choices=["spot", "arc"])
     r.add_argument("--turn-w", type=float)
     r.add_argument("--corner-radius", type=float)
+    r.add_argument("--sides", type=int, help="circle / s_curve as an inscribed N-gon per turn, stop-turn-go "
+                   "(D-17: the MD400 cannot brake an inner wheel, so true arcs fail on the ground)")
     r.add_argument("--direction", choices=["ccw", "cw"])
     r.add_argument("--arc-deg", type=float)
     r.add_argument("--first", choices=["left", "right"])

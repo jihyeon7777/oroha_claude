@@ -149,3 +149,28 @@ def test_body_rectangle_footprint_measured_robot():
     assert P.footprint(P.square(1.0, 0.2), body).placement(3.0, 0.3) == "wall"
     # the circle model is still available and more conservative
     assert P.footprint(P.straight(1.5, 0.2), 0.48).placement(3.0, 0.3) == "none"
+
+
+def test_polygon_arcs_close_like_the_true_arcs():
+    """D-17: circle/S as stop-turn-go chords (the MD400 cannot brake an inner wheel)."""
+    for sides in (8, 12):
+        p = P.circle(0.75, 0.15, sides=sides)
+        end = p.ideal_path(0.01)[-1]
+        assert end.x == pytest.approx(0.0, abs=2e-3) and end.y == pytest.approx(0.0, abs=2e-3)
+        assert math.degrees(end.yaw) == pytest.approx(360.0, abs=0.2)
+        kinds = [s.kind for s in p.segments]
+        assert "arc" not in kinds                      # only straights, spot turns and rests
+        chords = [s for s in p.segments if s.kind == "straight"]
+        assert len(chords) == sides
+        chord = P._shape_area(chords[0].duration, chords[0].ramp) * chords[0].v_peak
+        assert chord == pytest.approx(2 * 0.75 * math.sin(math.pi / sides), rel=1e-6)
+    a, b = P.s_curve(0.4, 0.15), P.s_curve(0.4, 0.15, sides=12)
+    ea, eb = a.ideal_path(0.01)[-1], b.ideal_path(0.01)[-1]
+    assert (eb.x, eb.y) == pytest.approx((ea.x, ea.y), abs=3e-3) and eb.yaw == pytest.approx(ea.yaw, abs=3e-3)
+    # the opposite half turns at the inflection are merged away: 6 + 6 chords, 12 turns
+    assert sum(s.kind == "spot" for s in b.segments) == 12
+    # vertex turns sweep the body half-diagonal, so a polygon S needs a little more room than the arc
+    assert P.footprint(b).placement(3.0, 0.3) == "none"
+    assert P.footprint(P.s_curve(0.38, 0.15, sides=12)).placement(3.0, 0.3) == "wall"
+    with pytest.raises(ValueError):
+        P.circle(0.75, 0.15, sides=2)

@@ -305,14 +305,46 @@ def straight(length: float, v: float, limits: Limits = Limits(),
     return _wrap("straight", {"length": length, "v": v}, [seg], limits, pre_rest, post_rest, 0.0)
 
 
-def circle(radius: float, v: float, direction: str = "ccw", limits: Limits = Limits(),
+def poly_arc(radius: float, angle: float, sides: int, v: float, turn_w: float,
+             limits: Limits, label: str) -> List[Tuple[str, Segment]]:
+    """An arc of `angle` rad (+ = left) as chords of the circle of `radius`: `sides` chords per
+    full turn, stop-turn-go. Half a corner turn at both ends, so the start/end poses are those
+    of the true arc and every vertex lies on the circle. Returned as (kind, segment) pairs so a
+    caller can merge the half turns where two arcs meet.
+
+    Why (D-17, T20261006-10/11): the MD400 gives no braking torque to a wheel that runs faster
+    than its command, so a skid-steer arc (inner side must hold back) cannot be driven; straight
+    runs and in-place turns can."""
+    k = max(1, int(round(sides * abs(angle) / (2.0 * math.pi))))
+    alpha = angle / k                                  # signed corner turn
+    chord = 2.0 * radius * math.sin(abs(alpha) / 2.0)
+    _require(v, 0.0, limits)
+    _require(0.0, turn_w, limits)
+    out: List[Tuple[str, Segment]] = [("turn", spot_segment(alpha / 2.0, turn_w, limits.ang_accel, f"{label}_t0"))]
+    for i in range(k):
+        out.append(("side", straight_segment(chord, v, limits.accel, f"{label}_s{i + 1}")))
+        a = alpha if i < k - 1 else alpha / 2.0
+        out.append(("turn", spot_segment(a, turn_w, limits.ang_accel, f"{label}_t{i + 1}")))
+    return out
+
+
+def circle(radius: float, v: float, direction: str = "ccw", sides: int = 0, turn_w: float = 0.5,
+           dwell: float = 0.5, limits: Limits = Limits(),
            pre_rest: float = 3.0, post_rest: float = 3.0) -> Profile:
-    """One full circle of `radius` m at `v` m/s. direction ccw (left) or cw (right)."""
+    """One full circle of `radius` m at `v` m/s. direction ccw (left) or cw (right).
+    sides = 0: a true arc; sides = N: inscribed N-gon, stop-turn-go (poly_arc, D-17)."""
     sign = 1.0 if direction == "ccw" else -1.0
+    params = {"radius": radius, "v": v, "direction": direction, "sides": sides}
+    if sides:
+        if sides < 3:
+            raise ValueError("sides must be >= 3 (or 0 for a true arc)")
+        motion = [s for _, s in poly_arc(radius, sign * 2.0 * math.pi, sides, v, turn_w, limits, "c")]
+        params.update({"turn_w": turn_w, "dwell": dwell,
+                       "chord_m": round(2.0 * radius * math.sin(math.pi / sides), 4)})
+        return _wrap("circle", params, motion, limits, pre_rest, post_rest, dwell)
     _require(v, v / radius, limits)
     seg = arc_segment(radius, sign * 2.0 * math.pi, v, limits.accel, "circle")
-    return _wrap("circle", {"radius": radius, "v": v, "direction": direction},
-                 [seg], limits, pre_rest, post_rest, 0.0)
+    return _wrap("circle", params, [seg], limits, pre_rest, post_rest, 0.0)
 
 
 def square(side: float, v: float, corner: str = "spot", turn_w: float = 0.5,
@@ -346,12 +378,25 @@ def square(side: float, v: float, corner: str = "spot", turn_w: float = 0.5,
 
 
 def s_curve(radius: float, v: float, arc_deg: float = 180.0, first: str = "left",
-            join: str = "continuous", dwell: float = 1.0, limits: Limits = Limits(),
-            pre_rest: float = 3.0, post_rest: float = 3.0) -> Profile:
+            join: str = "continuous", dwell: float = 1.0, sides: int = 0, turn_w: float = 0.5,
+            limits: Limits = Limits(), pre_rest: float = 3.0, post_rest: float = 3.0) -> Profile:
     """S: an arc of `arc_deg` to the `first` side, then the same arc the other way.
-    join='continuous' keeps speed through the inflection; 'stop' ramps to zero between."""
+    join='continuous' keeps speed through the inflection; 'stop' ramps to zero between.
+    sides = N: both arcs as chords of the N-gon, stop-turn-go (D-17); the two half turns at
+    the inflection cancel and are dropped; `dwell` is the stop at every vertex."""
     ang = math.radians(arc_deg)
     left = first == "left"
+    if sides:
+        if sides < 3:
+            raise ValueError("sides must be >= 3 (or 0 for true arcs)")
+        s1 = 1.0 if left else -1.0
+        a1 = poly_arc(radius, s1 * ang, sides, v, turn_w, limits, "a")
+        a2 = poly_arc(radius, -s1 * ang, sides, v, turn_w, limits, "b")
+        motion = [s for _, s in a1[:-1]] + [s for _, s in a2[1:]]     # opposite half turns cancel
+        return _wrap("s_curve", {"radius": radius, "v": v, "arc_deg": arc_deg, "first": first,
+                                 "sides": sides, "turn_w": turn_w, "dwell": dwell,
+                                 "chord_m": round(2.0 * radius * math.sin(math.pi / sides), 4)},
+                     motion, limits, pre_rest, post_rest, dwell)
     _require(v, v / radius, limits)
     if join == "continuous":
         motion = [s_curve_segment(radius, ang, v, limits.accel, left, "s")]
@@ -468,6 +513,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--first", default="left")
     ap.add_argument("--join", default="continuous")
     ap.add_argument("--angle-deg", type=float, default=360.0)
+    ap.add_argument("--sides", type=int, default=0, help="circle / s_curve as an N-gon (D-17)")
     ap.add_argument("--body", type=float, nargs=2, default=[BODY_LENGTH, BODY_WIDTH], metavar=("L", "W"),
                     help="robot outer length and width [m] (measured 0.80 x 0.53)")
     ap.add_argument("--half-diag", type=float, help="use the rotation-safe circle of this radius instead")
@@ -481,13 +527,14 @@ def main(argv: Iterable[str] | None = None) -> int:
     if a.path == "straight":
         p = straight(a.length, **common)
     elif a.path == "circle":
-        p = circle(a.radius, direction=a.direction, **common)
+        p = circle(a.radius, direction=a.direction, sides=a.sides, turn_w=a.turn_w, **common)
     elif a.path == "square":
         p = square(a.side, corner=a.corner, turn_w=a.turn_w, direction=a.direction, **common)
     elif a.path == "spot":
         p = spot(a.angle_deg, turn_w=a.turn_w)
     else:
-        p = s_curve(a.radius, arc_deg=a.arc_deg, first=a.first, join=a.join, **common)
+        p = s_curve(a.radius, arc_deg=a.arc_deg, first=a.first, join=a.join, sides=a.sides,
+                    turn_w=a.turn_w, **common)
 
     end = p.ideal_path(a.dt)[-1]
     print(f"{p.name} {p.params}")
