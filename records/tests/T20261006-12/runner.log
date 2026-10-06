@@ -1,0 +1,41 @@
+[INFO] [1791277088.615174778] [oroha_experiment]: experiment runner ready; runs -> /home/oroha/oroha_claude/data/runs
+[INFO] [1791277168.312786586] [oroha_experiment]: [R20261006-175924-spot] ARMED spot {'angle_deg': 360.0}
+[INFO] [1791277168.313764917] [oroha_experiment]: [R20261006-175924-spot] PREFLIGHT_OK 20261006T083114Z.json
+[INFO] [1791277171.983091233] [oroha_experiment]: [R20261006-175924-spot] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261006-175924-spot/bag
+[INFO] [1791277174.992998652] [oroha_experiment]: [R20261006-175924-spot] START t_total=19.07
+[INFO] [1791277174.997380901] [oroha_experiment]: [R20261006-175924-spot] SEGMENT rest_pre
+[INFO] [1791277177.988499753] [oroha_experiment]: [R20261006-175924-spot] SEGMENT spot
+[INFO] [1791277191.087955159] [oroha_experiment]: [R20261006-175924-spot] SEGMENT rest_post
+[INFO] [1791277194.088189360] [oroha_experiment]: [R20261006-175924-spot] END profile complete
+[INFO] [1791277195.406318213] [oroha_experiment]: [R20261006-175924-spot] BAG_STOPPED rc=0
+[INFO] [1791277195.416176560] [oroha_experiment]: run R20261006-175924-spot finished: DONE
+[INFO] [1791277213.254258158] [oroha_experiment]: [R20261006-180009-spot] ARMED spot {'angle_deg': -360.0}
+[INFO] [1791277213.255419452] [oroha_experiment]: [R20261006-180009-spot] PREFLIGHT_OK 20261006T083114Z.json
+[INFO] [1791277217.322350831] [oroha_experiment]: [R20261006-180009-spot] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261006-180009-spot/bag
+[INFO] [1791277218.080674713] [oroha_experiment]: [R20261006-180009-spot] START t_total=19.07
+[INFO] [1791277218.087378475] [oroha_experiment]: [R20261006-180009-spot] SEGMENT rest_pre
+[INFO] [1791277221.087952046] [oroha_experiment]: [R20261006-180009-spot] SEGMENT spot
+[INFO] [1791277234.188467709] [oroha_experiment]: [R20261006-180009-spot] SEGMENT rest_post
+[INFO] [1791277237.188629558] [oroha_experiment]: [R20261006-180009-spot] END profile complete
+[INFO] [1791277238.555342998] [oroha_experiment]: [R20261006-180009-spot] BAG_STOPPED rc=0
+[INFO] [1791277238.568197837] [oroha_experiment]: run R20261006-180009-spot finished: DONE
+[INFO] [1791277252.166089805] [oroha_experiment]: [R20261006-180048-spot] ARMED spot {'angle_deg': 360.0}
+[INFO] [1791277252.167122877] [oroha_experiment]: [R20261006-180048-spot] PREFLIGHT_OK 20261006T083114Z.json
+[INFO] [1791277256.028636769] [oroha_experiment]: [R20261006-180048-spot] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261006-180048-spot/bag
+[INFO] [1791277257.401523564] [oroha_experiment]: [R20261006-180048-spot] START t_total=19.07
+[INFO] [1791277257.439012103] [oroha_experiment]: [R20261006-180048-spot] SEGMENT rest_pre
+[INFO] [1791277260.446571805] [oroha_experiment]: [R20261006-180048-spot] SEGMENT spot
+[INFO] [1791277273.487990554] [oroha_experiment]: [R20261006-180048-spot] SEGMENT rest_post
+[INFO] [1791277276.488337626] [oroha_experiment]: [R20261006-180048-spot] END profile complete
+[INFO] [1791277277.804033039] [oroha_experiment]: [R20261006-180048-spot] BAG_STOPPED rc=0
+[INFO] [1791277277.820095186] [oroha_experiment]: run R20261006-180048-spot finished: DONE
+[INFO] [1791277292.915522206] [oroha_experiment]: [R20261006-180129-spot] ARMED spot {'angle_deg': -360.0}
+[INFO] [1791277292.916551759] [oroha_experiment]: [R20261006-180129-spot] PREFLIGHT_OK 20261006T083114Z.json
+[INFO] [1791277296.773757772] [oroha_experiment]: [R20261006-180129-spot] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261006-180129-spot/bag
+[INFO] [1791277297.321351790] [oroha_experiment]: [R20261006-180129-spot] START t_total=19.07
+[INFO] [1791277297.343257719] [oroha_experiment]: [R20261006-180129-spot] SEGMENT rest_pre
+[INFO] [1791277300.338901171] [oroha_experiment]: [R20261006-180129-spot] SEGMENT spot
+[INFO] [1791277313.388386142] [oroha_experiment]: [R20261006-180129-spot] SEGMENT rest_post
+[INFO] [1791277316.389021564] [oroha_experiment]: [R20261006-180129-spot] END profile complete
+[INFO] [1791277317.763427522] [oroha_experiment]: [R20261006-180129-spot] BAG_STOPPED rc=0
+[INFO] [1791277317.783764714] [oroha_experiment]: run R20261006-180129-spot finished: DONE

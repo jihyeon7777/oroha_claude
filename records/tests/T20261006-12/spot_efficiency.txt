@@ -1,0 +1,5 @@
+R20261006-175924-spot cmd +360 deg DONE: gyro +255.3 deg, wheel +357.1 deg, eff 0.715
+R20261006-180009-spot cmd -360 deg DONE: gyro -254.4 deg, wheel -356.9 deg, eff 0.713
+R20261006-180048-spot cmd +360 deg DONE: gyro +255.7 deg, wheel +357.2 deg, eff 0.716
+R20261006-180129-spot cmd -360 deg DONE: gyro -255.2 deg, wheel -357.3 deg, eff 0.714
+mean eff 0.7144 sd 0.0012 -> B_eff 0.6313

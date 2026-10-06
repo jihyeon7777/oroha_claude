@@ -112,7 +112,7 @@ class ExperimentRunner(Node):
         d("left_joint", "motor_L")
         d("right_joint", "motor_R")
         d("wheel_radius", 0.003580)     # defaults; replaced by diff_cont's values at ARM when readable
-        d("wheel_separation", 0.451)
+        d("wheel_separation", 0.631)    # effective track (D-18)
         d("log_mirror_max", 50)         # NOTE events from /rosout per run
         d("abort_zero_s", 1.0)
         d("direct_stop_on_fail", True)      # Modbus stop of both MD400 after a FAIL (hardware link lost)

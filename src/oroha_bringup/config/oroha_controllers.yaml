@@ -47,7 +47,12 @@ diff_cont:
     # radius 0.1239 m; total drivetrain ratio 34.615 (gearbox 30:1 x belt 26T:30T).
     # Re-measure after re-inflating tyres or changing payload.
     wheel_radius: 0.003580
-    wheel_separation: 0.451         # tape, 2026-09-05. 4-wheel skid-steer: effective track for yaw may be larger
+    # EFFECTIVE track for yaw, not the tape value: a 4-wheel skid-steer slips sideways in a turn, so
+    # the body turns only 0.714 x what the wheels would give at the physical track 0.451 m (in-place
+    # turns 0.5 rad/s, gyro vs wheels, 4 runs +-360 deg, sd 0.001; ~50 kg, 10 psi, room floor;
+    # T20261006-12, D-18). 0.451 / 0.714 = 0.631: commanded and odometry yaw then match the body.
+    # Re-measure after a floor, load or tyre-pressure change.
+    wheel_separation: 0.631
     base_frame_id: base_footprint   # URDF root; odom -> base_footprint -> base_link (single TF parent)
     odom_frame_id: odom
     enable_odom_tf: true

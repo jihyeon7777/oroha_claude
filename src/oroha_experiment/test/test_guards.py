@@ -12,7 +12,7 @@ def _run(g, v, w, ml, mr, secs=2.0, dt=0.05):
 
 
 def test_expected_matches_diff_drive():
-    g = WheelGuard(wheel_radius=0.003635)       # radius in use on 2026-10-01 (T20261001-03)
+    g = WheelGuard(wheel_radius=0.003635, wheel_separation=0.451)   # values in use on 2026-10-01 (T20261001-03)
     l, r = g.expected(0.2, 0.0)
     assert abs(l - 55.02) < 0.05 and abs(r - l) < 1e-9            # T20261001-03: 54.9 rad/s measured
     l, r = g.expected(0.0, 2.0)

@@ -38,7 +38,7 @@ class Limits:
     accel: float = 0.3            # m/s^2, linear ramp
     ang_accel: float = 1.0        # rad/s^2, angular ramp (spot turns)
     wheel_v_max: float = 1.0      # m/s, per side (3000 rpm = 1.14 m/s)
-    half_track: float = 0.2255    # m, wheel_separation / 2
+    half_track: float = 0.3157    # m, diff_cont wheel_separation / 2 (effective track 0.631, D-18)
 
 
 # ---------------------------------------------------------------- trapezoid --
