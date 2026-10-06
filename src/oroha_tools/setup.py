@@ -31,6 +31,7 @@ setup(
             "oroha_bus_probe = oroha_tools.bus_probe:main",
             "oroha_hw_recover = oroha_tools.hw_recover:main",
             "oroha_di_watch = oroha_tools.di_watch:main",
+            "oroha_brake_test = oroha_tools.brake_test:main",
         ],
     },
 )
