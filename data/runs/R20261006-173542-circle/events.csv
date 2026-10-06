@@ -1,0 +1,9 @@
+stamp_ns,t_run,event,segment_index,detail
+1791275746563570871,-1.0,ARMED,-1,"circle {'radius': 0.75, 'v': 0.15}"
+1791275746565007479,-1.0,PREFLIGHT_OK,-1,20261006T083114Z.json
+1791275749614268494,-1.0,BAG_STARTED,-1,/home/oroha/oroha_claude/data/runs/R20261006-173542-circle/bag
+1791275751979476828,0.0108,START,-1,t_total=37.92
+1791275751998298323,0.0297,SEGMENT,0,rest_pre
+1791275754998440948,3.0298,SEGMENT,1,circle
+1791275757398749444,5.4301,FAIL,1,"LEFT wheel not following the command: expected +29.3 rad/s, measured +50.6 for 1.5 s; Pico I L 0.10 R 0.71 A; MD400 status L 0x00 R 0x00; DI L 0x34 R 0x14 (that branch idle -> MD400 not driving (comm lost / alarm?))"
+1791275758765134160,-1.0,BAG_STOPPED,-1,rc=0

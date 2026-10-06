@@ -1,0 +1,33 @@
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1791275747.273723326] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1791275747.273741696] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1791275747.282473158] [rosbag2_recorder]: Starting recording to '/home/oroha/oroha_claude/data/runs/R20261006-173542-circle/bag'
+[INFO] [1791275747.287188185] [rosbag2_recorder]: Subscribed to topic '/rosout'
+[INFO] [1791275747.287536832] [rosbag2_recorder]: Listening for topics...
+[INFO] [1791275747.287616554] [rosbag2_recorder]: Recording...
+[INFO] [1791275747.287562573] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1791275747.376494724] [rosbag2_recorder]: Subscribed to topic '/imu/data'
+[INFO] [1791275747.381586990] [rosbag2_recorder]: Subscribed to topic '/diagnostics'
+[INFO] [1791275747.383895467] [rosbag2_recorder]: Subscribed to topic '/oroha_power/battery'
+[INFO] [1791275747.385935166] [rosbag2_recorder]: Subscribed to topic '/oroha_power/calibration_event'
+[INFO] [1791275747.388046531] [rosbag2_recorder]: Subscribed to topic '/imu/mag'
+[INFO] [1791275747.390177841] [rosbag2_recorder]: Subscribed to topic '/imu/temperature'
+[INFO] [1791275747.393503871] [rosbag2_recorder]: Subscribed to topic '/oroha_power/sample'
+[INFO] [1791275748.212309784] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel'
+[INFO] [1791275748.214485150] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/event'
+[INFO] [1791275748.218056808] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/status'
+[INFO] [1791275748.977414782] [rosbag2_recorder]: Subscribed to topic '/joint_states'
+[INFO] [1791275748.986471724] [rosbag2_recorder]: Subscribed to topic '/dynamic_joint_states'
+[INFO] [1791275748.991543176] [rosbag2_recorder]: Subscribed to topic '/diff_cont/odom'
+[INFO] [1791275748.993544078] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel_out'
+[INFO] [1791275748.997740032] [rosbag2_recorder]: Subscribed to topic '/tf'
+[WARN] [1791275749.261096698] [rosbag2_recorder]: New publisher discovered on topic '/tf', offering incompatible QoS. No messages will be sent to it. Last incompatible policy: DURABILITY_QOS_POLICY
+[WARN] [1791275749.261315864] [rosbag2_recorder]: A new publisher for subscribed topic /tf was found offering RMW_QOS_POLICY_DURABILITY_VOLATILE, but rosbag2 already subscribed requesting RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL. Messages from this new publisher will not be recorded.
+[INFO] [1791275749.600795543] [rosbag2_recorder]: Subscribed to topic '/tf_static'
+[INFO] [1791275749.603660444] [rosbag2_recorder]: Subscribed to topic '/robot_description'
+[INFO] [1791275749.603912758] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[INFO] [1791275749.604014665] [rosbag2_recorder]: Topics discovery stopped.
+[INFO] [1791275758.448929484] [rosbag2_recorder]: Pausing recording.
+[INFO] [1791275758.451506367] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1791275758.472623746] [rosbag2_recorder]: Recording stopped
+[WARN] [1791275758.472889634] [rosbag2_recorder]: Number of messages lost on the transport layer: 2
+[INFO] [1791275758.477198198] [rosbag2_recorder]: Event publisher thread: Exited

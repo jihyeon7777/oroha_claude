@@ -1,0 +1,30 @@
+[INFO] [1791275489.674648311] [oroha_experiment]: experiment runner ready; runs -> /home/oroha/oroha_claude/data/runs
+[INFO] [1791275614.560101851] [oroha_experiment]: [R20261006-173330-straight] ARMED straight {'length': 1.0, 'v': 0.15}
+[INFO] [1791275614.561458663] [oroha_experiment]: [R20261006-173330-straight] PREFLIGHT_OK 20261006T083114Z.json
+[INFO] [1791275618.232232017] [oroha_experiment]: [R20261006-173330-straight] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261006-173330-straight/bag
+[INFO] [1791275621.008231333] [oroha_experiment]: [R20261006-173330-straight] START t_total=13.17
+[INFO] [1791275621.012677267] [oroha_experiment]: [R20261006-173330-straight] SEGMENT rest_pre
+[INFO] [1791275624.000222902] [oroha_experiment]: [R20261006-173330-straight] SEGMENT straight
+[INFO] [1791275631.200172634] [oroha_experiment]: [R20261006-173330-straight] SEGMENT rest_post
+[INFO] [1791275634.199923075] [oroha_experiment]: [R20261006-173330-straight] END profile complete
+[INFO] [1791275635.566752160] [oroha_experiment]: [R20261006-173330-straight] BAG_STOPPED rc=0
+[INFO] [1791275635.579394261] [oroha_experiment]: run R20261006-173330-straight finished: DONE
+[INFO] [1791275659.383818596] [oroha_experiment]: [R20261006-173415-spot] ARMED spot {'angle_deg': 360.0}
+[INFO] [1791275659.384751335] [oroha_experiment]: [R20261006-173415-spot] PREFLIGHT_OK 20261006T083114Z.json
+[INFO] [1791275660.394365114] [oroha_experiment]: [R20261006-173415-spot] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261006-173415-spot/bag
+[INFO] [1791275662.135736466] [oroha_experiment]: [R20261006-173415-spot] START t_total=19.07
+[INFO] [1791275662.152202429] [oroha_experiment]: [R20261006-173415-spot] SEGMENT rest_pre
+[INFO] [1791275665.152400776] [oroha_experiment]: [R20261006-173415-spot] SEGMENT spot
+[INFO] [1791275678.200234824] [oroha_experiment]: [R20261006-173415-spot] SEGMENT rest_post
+[INFO] [1791275681.200572856] [oroha_experiment]: [R20261006-173415-spot] END profile complete
+[INFO] [1791275682.566604147] [oroha_experiment]: [R20261006-173415-spot] BAG_STOPPED rc=0
+[INFO] [1791275682.583079425] [oroha_experiment]: run R20261006-173415-spot finished: DONE
+[INFO] [1791275746.564641388] [oroha_experiment]: [R20261006-173542-circle] ARMED circle {'radius': 0.75, 'v': 0.15}
+[INFO] [1791275746.565758700] [oroha_experiment]: [R20261006-173542-circle] PREFLIGHT_OK 20261006T083114Z.json
+[INFO] [1791275749.615493287] [oroha_experiment]: [R20261006-173542-circle] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261006-173542-circle/bag
+[INFO] [1791275751.980543696] [oroha_experiment]: [R20261006-173542-circle] START t_total=37.92
+[INFO] [1791275751.999912060] [oroha_experiment]: [R20261006-173542-circle] SEGMENT rest_pre
+[INFO] [1791275755.000373000] [oroha_experiment]: [R20261006-173542-circle] SEGMENT circle
+[INFO] [1791275757.400730607] [oroha_experiment]: [R20261006-173542-circle] FAIL LEFT wheel not following the command: expected +29.3 rad/s, measured +50.6 for 1.5 s; Pico I L 0.10 R 0.71 A; MD400 status L 0x00 R 0x00; DI L 0x34 R 0x14 (that branch idle -> MD400 not driving (comm lost / alarm?))
+[INFO] [1791275758.766332732] [oroha_experiment]: [R20261006-173542-circle] BAG_STOPPED rc=0
+[INFO] [1791275758.788892051] [oroha_experiment]: run R20261006-173542-circle finished: FAILED
