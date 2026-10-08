@@ -1,0 +1,4 @@
+records/tests/T20261008-03/b6sum.py
+records/tests/T20261008-03/summary.txt
+records/tests/T20261008-03/uncommitted.diff
+records/tests/T20261008-03/versions.yaml
