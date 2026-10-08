@@ -71,6 +71,30 @@ def odom_summary(samples, ideal_end=None, gt=None) -> dict:
     return out
 
 
+def gyro_yaw_rest_corrected(samples, prof_rows) -> dict:
+    """Yaw change from START to the end of the samples with the gz bias of the run's rest_pre
+    window removed (the sensor is never zeroed — IMU read-only, D-19; T20261008-01: bias
+    0.0105 rad/s, the same before and after a run). Integrates on header stamps."""
+    from oroha_tools.power_analysis import rest_windows
+    win = [w for w in rest_windows(prof_rows) if w[0] == "rest_pre"]
+    if not samples or not win:
+        return {"gyro_yaw_rest_corrected_rad": None, "gyro_bias_rad_s": None}
+    a, b = win[0][1], win[0][2]
+    rest = [z for t, z in samples if a <= t <= b]
+    if len(rest) < 10:
+        return {"gyro_yaw_rest_corrected_rad": None, "gyro_bias_rad_s": None}
+    bias = sum(rest) / len(rest)
+    yaw, prev = 0.0, None
+    for t, z in samples:
+        if t < 0.0:
+            continue
+        if prev is not None:
+            yaw += (z - bias) * (t - prev)
+        prev = t
+    return {"gyro_yaw_rest_corrected_rad": round(yaw, 4), "gyro_bias_rad_s": round(bias, 6),
+            "gyro_bias_window_s": [round(a, 2), round(b, 2)]}
+
+
 def _yaw(q) -> float:
     return math.atan2(2.0 * (q.w * q.z + q.x * q.y), 1.0 - 2.0 * (q.y * q.y + q.z * q.z))
 
@@ -167,6 +191,7 @@ def export(run_dir: Path, out: Path) -> dict:
     imu_yaw_first = imu_yaw_last = None
     gyro_int = 0.0
     gyro_prev = None
+    gz_samples = []    # (t from START, gz) for the bias-corrected yaw (IMU read-only, D-19)
     joint_names = None
     diag = {}          # joint -> {"n", "stale", "stale_run", "stale_run_max", "seq", "status": {value: n}}
 
@@ -252,6 +277,8 @@ def export(run_dir: Path, out: Path) -> dict:
             if gyro_prev is not None and s_ns:
                 gyro_int += msg.angular_velocity.z * (s_ns - gyro_prev) * 1e-9
             gyro_prev = s_ns
+            if s_ns:
+                gz_samples.append(((s_ns - t0) * 1e-9, msg.angular_velocity.z))
             q, g, a = msg.orientation, msg.angular_velocity, msg.linear_acceleration
             w.row(name, {**base, "qx": q.x, "qy": q.y, "qz": q.z, "qw": q.w, "yaw": yaw,
                          "gx": g.x, "gy": g.y, "gz": g.z, "ax": a.x, "ay": a.y, "az": a.z,
@@ -318,7 +345,10 @@ def export(run_dir: Path, out: Path) -> dict:
         "imu": None if imu_yaw_first is None else {
             "fused_yaw_change_rad": round(imu_yaw_last - imu_yaw_first, 4),
             "gyro_integrated_yaw_rad": round(gyro_int, 4),
-            "note": "fused yaw uses the magnetometer (unreliable indoors); gyro integral drifts ~-3 deg/min before zero_gyros",
+            **gyro_yaw_rest_corrected(gz_samples, prof_rows),
+            "note": "use gyro_yaw_rest_corrected_rad (gz minus the rest_pre bias; the UM7 is never zeroed, D-19). "
+                    "gyro_integrated_yaw_rad keeps the bias (~0.6 deg/s on this unit); fused yaw uses the "
+                    "magnetometer (unreliable indoors)",
         },
         "conditions": meta.get("conditions"),
         "versions": meta.get("versions"),

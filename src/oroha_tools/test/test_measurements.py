@@ -60,3 +60,14 @@ def test_wheel_push_revs_and_dist_together():
     assert r["rolling_circumference_m"] == pytest.approx(2.372 / 3)
     from oroha_tools.wheel_push import REF_M_PER_COUNT
     assert r["diff_vs_ref_pct"] == pytest.approx((2.372 / 3115 / REF_M_PER_COUNT - 1) * 100)
+
+
+def test_gyro_yaw_rest_corrected_removes_the_bias():
+    from oroha_tools.export_csv import gyro_yaw_rest_corrected
+    prof = [{"t": f"{k * 0.05:.2f}", "seg_label": "rest_pre" if k < 60 else "spot"} for k in range(300)]
+    bias, rate = 0.0105, 0.5
+    samples = [(k * 0.02 - 1.0, bias + (rate if 3.0 <= k * 0.02 - 1.0 < 3.0 + 3.1416 / rate * 2 else 0.0))
+               for k in range(1000)]
+    out = gyro_yaw_rest_corrected(samples, prof)
+    assert abs(out["gyro_bias_rad_s"] - bias) < 1e-9
+    assert abs(out["gyro_yaw_rest_corrected_rad"] - 2 * 3.1416) < 0.03
