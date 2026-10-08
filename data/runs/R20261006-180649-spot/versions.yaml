@@ -1,0 +1,60 @@
+captured_utc: '2026-10-06T09:06:49Z'
+captured_local: 2026-10-06 18:06:49 KST
+timezone: Asia/Seoul
+chrony_tracking:
+- 'Reference ID    : 7986D768 (121.134.215.104)'
+- 'Stratum         : 3'
+- 'Ref time (UTC)  : Tue Oct 06 08:59:16 2026'
+- 'System time     : 0.000329925 seconds fast of NTP time'
+- 'Last offset     : +0.000127015 seconds'
+- 'RMS offset      : 0.000532255 seconds'
+host:
+  hostname: pi
+  os: Linux-6.8.0-1065-raspi-aarch64-with-glibc2.39
+  kernel: 6.8.0-1065-raspi
+  python: 3.12.3
+workspace:
+  path: /home/oroha/oroha_claude
+  head: b1a4a5a301beca9da6ab7c57747e4f82f1605f06
+  describe: b1a4a5a-dirty
+  branch: main
+  dirty: true
+external:
+  mdrobot_motor_driver:
+    head: c5c1f3f5613bd72a607d0724e8bc58902497b720
+    describe: v1.4.0-dirty
+    branch: HEAD
+    dirty: true
+  um7_driver:
+    head: 9a342584bf985d9e5af265d99aa64bb3eb47f29f
+    describe: 9a34258
+    branch: HEAD
+    dirty: false
+patches_applied:
+- patches/external/mdrobot_motor_driver/0001-status-read_seq-state-interfaces.patch
+- patches/external/mdrobot_motor_driver/0002-resync-retry-inter-frame-delay.patch
+- patches/external/mdrobot_motor_driver/0003-di-state-interface.patch
+firmware:
+  file: firmware/pico/main.py
+  sha256: bace95054b5498fcc5d8acb95ff797909c4857f53977f9990579aca3b7884483
+calibration:
+  sensing-20260828.yaml: sensing-20260828
+  wheel-20260909.yaml: wheel-20260909
+  wheel-20261006.yaml: wheel-20261006
+config_sha256:
+  src/oroha_bringup/config/oroha_controllers.yaml: b09bb793cb337054aad33b9c8cd5885e5a4039f7d4899b4fcc7165d68a710239
+  src/oroha_bringup/config/power.yaml: d57d7cc647e19552b1e21cce296b0066147026eaf9350d85ba8ed6a8863e2963
+  src/oroha_bringup/config/um7.yaml: a52d09b120afe871938d2413dcdddc004ea479c7da145280c2c449f9563e945e
+  src/oroha_description/urdf/oroha.urdf.xacro: 6c58256eb8dff3c3ab9b28429c1e76e252dd5b3670030c2f063538b6c8724d1c
+  src/oroha_description/urdf/oroha.ros2_control.xacro: eabfab621ecedbbf0da2d069a6fec0c4a0ff6305a1fa053c5cdd27b8c896d181
+ros_packages:
+  ros2_control: 4.48.0
+  ros2_controllers: 4.42.1
+  diff_drive_controller: 4.42.1
+  hardware_interface: 4.48.0
+  controller_manager: 4.48.0
+  rosbag2: 0.26.11
+  xacro: 2.1.1
+ros_distro: jazzy
+ros_domain_id: '42'
+rmw: rmw_fastrtps_cpp (default)

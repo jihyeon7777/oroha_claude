@@ -1,0 +1,10 @@
+diff --git a/records/conditions_latest.yaml b/records/conditions_latest.yaml
+index f46f0e4..41539d1 100644
+--- a/records/conditions_latest.yaml
++++ b/records/conditions_latest.yaml
+@@ -1,4 +1,4 @@
+-updated_utc: '2026-10-06T09:01:28Z'
++updated_utc: '2026-10-06T09:06:48Z'
+ rig_state: on_ground
+ surface: 실내 방 바닥 (재질 미기록)
+ note: ''

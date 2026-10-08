@@ -29,3 +29,4 @@ __pycache__/
 
 # hardware-test bags (records/tests/<ID>/ holds the committed notes and versions)
 /data/tests/*/bag*/
+/data/drive/        # setup/drive.sh logs and bags (keyboard driving, not experiments)

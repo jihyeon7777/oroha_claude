@@ -81,7 +81,8 @@ oroha_md_stop                            # 비상: 양쪽 MD400 VEL_CMD 0·stop�
 ros2 topic pub -r 10 -t 30 /diff_cont/cmd_vel geometry_msgs/msg/TwistStamped "{header: auto, twist: {linear: {x: 0.1}}}"   # 3 s 뒤 스스로 끝남
 ros2 run oroha_tools oroha_direction_check --id 1 --yes [--sec 10 --resend --test-id T…]   # 바퀴 띄우고, 모터 돈다
 oroha_wheel_push --phase start   →(사용자 밀기)→   oroha_wheel_push --phase end --revs 3
-ros2 run oroha_teleop deadman_teleop                                  # 사용자 터미널(TTY 필요)
+bash setup/drive.sh [--record] [--imu]                                # 키보드 주행 한 번에: 런치(뒤) + 텔레옵(앞), 종료 시 안전 정지 (사용자 터미널)
+ros2 run oroha_teleop deadman_teleop                                  # 텔레옵만 (런치가 이미 떠 있을 때, TTY 필요)
 ros2 run oroha_experiment runner [--ros-args -p require_*:=false]     # 실험 실행기
 oroha_exp run --path square --side 1.0 --v 0.2 --rig-state lifted [--yes]   # 접지는 사용자 터미널에서 1회씩
 oroha_exp conditions --set surface=... ; oroha_exp gt --run <RUN_ID> --x 1.47 --y -0.03
