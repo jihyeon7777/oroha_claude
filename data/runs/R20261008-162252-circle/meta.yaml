@@ -1,0 +1,506 @@
+preflight: /home/oroha/oroha_claude/records/preflight/20261008T064601Z.json
+run_id: R20261008-162252-circle
+series_id: B6-circle12-lag
+repeat_index: 0
+repeats: 1
+path: circle
+params:
+  radius: 0.75
+  sides: 12
+  v: 0.2
+profile:
+  name: circle
+  params:
+    radius: 0.75
+    v: 0.2
+    direction: ccw
+    sides: 12
+    turn_w: 0.5
+    dwell: 0.5
+    chord_m: 0.3882
+  duration_s: 69.963
+  limits:
+    v_max: 0.35
+    w_max: 1.2
+    accel: 0.3
+    ang_accel: 1.0
+    wheel_v_max: 1.0
+    half_track: 0.3157
+    lag_straight_s: 0.035
+    lag_turn_s: 0.091
+  segments:
+  - label: rest_pre
+    kind: rest
+    duration: 3.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t0
+    kind: spot
+    duration: 1.114598775598299
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.8519359237066273
+  - label: dwell1
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s1
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell2
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t1
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell3
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s2
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell4
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t2
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell5
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s3
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell6
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t3
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell7
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s4
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell8
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t4
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell9
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s5
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell10
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t5
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell11
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s6
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell12
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t6
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell13
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s7
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell14
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t7
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell15
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s8
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell16
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t8
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell17
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s9
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell18
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t9
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell19
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s10
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell20
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t10
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell21
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s11
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell22
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t11
+    kind: spot
+    duration: 1.6381975511965976
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.9200490284798708
+  - label: dwell23
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_s12
+    kind: straight
+    duration: 2.642809504935572
+    v_peak: 0.2
+    w_peak: 0.0
+    ramp: 0.6666666666666667
+    ideal_scale: 0.9822887296797533
+  - label: dwell24
+    kind: rest
+    duration: 0.5
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+  - label: c_t12
+    kind: spot
+    duration: 1.114598775598299
+    v_peak: 0.0
+    w_peak: 0.5
+    ramp: 0.5
+    ideal_scale: 0.8519359237066273
+  - label: rest_post
+    kind: rest
+    duration: 3.0
+    v_peak: 0.0
+    w_peak: 0.0
+    ramp: 0.0
+    ideal_scale: 1.0
+timezone: KST
+armed_utc: '2026-10-08T07:22:56Z'
+armed_ros_ns: 1791444176157861050
+armed_local: 2026-10-08 16:22:56 KST
+status: DONE
+conditions:
+  updated_utc: '2026-10-08T07:22:50Z'
+  rig_state: on_ground
+  surface: 미끄러운 바닥 (넓은 방, 재질 미상)
+  note: ''
+  robot_mass_kg: 50 (약, 사용자 보고 2026-10-06)
+  payload_kg: '0'
+  tyre_pressure_kpa: 69 (10 psi, 사용자 보고)
+  floor_slope_deg: 미측정
+  ambient_c: 미측정
+  battery_note: ''
+  operator: ''
+versions:
+  workspace:
+    path: /home/oroha/oroha_claude
+    head: f685291713eb9f383e188a831d19548b8be960f7
+    describe: f685291-dirty
+    branch: main
+    dirty: true
+  external:
+    mdrobot_motor_driver:
+      head: c5c1f3f5613bd72a607d0724e8bc58902497b720
+      describe: v1.4.0-dirty
+      branch: HEAD
+      dirty: true
+    um7_driver:
+      head: 9a342584bf985d9e5af265d99aa64bb3eb47f29f
+      describe: 9a34258
+      branch: HEAD
+      dirty: false
+  firmware_sha256: bace95054b5498fcc5d8acb95ff797909c4857f53977f9990579aca3b7884483
+  calibration:
+    sensing-20260828.yaml: sensing-20260828
+    wheel-20260909.yaml: wheel-20260909
+    wheel-20261006.yaml: wheel-20261006
+  uncommitted_diff_bytes: 334
+  untracked_files: 0
+cmd_topic: /diff_cont/cmd_vel
+cmd_rate_hz: 20.0
+bag:
+  path: bag
+  bytes: 4343933
+  topics:
+  - /diff_cont/cmd_vel
+  - /diff_cont/cmd_vel_out
+  - /diff_cont/odom
+  - /joint_states
+  - /dynamic_joint_states
+  - /tf
+  - /tf_static
+  - /robot_description
+  - /oroha_power/sample
+  - /oroha_power/battery
+  - /oroha_power/calibration_event
+  - /imu/data
+  - /imu/mag
+  - /imu/temperature
+  - /diagnostics
+  - /oroha_experiment/event
+  - /oroha_experiment/status
+  - /rosout
+manual_gt: null
+notes: []
+rig_state: on_ground
+arena:
+  room_m: 5.0
+  margin_m: 0.3
+  body_m:
+  - 0.8
+  - 0.53
+  needed_m:
+  - 2.24
+  - 2.24
+  placement: wall
+  start_offset_m:
+  - 1.42
+  - 0.67
+params_file: params.yaml
+params_absent: []
+hardware_components:
+- name: oroha_base
+  plugin: mdrobot_ros2_control/MdrobotSystemHardware
+  state: active
+  command_interfaces:
+  - motor_R/velocity
+  - motor_L/velocity
+  state_interfaces:
+  - motor_R/read_seq
+  - motor_L/status2
+  - motor_R/position
+  - motor_L/status
+  - motor_R/status2
+  - motor_L/effort
+  - motor_L/position
+  - motor_L/velocity
+  - motor_L/di
+  - motor_L/read_seq
+  - motor_R/velocity
+  - motor_R/di
+  - motor_R/effort
+  - motor_R/status
+guard:
+  wheel_radius: 0.00358
+  wheel_separation: 0.631
+  source: diff_cont
+  min_expected: 10.0
+  still: 2.0
+  timeout_s: 1.0
+start_utc: '2026-10-08T07:22:58Z'
+start_ros_ns: 1791444178596831623
+log_warnings: 6
+end_utc: '2026-10-08T07:24:09Z'
+t_run_end: 71.329

@@ -1,0 +1,12 @@
+stamp_ns,t_run,event,segment_index,detail
+1791444148591250862,-1.0,ARMED,-1,"straight {'length': -1.5, 'v': 0.2}"
+1791444148592450545,-1.0,PREFLIGHT_OK,-1,20261008T064601Z.json
+1791444151633463262,-1.0,BAG_STARTED,-1,/home/oroha/oroha_claude/data/runs/R20261008-162224-straight/bag
+1791444151646868206,0.0093,START,-1,t_total=14.20
+1791444151656646062,0.0191,SEGMENT,0,rest_pre
+1791444154656027875,3.0185,SEGMENT,1,straight
+1791444162558723426,10.9211,NOTE,1,"log controller_manager WARN: Overrun might occur, Total time : 184711.886 us (Expected < 100000.000 us) --> Read time : 156722.166 us, Update time : 81.741 us, Write time : 27907.979 us"
+1791444162562110754,10.9246,NOTE,1,log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 184.930718 ms (missed cycles : 2).
+1791444162855878763,11.2183,SEGMENT,2,rest_post
+1791444165855980945,14.2185,END,2,profile complete
+1791444167179578806,-1.0,BAG_STOPPED,-1,rc=0

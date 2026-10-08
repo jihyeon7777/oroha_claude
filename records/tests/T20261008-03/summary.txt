@@ -3,3 +3,8 @@ R20261008-161339-square DONE {'side': 1.5, 'v': 0.2} | odom end-ideal x -0.034 y
 R20261008-161451-square DONE {'side': 1.5, 'v': 0.2} | odom end-ideal x +0.001 y +0.005 yaw -0.2 deg | gyro yaw +360.0 deg (ideal -) | E inc 0.2595 abs 0.3391 Wh | max I 0.75/0.83 A
 R20261008-161646-s_curve DONE {'first': 'left', 'radius': 0.6, 'sides': 12, 'v': 0.2} | odom end-ideal x +0.022 y +0.019 yaw -0.0 deg | gyro yaw +0.5 deg (ideal -) | E inc 0.2140 abs 0.3108 Wh | max I 0.77/0.82 A
 R20261008-161813-s_curve DONE {'first': 'right', 'radius': 0.6, 'sides': 12, 'v': 0.2} | odom end-ideal x +0.044 y -0.023 yaw +0.0 deg | gyro yaw +0.9 deg (ideal -) | E inc 0.2125 abs 0.3093 Wh | max I 0.79/0.80 A
+R20261008-162101-straight DONE {'length': 1.5, 'v': 0.2} | odom end-ideal x -0.000 y +0.002 yaw -0.1 deg | gyro yaw +0.9 deg (ideal -) | E inc 0.0391 abs 0.0595 Wh | max I 0.55/0.52 A
+R20261008-162128-straight DONE {'length': -1.5, 'v': 0.2} | odom end-ideal x -0.005 y +0.003 yaw +0.1 deg | gyro yaw +0.8 deg (ideal -) | E inc 0.0284 abs 0.0492 Wh | max I 0.46/0.45 A
+R20261008-162156-straight DONE {'length': 1.5, 'v': 0.2} | odom end-ideal x +0.000 y +0.004 yaw +0.0 deg | gyro yaw -0.5 deg (ideal -) | E inc 0.0382 abs 0.0600 Wh | max I 0.56/0.47 A
+R20261008-162224-straight DONE {'length': -1.5, 'v': 0.2} | odom end-ideal x -0.004 y +0.004 yaw +0.1 deg | gyro yaw -0.1 deg (ideal -) | E inc 0.0282 abs 0.0501 Wh | max I 0.45/0.45 A
+R20261008-162252-circle DONE {'radius': 0.75, 'sides': 12, 'v': 0.2} | odom end-ideal x -0.029 y +0.016 yaw -1.2 deg | gyro yaw +351.4 deg (ideal -) | E inc 0.2434 abs 0.3341 Wh | max I 0.76/0.82 A

@@ -1,0 +1,349 @@
+[INFO] [1791442951.033234391] [oroha_experiment]: experiment runner ready; runs -> /home/oroha/oroha_claude/data/runs
+[INFO] [1791443084.917329093] [oroha_experiment]: [R20261008-160440-circle] ARMED circle {'radius': 0.75, 'sides': 12, 'v': 0.2}
+[INFO] [1791443084.918407886] [oroha_experiment]: [R20261008-160440-circle] PREFLIGHT_OK 20261008T064601Z.json
+[INFO] [1791443088.172102278] [oroha_experiment]: [R20261008-160440-circle] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261008-160440-circle/bag
+[INFO] [1791443088.199990060] [oroha_experiment]: [R20261008-160440-circle] START t_total=69.96
+[INFO] [1791443088.208113521] [oroha_experiment]: [R20261008-160440-circle] SEGMENT rest_pre
+[INFO] [1791443091.208204159] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t0
+[INFO] [1791443092.307906980] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell1
+[INFO] [1791443092.808611764] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s1
+[INFO] [1791443095.458377093] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell2
+[INFO] [1791443095.957573640] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t1
+[INFO] [1791443097.608068526] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell3
+[INFO] [1791443098.107725868] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s2
+[INFO] [1791443100.758069696] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell4
+[INFO] [1791443101.257687223] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t2
+[INFO] [1791443102.857581533] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell5
+[INFO] [1791443103.357069523] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s3
+[INFO] [1791443106.008243608] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell6
+[INFO] [1791443106.507856487] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t3
+[INFO] [1791443108.157366839] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell7
+[INFO] [1791443108.657457606] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s4
+[INFO] [1791443111.307617342] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell8
+[INFO] [1791443111.808125885] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t4
+[INFO] [1791443113.457770311] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell9
+[INFO] [1791443113.958384983] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s5
+[INFO] [1791443116.610430826] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell10
+[INFO] [1791443117.107647618] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t5
+[INFO] [1791443118.707721038] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell11
+[INFO] [1791443119.211185556] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s6
+[INFO] [1791443121.857517116] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell12
+[INFO] [1791443122.357240754] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t6
+[INFO] [1791443124.008130732] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell13
+[INFO] [1791443124.512409284] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s7
+[INFO] [1791443127.157680958] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell14
+[INFO] [1791443127.657636855] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t7
+[INFO] [1791443129.307423095] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell15
+[INFO] [1791443129.808310841] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s8
+[INFO] [1791443132.408587572] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell16
+[INFO] [1791443132.907618360] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t8
+[INFO] [1791443134.557747025] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell17
+[INFO] [1791443135.057767422] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s9
+[INFO] [1791443137.707751751] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell18
+[INFO] [1791443138.211351546] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t9
+[INFO] [1791443139.857501814] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell19
+[INFO] [1791443140.359357872] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s10
+[INFO] [1791443143.021065301] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell20
+[INFO] [1791443143.164442479] [oroha_experiment]: [R20261008-160440-circle] NOTE log controller_manager WARN: Overrun might occur, Total time : 189013.657 us (Expected < 100000.000 us) --> Read time : 161015.986 us, Update time : 71.241 us, Write time : 27926.430 us
+[INFO] [1791443143.167759508] [oroha_experiment]: [R20261008-160440-circle] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 189.239850 ms (missed cycles : 2).
+[INFO] [1791443143.507747712] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t10
+[INFO] [1791443145.107828799] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell21
+[INFO] [1791443145.610423467] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s11
+[INFO] [1791443148.257735673] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell22
+[INFO] [1791443148.757707292] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t11
+[INFO] [1791443150.407778605] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell23
+[INFO] [1791443150.907670317] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_s12
+[INFO] [1791443153.557524961] [oroha_experiment]: [R20261008-160440-circle] SEGMENT dwell24
+[INFO] [1791443154.057729061] [oroha_experiment]: [R20261008-160440-circle] SEGMENT c_t12
+[INFO] [1791443155.157592418] [oroha_experiment]: [R20261008-160440-circle] SEGMENT rest_post
+[INFO] [1791443158.157974796] [oroha_experiment]: [R20261008-160440-circle] END profile complete
+[INFO] [1791443159.527822107] [oroha_experiment]: [R20261008-160440-circle] BAG_STOPPED rc=0
+[INFO] [1791443159.555768556] [oroha_experiment]: run R20261008-160440-circle finished: DONE
+[INFO] [1791443623.666204505] [oroha_experiment]: [R20261008-161339-square] ARMED square {'side': 1.5, 'v': 0.2}
+[INFO] [1791443623.667152317] [oroha_experiment]: [R20261008-161339-square] PREFLIGHT_OK 20261008T064601Z.json
+[INFO] [1791443624.676264125] [oroha_experiment]: [R20261008-161339-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261008-161339-square/bag
+[INFO] [1791443624.695979334] [oroha_experiment]: [R20261008-161339-square] START t_total=60.74
+[INFO] [1791443624.746210486] [oroha_experiment]: [R20261008-161339-square] SEGMENT rest_pre
+[INFO] [1791443627.707748980] [oroha_experiment]: [R20261008-161339-square] SEGMENT side1
+[INFO] [1791443635.907562786] [oroha_experiment]: [R20261008-161339-square] SEGMENT dwell1
+[INFO] [1791443636.907741708] [oroha_experiment]: [R20261008-161339-square] SEGMENT turn1
+[INFO] [1791443640.657769653] [oroha_experiment]: [R20261008-161339-square] SEGMENT dwell2
+[INFO] [1791443641.657621094] [oroha_experiment]: [R20261008-161339-square] SEGMENT side2
+[INFO] [1791443649.857469826] [oroha_experiment]: [R20261008-161339-square] SEGMENT dwell3
+[INFO] [1791443650.857055953] [oroha_experiment]: [R20261008-161339-square] SEGMENT turn2
+[INFO] [1791443654.557457301] [oroha_experiment]: [R20261008-161339-square] SEGMENT dwell4
+[INFO] [1791443655.557485834] [oroha_experiment]: [R20261008-161339-square] SEGMENT side3
+[INFO] [1791443663.664396095] [oroha_experiment]: [R20261008-161339-square] NOTE log controller_manager WARN: Overrun might occur, Total time : 189069.100 us (Expected < 100000.000 us) --> Read time : 161088.837 us, Update time : 67.667 us, Write time : 27912.596 us
+[INFO] [1791443663.670636764] [oroha_experiment]: [R20261008-161339-square] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 189.294317 ms (missed cycles : 2).
+[INFO] [1791443663.757654028] [oroha_experiment]: [R20261008-161339-square] SEGMENT dwell5
+[INFO] [1791443664.757047248] [oroha_experiment]: [R20261008-161339-square] SEGMENT turn3
+[INFO] [1791443665.061620912] [oroha_experiment]: [R20261008-161339-square] NOTE log controller_manager WARN: Overrun might occur, Total time : 185217.999 us (Expected < 100000.000 us) --> Read time : 157245.310 us, Update time : 79.685 us, Write time : 27893.004 us
+[INFO] [1791443668.507826044] [oroha_experiment]: [R20261008-161339-square] SEGMENT dwell6
+[INFO] [1791443669.507696578] [oroha_experiment]: [R20261008-161339-square] SEGMENT side4
+[INFO] [1791443677.707725827] [oroha_experiment]: [R20261008-161339-square] SEGMENT dwell7
+[INFO] [1791443678.707567935] [oroha_experiment]: [R20261008-161339-square] SEGMENT turn4
+[INFO] [1791443682.457636714] [oroha_experiment]: [R20261008-161339-square] SEGMENT rest_post
+[INFO] [1791443685.458257609] [oroha_experiment]: [R20261008-161339-square] END profile complete
+[INFO] [1791443686.830926803] [oroha_experiment]: [R20261008-161339-square] BAG_STOPPED rc=0
+[INFO] [1791443686.846902022] [oroha_experiment]: run R20261008-161339-square finished: DONE
+[INFO] [1791443695.161190912] [oroha_experiment]: [R20261008-161451-square] ARMED square {'side': 1.5, 'v': 0.2}
+[INFO] [1791443695.162324353] [oroha_experiment]: [R20261008-161451-square] PREFLIGHT_OK 20261008T064601Z.json
+[INFO] [1791443698.009558929] [oroha_experiment]: [R20261008-161451-square] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261008-161451-square/bag
+[INFO] [1791443698.030373618] [oroha_experiment]: [R20261008-161451-square] START t_total=60.74
+[INFO] [1791443698.057239865] [oroha_experiment]: [R20261008-161451-square] SEGMENT rest_pre
+[INFO] [1791443701.057623058] [oroha_experiment]: [R20261008-161451-square] SEGMENT side1
+[INFO] [1791443709.257617733] [oroha_experiment]: [R20261008-161451-square] SEGMENT dwell1
+[INFO] [1791443710.257443786] [oroha_experiment]: [R20261008-161451-square] SEGMENT turn1
+[INFO] [1791443713.957590041] [oroha_experiment]: [R20261008-161451-square] SEGMENT dwell2
+[INFO] [1791443714.957618519] [oroha_experiment]: [R20261008-161451-square] SEGMENT side2
+[INFO] [1791443715.260690890] [oroha_experiment]: [R20261008-161451-square] NOTE log controller_manager WARN: Overrun might occur, Total time : 185685.813 us (Expected < 100000.000 us) --> Read time : 158011.327 us, Update time : 167.185 us, Write time : 27507.301 us
+[INFO] [1791443715.263737142] [oroha_experiment]: [R20261008-161451-square] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 185.906408 ms (missed cycles : 2).
+[INFO] [1791443723.157743695] [oroha_experiment]: [R20261008-161451-square] SEGMENT dwell3
+[INFO] [1791443724.157694599] [oroha_experiment]: [R20261008-161451-square] SEGMENT turn2
+[INFO] [1791443727.908047599] [oroha_experiment]: [R20261008-161451-square] SEGMENT dwell4
+[INFO] [1791443728.907688837] [oroha_experiment]: [R20261008-161451-square] SEGMENT side3
+[INFO] [1791443737.107758290] [oroha_experiment]: [R20261008-161451-square] SEGMENT dwell5
+[INFO] [1791443738.107758954] [oroha_experiment]: [R20261008-161451-square] SEGMENT turn3
+[INFO] [1791443741.857678529] [oroha_experiment]: [R20261008-161451-square] SEGMENT dwell6
+[INFO] [1791443742.857531544] [oroha_experiment]: [R20261008-161451-square] SEGMENT side4
+[INFO] [1791443751.057587349] [oroha_experiment]: [R20261008-161451-square] SEGMENT dwell7
+[INFO] [1791443752.057495272] [oroha_experiment]: [R20261008-161451-square] SEGMENT turn4
+[INFO] [1791443755.757563250] [oroha_experiment]: [R20261008-161451-square] SEGMENT rest_post
+[INFO] [1791443758.757812576] [oroha_experiment]: [R20261008-161451-square] END profile complete
+[INFO] [1791443760.130927070] [oroha_experiment]: [R20261008-161451-square] BAG_STOPPED rc=0
+[INFO] [1791443760.147118158] [oroha_experiment]: run R20261008-161451-square finished: DONE
+[INFO] [1791443810.132101053] [oroha_experiment]: [R20261008-161646-s_curve] ARMED s_curve {'first': 'left', 'radius': 0.6, 'sides': 12, 'v': 0.2}
+[INFO] [1791443810.133299626] [oroha_experiment]: [R20261008-161646-s_curve] PREFLIGHT_OK 20261008T064601Z.json
+[INFO] [1791443811.958171570] [oroha_experiment]: [R20261008-161646-s_curve] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261008-161646-s_curve/bag
+[INFO] [1791443811.987355084] [oroha_experiment]: [R20261008-161646-s_curve] START t_total=74.67
+[INFO] [1791443812.014072046] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT rest_pre
+[INFO] [1791443815.010480437] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_t0
+[INFO] [1791443816.107779564] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell1
+[INFO] [1791443817.107504051] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_s1
+[INFO] [1791443819.357626336] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell2
+[INFO] [1791443820.357443915] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_t1
+[INFO] [1791443822.008825328] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell3
+[INFO] [1791443823.011588626] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_s2
+[INFO] [1791443824.861805812] [oroha_experiment]: [R20261008-161646-s_curve] NOTE log controller_manager WARN: Overrun might occur, Total time : 186037.532 us (Expected < 100000.000 us) --> Read time : 158088.480 us, Update time : 79.092 us, Write time : 27869.960 us
+[INFO] [1791443824.865021197] [oroha_experiment]: [R20261008-161646-s_curve] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 186.257292 ms (missed cycles : 2).
+[INFO] [1791443825.257492009] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell4
+[INFO] [1791443826.257372811] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_t2
+[INFO] [1791443827.907683318] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell5
+[INFO] [1791443828.907687213] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_s3
+[INFO] [1791443831.157158572] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell6
+[INFO] [1791443832.157493503] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_t3
+[INFO] [1791443833.758123988] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell7
+[INFO] [1791443834.757800142] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_s4
+[INFO] [1791443837.057503894] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell8
+[INFO] [1791443838.057413603] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_t4
+[INFO] [1791443839.657513644] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell9
+[INFO] [1791443840.657493094] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_s5
+[INFO] [1791443840.964425751] [oroha_experiment]: [R20261008-161646-s_curve] NOTE log controller_manager WARN: Overrun might occur, Total time : 189275.713 us (Expected < 100000.000 us) --> Read time : 161300.919 us, Update time : 77.833 us, Write time : 27896.961 us
+[INFO] [1791443840.967603894] [oroha_experiment]: [R20261008-161646-s_curve] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 189.496711 ms (missed cycles : 2).
+[INFO] [1791443842.907725194] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell10
+[INFO] [1791443843.907777217] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_t5
+[INFO] [1791443845.557604410] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell11
+[INFO] [1791443846.558013452] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT a_s6
+[INFO] [1791443848.808912236] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell12
+[INFO] [1791443849.810901646] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_s1
+[INFO] [1791443852.057514787] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell13
+[INFO] [1791443853.057613163] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_t1
+[INFO] [1791443853.567621549] [oroha_experiment]: [R20261008-161646-s_curve] NOTE log controller_manager WARN: Overrun might occur, Total time : 184614.478 us (Expected < 100000.000 us) --> Read time : 156663.240 us, Update time : 71.981 us, Write time : 27879.257 us
+[INFO] [1791443853.570470230] [oroha_experiment]: [R20261008-161646-s_curve] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 184.864391 ms (missed cycles : 2).
+[INFO] [1791443854.707665541] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell14
+[INFO] [1791443855.707471824] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_s2
+[INFO] [1791443857.957554424] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell15
+[INFO] [1791443858.957420077] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_t2
+[INFO] [1791443860.611317783] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell16
+[INFO] [1791443861.621873848] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_s3
+[INFO] [1791443863.857470227] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell17
+[INFO] [1791443864.857463418] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_t3
+[INFO] [1791443866.507845610] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell18
+[INFO] [1791443867.507655060] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_s4
+[INFO] [1791443869.757602975] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell19
+[INFO] [1791443870.757592906] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_t4
+[INFO] [1791443872.411232575] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell20
+[INFO] [1791443873.408207399] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_s5
+[INFO] [1791443875.657554833] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell21
+[INFO] [1791443876.657626579] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_t5
+[INFO] [1791443878.263666649] [oroha_experiment]: [R20261008-161646-s_curve] NOTE log controller_manager WARN: Overrun might occur, Total time : 188597.048 us (Expected < 100000.000 us) --> Read time : 160626.365 us, Update time : 67.889 us, Write time : 27902.794 us
+[INFO] [1791443878.266675164] [oroha_experiment]: [R20261008-161646-s_curve] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 188.842461 ms (missed cycles : 2).
+[INFO] [1791443878.308053420] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell22
+[INFO] [1791443879.307612889] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_s6
+[INFO] [1791443879.864189357] [oroha_experiment]: [R20261008-161646-s_curve] NOTE log controller_manager WARN: Overrun might occur, Total time : 188611.787 us (Expected < 100000.000 us) --> Read time : 160633.697 us, Update time : 125.444 us, Write time : 27852.646 us
+[INFO] [1791443881.557533748] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT dwell23
+[INFO] [1791443882.557826641] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT b_t6
+[INFO] [1791443883.657486505] [oroha_experiment]: [R20261008-161646-s_curve] SEGMENT rest_post
+[INFO] [1791443886.657598354] [oroha_experiment]: [R20261008-161646-s_curve] END profile complete
+[INFO] [1791443888.034624583] [oroha_experiment]: [R20261008-161646-s_curve] BAG_STOPPED rc=0
+[INFO] [1791443888.059954325] [oroha_experiment]: run R20261008-161646-s_curve finished: DONE
+[INFO] [1791443897.227292449] [oroha_experiment]: [R20261008-161813-s_curve] ARMED s_curve {'first': 'right', 'radius': 0.6, 'sides': 12, 'v': 0.2}
+[INFO] [1791443897.228395429] [oroha_experiment]: [R20261008-161813-s_curve] PREFLIGHT_OK 20261008T064601Z.json
+[INFO] [1791443898.544458763] [oroha_experiment]: [R20261008-161813-s_curve] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261008-161813-s_curve/bag
+[INFO] [1791443898.574539905] [oroha_experiment]: [R20261008-161813-s_curve] START t_total=74.67
+[INFO] [1791443898.578405993] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT rest_pre
+[INFO] [1791443901.557683519] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_t0
+[INFO] [1791443902.064459318] [oroha_experiment]: [R20261008-161813-s_curve] NOTE log controller_manager WARN: Overrun might occur, Total time : 189267.250 us (Expected < 100000.000 us) --> Read time : 161286.549 us, Update time : 81.611 us, Write time : 27899.090 us
+[INFO] [1791443902.067520721] [oroha_experiment]: [R20261008-161813-s_curve] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 189.492204 ms (missed cycles : 2).
+[INFO] [1791443902.708448662] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell1
+[INFO] [1791443903.707696335] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_s1
+[INFO] [1791443905.957643657] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell2
+[INFO] [1791443906.957330941] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_t1
+[INFO] [1791443908.610343407] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell3
+[INFO] [1791443909.608685415] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_s2
+[INFO] [1791443911.857565553] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell4
+[INFO] [1791443912.857610910] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_t2
+[INFO] [1791443914.457512526] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell5
+[INFO] [1791443915.457632883] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_s3
+[INFO] [1791443917.757486338] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell6
+[INFO] [1791443918.757583047] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_t3
+[INFO] [1791443920.357668440] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell7
+[INFO] [1791443921.357466798] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_s4
+[INFO] [1791443923.610422153] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell8
+[INFO] [1791443924.608334161] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_t4
+[INFO] [1791443926.257544225] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell9
+[INFO] [1791443927.257380620] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_s5
+[INFO] [1791443929.507784941] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell10
+[INFO] [1791443930.507885853] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_t5
+[INFO] [1791443932.157642454] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell11
+[INFO] [1791443933.156989127] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT a_s6
+[INFO] [1791443935.408232929] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell12
+[INFO] [1791443936.412322076] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_s1
+[INFO] [1791443938.657557053] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell13
+[INFO] [1791443939.657582170] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_t1
+[INFO] [1791443941.307860677] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell14
+[INFO] [1791443942.307863664] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_s2
+[INFO] [1791443944.557602208] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell15
+[INFO] [1791443945.557627102] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_t2
+[INFO] [1791443947.209300034] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell16
+[INFO] [1791443948.210424148] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_s3
+[INFO] [1791443950.070116155] [oroha_experiment]: [R20261008-161813-s_curve] NOTE log controller_manager WARN: Overrun might occur, Total time : 194206.131 us (Expected < 100000.000 us) --> Read time : 166269.004 us, Update time : 76.148 us, Write time : 27860.979 us
+[INFO] [1791443950.074063149] [oroha_experiment]: [R20261008-161813-s_curve] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 194.410819 ms (missed cycles : 2).
+[INFO] [1791443950.457876900] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell17
+[INFO] [1791443951.457660554] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_t3
+[INFO] [1791443953.107774746] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell18
+[INFO] [1791443954.107711048] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_s4
+[INFO] [1791443956.357487019] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell19
+[INFO] [1791443957.357576764] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_t4
+[INFO] [1791443959.010427990] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell20
+[INFO] [1791443959.957662237] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_s5
+[INFO] [1791443962.257490822] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell21
+[INFO] [1791443963.257345531] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_t5
+[INFO] [1791443964.857633924] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell22
+[INFO] [1791443965.857342485] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_s6
+[INFO] [1791443966.164850900] [oroha_experiment]: [R20261008-161813-s_curve] NOTE log controller_manager WARN: Overrun might occur, Total time : 189492.453 us (Expected < 100000.000 us) --> Read time : 161514.419 us, Update time : 75.537 us, Write time : 27902.497 us
+[INFO] [1791443966.168017562] [oroha_experiment]: [R20261008-161813-s_curve] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 189.707064 ms (missed cycles : 2).
+[INFO] [1791443968.107774307] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT dwell23
+[INFO] [1791443969.107490368] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT b_t6
+[INFO] [1791443970.257603827] [oroha_experiment]: [R20261008-161813-s_curve] SEGMENT rest_post
+[INFO] [1791443973.257942064] [oroha_experiment]: [R20261008-161813-s_curve] END profile complete
+[INFO] [1791443974.626610972] [oroha_experiment]: [R20261008-161813-s_curve] BAG_STOPPED rc=0
+[INFO] [1791443974.671073686] [oroha_experiment]: run R20261008-161813-s_curve finished: DONE
+[INFO] [1791444066.342532507] [oroha_experiment]: [R20261008-162101-straight] ARMED straight {'length': 1.5, 'v': 0.2}
+[INFO] [1791444066.343814116] [oroha_experiment]: [R20261008-162101-straight] PREFLIGHT_OK 20261008T064601Z.json
+[INFO] [1791444068.271922210] [oroha_experiment]: [R20261008-162101-straight] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261008-162101-straight/bag
+[INFO] [1791444068.285113525] [oroha_experiment]: [R20261008-162101-straight] START t_total=14.20
+[INFO] [1791444068.307109179] [oroha_experiment]: [R20261008-162101-straight] SEGMENT rest_pre
+[INFO] [1791444071.307871693] [oroha_experiment]: [R20261008-162101-straight] SEGMENT straight
+[INFO] [1791444079.507513433] [oroha_experiment]: [R20261008-162101-straight] SEGMENT rest_post
+[INFO] [1791444082.509992593] [oroha_experiment]: [R20261008-162101-straight] END profile complete
+[INFO] [1791444083.831632308] [oroha_experiment]: [R20261008-162101-straight] BAG_STOPPED rc=0
+[INFO] [1791444083.843641791] [oroha_experiment]: run R20261008-162101-straight finished: DONE
+[INFO] [1791444092.882849894] [oroha_experiment]: [R20261008-162128-straight] ARMED straight {'length': -1.5, 'v': 0.2}
+[INFO] [1791444092.883882541] [oroha_experiment]: [R20261008-162128-straight] PREFLIGHT_OK 20261008T064601Z.json
+[INFO] [1791444096.759433479] [oroha_experiment]: [R20261008-162128-straight] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261008-162128-straight/bag
+[INFO] [1791444096.774647254] [oroha_experiment]: [R20261008-162128-straight] START t_total=14.20
+[INFO] [1791444096.807398967] [oroha_experiment]: [R20261008-162128-straight] SEGMENT rest_pre
+[INFO] [1791444099.807961352] [oroha_experiment]: [R20261008-162128-straight] SEGMENT straight
+[INFO] [1791444107.565184739] [oroha_experiment]: [R20261008-162128-straight] NOTE log controller_manager WARN: Overrun might occur, Total time : 189855.970 us (Expected < 100000.000 us) --> Read time : 161875.288 us, Update time : 80.148 us, Write time : 27900.534 us
+[INFO] [1791444107.568520790] [oroha_experiment]: [R20261008-162128-straight] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 190.086736 ms (missed cycles : 2).
+[INFO] [1791444108.015022785] [oroha_experiment]: [R20261008-162128-straight] SEGMENT rest_post
+[INFO] [1791444111.014834801] [oroha_experiment]: [R20261008-162128-straight] END profile complete
+[INFO] [1791444112.333918223] [oroha_experiment]: [R20261008-162128-straight] BAG_STOPPED rc=0
+[INFO] [1791444112.374324981] [oroha_experiment]: run R20261008-162128-straight finished: DONE
+[INFO] [1791444121.241002625] [oroha_experiment]: [R20261008-162156-straight] ARMED straight {'length': 1.5, 'v': 0.2}
+[INFO] [1791444121.242048253] [oroha_experiment]: [R20261008-162156-straight] PREFLIGHT_OK 20261008T064601Z.json
+[INFO] [1791444124.585316207] [oroha_experiment]: [R20261008-162156-straight] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261008-162156-straight/bag
+[INFO] [1791444124.599688335] [oroha_experiment]: [R20261008-162156-straight] START t_total=14.20
+[INFO] [1791444124.608490156] [oroha_experiment]: [R20261008-162156-straight] SEGMENT rest_pre
+[INFO] [1791444127.608617542] [oroha_experiment]: [R20261008-162156-straight] SEGMENT straight
+[INFO] [1791444135.808457040] [oroha_experiment]: [R20261008-162156-straight] SEGMENT rest_post
+[INFO] [1791444138.810849979] [oroha_experiment]: [R20261008-162156-straight] END profile complete
+[INFO] [1791444140.130688733] [oroha_experiment]: [R20261008-162156-straight] BAG_STOPPED rc=0
+[INFO] [1791444140.142614216] [oroha_experiment]: run R20261008-162156-straight finished: DONE
+[INFO] [1791444148.592203027] [oroha_experiment]: [R20261008-162224-straight] ARMED straight {'length': -1.5, 'v': 0.2}
+[INFO] [1791444148.593125433] [oroha_experiment]: [R20261008-162224-straight] PREFLIGHT_OK 20261008T064601Z.json
+[INFO] [1791444151.634570446] [oroha_experiment]: [R20261008-162224-straight] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261008-162224-straight/bag
+[INFO] [1791444151.648049741] [oroha_experiment]: [R20261008-162224-straight] START t_total=14.20
+[INFO] [1791444151.659268577] [oroha_experiment]: [R20261008-162224-straight] SEGMENT rest_pre
+[INFO] [1791444154.657849780] [oroha_experiment]: [R20261008-162224-straight] SEGMENT straight
+[INFO] [1791444162.560466553] [oroha_experiment]: [R20261008-162224-straight] NOTE log controller_manager WARN: Overrun might occur, Total time : 184711.886 us (Expected < 100000.000 us) --> Read time : 156722.166 us, Update time : 81.741 us, Write time : 27907.979 us
+[INFO] [1791444162.563719511] [oroha_experiment]: [R20261008-162224-straight] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 184.930718 ms (missed cycles : 2).
+[INFO] [1791444162.857633279] [oroha_experiment]: [R20261008-162224-straight] SEGMENT rest_post
+[INFO] [1791444165.857725535] [oroha_experiment]: [R20261008-162224-straight] END profile complete
+[INFO] [1791444167.180784230] [oroha_experiment]: [R20261008-162224-straight] BAG_STOPPED rc=0
+[INFO] [1791444167.194112674] [oroha_experiment]: run R20261008-162224-straight finished: DONE
+[INFO] [1791444176.645054636] [oroha_experiment]: [R20261008-162252-circle] ARMED circle {'radius': 0.75, 'sides': 12, 'v': 0.2}
+[INFO] [1791444176.646117246] [oroha_experiment]: [R20261008-162252-circle] PREFLIGHT_OK 20261008T064601Z.json
+[INFO] [1791444178.577486113] [oroha_experiment]: [R20261008-162252-circle] BAG_STARTED /home/oroha/oroha_claude/data/runs/R20261008-162252-circle/bag
+[INFO] [1791444178.620674589] [oroha_experiment]: [R20261008-162252-circle] START t_total=69.96
+[INFO] [1791444178.646772292] [oroha_experiment]: [R20261008-162252-circle] SEGMENT rest_pre
+[INFO] [1791444181.610444804] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t0
+[INFO] [1791444182.757643674] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell1
+[INFO] [1791444183.257851575] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s1
+[INFO] [1791444185.857661363] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell2
+[INFO] [1791444186.357412875] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t1
+[INFO] [1791444188.010217805] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell3
+[INFO] [1791444188.507851246] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s2
+[INFO] [1791444191.157529167] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell4
+[INFO] [1791444191.657461716] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t2
+[INFO] [1791444193.307605001] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell5
+[INFO] [1791444193.808396808] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s3
+[INFO] [1791444196.457634026] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell6
+[INFO] [1791444196.957512853] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t3
+[INFO] [1791444198.557602820] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell7
+[INFO] [1791444199.057528073] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s4
+[INFO] [1791444201.707771308] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell8
+[INFO] [1791444202.210107298] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t4
+[INFO] [1791444203.857534254] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell9
+[INFO] [1791444204.357529210] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s5
+[INFO] [1791444207.008200982] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell10
+[INFO] [1791444207.507593902] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t5
+[INFO] [1791444207.863524377] [oroha_experiment]: [R20261008-162252-circle] NOTE log controller_manager WARN: Overrun might occur, Total time : 188227.658 us (Expected < 100000.000 us) --> Read time : 160270.087 us, Update time : 127.963 us, Write time : 27829.608 us
+[INFO] [1791444207.866619151] [oroha_experiment]: [R20261008-162252-circle] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 188.452541 ms (missed cycles : 2).
+[INFO] [1791444209.157463428] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell11
+[INFO] [1791444209.657541107] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s6
+[INFO] [1791444212.307791990] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell12
+[INFO] [1791444212.808201834] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t6
+[INFO] [1791444214.408239894] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell13
+[INFO] [1791444214.907592296] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s7
+[INFO] [1791444217.557531365] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell14
+[INFO] [1791444218.057563988] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t7
+[INFO] [1791444219.708167458] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell15
+[INFO] [1791444220.208261951] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s8
+[INFO] [1791444222.857447335] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell16
+[INFO] [1791444223.357294125] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t8
+[INFO] [1791444225.010802758] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell17
+[INFO] [1791444225.165423853] [oroha_experiment]: [R20261008-162252-circle] NOTE log controller_manager WARN: Overrun might occur, Total time : 189755.435 us (Expected < 100000.000 us) --> Read time : 161773.659 us, Update time : 74.074 us, Write time : 27907.702 us
+[INFO] [1791444225.168658274] [oroha_experiment]: [R20261008-162252-circle] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 189.973591 ms (missed cycles : 2).
+[INFO] [1791444225.508401477] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s9
+[INFO] [1791444228.107528525] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell18
+[INFO] [1791444228.610159107] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t9
+[INFO] [1791444230.261591983] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell19
+[INFO] [1791444230.757551075] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s10
+[INFO] [1791444233.410111251] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell20
+[INFO] [1791444233.907960229] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t10
+[INFO] [1791444235.557408719] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell21
+[INFO] [1791444236.057516379] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s11
+[INFO] [1791444238.707780206] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell22
+[INFO] [1791444239.211082732] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t11
+[INFO] [1791444240.808075796] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell23
+[INFO] [1791444241.307658475] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_s12
+[INFO] [1791444243.957200434] [oroha_experiment]: [R20261008-162252-circle] SEGMENT dwell24
+[INFO] [1791444244.457598982] [oroha_experiment]: [R20261008-162252-circle] SEGMENT c_t12
+[INFO] [1791444245.609595179] [oroha_experiment]: [R20261008-162252-circle] SEGMENT rest_post
+[INFO] [1791444245.765520587] [oroha_experiment]: [R20261008-162252-circle] NOTE log controller_manager WARN: Overrun might occur, Total time : 189229.972 us (Expected < 100000.000 us) --> Read time : 161268.641 us, Update time : 134.444 us, Write time : 27826.887 us
+[INFO] [1791444245.770044303] [oroha_experiment]: [R20261008-162252-circle] NOTE log controller_manager WARN: Overrun detected! The controller manager missed its desired rate of 10 Hz. The loop took 189.463974 ms (missed cycles : 2).
+[INFO] [1791444248.608760881] [oroha_experiment]: [R20261008-162252-circle] END profile complete
+[INFO] [1791444249.926033824] [oroha_experiment]: [R20261008-162252-circle] BAG_STOPPED rc=0
+[INFO] [1791444249.953866062] [oroha_experiment]: run R20261008-162252-circle finished: DONE
