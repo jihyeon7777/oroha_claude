@@ -39,6 +39,17 @@ class Limits:
     ang_accel: float = 1.0        # rad/s^2, angular ramp (spot turns)
     wheel_v_max: float = 1.0      # m/s, per side (3000 rpm = 1.14 m/s)
     half_track: float = 0.3157    # m, diff_cont wheel_separation / 2 (effective track 0.631, D-18)
+    lag_straight_s: float = 0.0   # start-lag compensation per straight / spot segment (D-20);
+    lag_turn_s: float = 0.0       # 0 here, the runner sets the measured LAG_* values
+
+
+# Measured on the ground (D-20, T20261008-02): the MD400s start every segment late and the
+# 0-command brake at its end keeps the deficit, so each segment comes up short by a CONSTANT
+# time x peak rate — spot turns 2.6 deg at 0.5 rad/s (0.091 s), straights 7 mm at 0.2 m/s
+# (0.035 s). A 12-gon (13 turns) lost 35 deg. Compensation lengthens the COMMAND; the ideal
+# path keeps the intended geometry (Segment.ideal_scale).
+LAG_STRAIGHT_S = 0.035
+LAG_TURN_S = 0.091
 
 
 # ---------------------------------------------------------------- trapezoid --
@@ -103,6 +114,7 @@ class Segment:
     v_peak: float = 0.0       # m/s (signed: negative = backward)
     w_peak: float = 0.0       # rad/s (signed: + = ccw/left). arc: v_peak / R
     ramp: float = 0.0         # s, ramp length at each end
+    ideal_scale: float = 1.0  # intended / commanded amount (lag compensation, D-20)
 
     def cmd(self, t: float) -> Tuple[float, float]:
         """Body velocity command at segment-local time t."""
@@ -123,9 +135,13 @@ def rest(duration: float, label: str = "rest") -> Segment:
     return Segment(label, "rest", duration)
 
 
-def straight_segment(length: float, v: float, accel: float, label: str = "straight") -> Segment:
-    total, peak, ramp = _plan(abs(length), abs(v), accel)
-    return Segment(label, "straight", total, math.copysign(peak, length), 0.0, ramp)
+def straight_segment(length: float, v: float, accel: float, label: str = "straight",
+                     lag: float = 0.0) -> Segment:
+    """`lag` s of start-lag compensation: the command covers |length| + |v|*lag (D-20)."""
+    amount = abs(length) + abs(v) * lag
+    total, peak, ramp = _plan(amount, abs(v), accel)
+    return Segment(label, "straight", total, math.copysign(peak, length), 0.0, ramp,
+                   abs(length) / amount)
 
 
 def arc_segment(radius: float, angle: float, v: float, accel: float, label: str = "arc") -> Segment:
@@ -136,10 +152,12 @@ def arc_segment(radius: float, angle: float, v: float, accel: float, label: str 
     return Segment(label, "arc", total, peak, math.copysign(peak / radius, angle), ramp)
 
 
-def spot_segment(angle: float, w: float, ang_accel: float, label: str = "spot") -> Segment:
-    """Turn in place through `angle` rad (+ = ccw) at |w| rad/s."""
-    total, peak, ramp = _plan(abs(angle), abs(w), ang_accel)
-    return Segment(label, "spot", total, 0.0, math.copysign(peak, angle), ramp)
+def spot_segment(angle: float, w: float, ang_accel: float, label: str = "spot",
+                 lag: float = 0.0) -> Segment:
+    """Turn in place through `angle` rad (+ = ccw) at |w| rad/s; `lag` as in straight_segment."""
+    amount = abs(angle) + abs(w) * lag
+    total, peak, ramp = _plan(amount, abs(w), ang_accel)
+    return Segment(label, "spot", total, 0.0, math.copysign(peak, angle), ramp, abs(angle) / amount)
 
 
 def s_curve_segment(radius: float, arc_angle: float, v: float, accel: float,
@@ -209,7 +227,10 @@ class Profile:
         poses = [Pose(0.0, 0.0, 0.0, 0.0)]
         n = int(math.ceil(self.duration / dt))
         for k in range(n):
-            v, w, _, _ = self.cmd_at((k + 0.5) * dt)
+            v, w, i, _ = self.cmd_at((k + 0.5) * dt)
+            if i >= 0:                                   # lag-compensated segments: intended motion
+                sc = self.segments[i].ideal_scale
+                v, w = v * sc, w * sc
             if abs(w) < 1e-9:
                 x += v * dt * math.cos(yaw)
                 y += v * dt * math.sin(yaw)
@@ -222,8 +243,11 @@ class Profile:
         return poses
 
     def path_length(self, dt: float = DT_DEFAULT) -> float:
-        return sum(abs(self.cmd_at((k + 0.5) * dt)[0]) * dt
-                   for k in range(int(math.ceil(self.duration / dt))))
+        tot = 0.0
+        for k in range(int(math.ceil(self.duration / dt))):
+            v, _, i, _ = self.cmd_at((k + 0.5) * dt)
+            tot += abs(v) * dt * (self.segments[i].ideal_scale if i >= 0 else 1.0)
+        return tot
 
     def validate(self) -> None:
         """Raise ValueError if any command exceeds the limits or the profile is malformed."""
@@ -301,7 +325,7 @@ def straight(length: float, v: float, limits: Limits = Limits(),
              pre_rest: float = 3.0, post_rest: float = 3.0) -> Profile:
     """One straight line of `length` m at `v` m/s (negative length = backward)."""
     _require(v, 0.0, limits)
-    seg = straight_segment(length, v, limits.accel, "straight")
+    seg = straight_segment(length, v, limits.accel, "straight", limits.lag_straight_s)
     return _wrap("straight", {"length": length, "v": v}, [seg], limits, pre_rest, post_rest, 0.0)
 
 
@@ -320,11 +344,12 @@ def poly_arc(radius: float, angle: float, sides: int, v: float, turn_w: float,
     chord = 2.0 * radius * math.sin(abs(alpha) / 2.0)
     _require(v, 0.0, limits)
     _require(0.0, turn_w, limits)
-    out: List[Tuple[str, Segment]] = [("turn", spot_segment(alpha / 2.0, turn_w, limits.ang_accel, f"{label}_t0"))]
+    ls, lt = limits.lag_straight_s, limits.lag_turn_s
+    out: List[Tuple[str, Segment]] = [("turn", spot_segment(alpha / 2.0, turn_w, limits.ang_accel, f"{label}_t0", lt))]
     for i in range(k):
-        out.append(("side", straight_segment(chord, v, limits.accel, f"{label}_s{i + 1}")))
+        out.append(("side", straight_segment(chord, v, limits.accel, f"{label}_s{i + 1}", ls)))
         a = alpha if i < k - 1 else alpha / 2.0
-        out.append(("turn", spot_segment(a, turn_w, limits.ang_accel, f"{label}_t{i + 1}")))
+        out.append(("turn", spot_segment(a, turn_w, limits.ang_accel, f"{label}_t{i + 1}", lt)))
     return out
 
 
@@ -358,8 +383,9 @@ def square(side: float, v: float, corner: str = "spot", turn_w: float = 0.5,
         _require(v, 0.0, limits)
         _require(0.0, turn_w, limits)
         for i in range(4):
-            motion.append(straight_segment(side, v, limits.accel, f"side{i + 1}"))
-            motion.append(spot_segment(sign * math.pi / 2.0, turn_w, limits.ang_accel, f"turn{i + 1}"))
+            motion.append(straight_segment(side, v, limits.accel, f"side{i + 1}", limits.lag_straight_s))
+            motion.append(spot_segment(sign * math.pi / 2.0, turn_w, limits.ang_accel, f"turn{i + 1}",
+                                       limits.lag_turn_s))
         d = dwell
     elif corner == "arc":
         run = side - 2.0 * corner_radius
@@ -416,7 +442,7 @@ def spot(angle_deg: float = 360.0, turn_w: float = 0.5, limits: Limits = Limits(
          pre_rest: float = 3.0, post_rest: float = 3.0) -> Profile:
     """Turn in place through `angle_deg` (+ = ccw/left) at `turn_w` rad/s."""
     _require(0.0, turn_w, limits)
-    seg = spot_segment(math.radians(angle_deg), turn_w, limits.ang_accel, "spot")
+    seg = spot_segment(math.radians(angle_deg), turn_w, limits.ang_accel, "spot", limits.lag_turn_s)
     return _wrap("spot", {"angle_deg": angle_deg, "turn_w": turn_w}, [seg], limits,
                  pre_rest, post_rest, 0.0)
 
@@ -514,6 +540,8 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--join", default="continuous")
     ap.add_argument("--angle-deg", type=float, default=360.0)
     ap.add_argument("--sides", type=int, default=0, help="circle / s_curve as an N-gon (D-17)")
+    ap.add_argument("--lag-straight", type=float, default=LAG_STRAIGHT_S, help="D-20 compensation [s]")
+    ap.add_argument("--lag-turn", type=float, default=LAG_TURN_S, help="D-20 compensation [s]")
     ap.add_argument("--body", type=float, nargs=2, default=[BODY_LENGTH, BODY_WIDTH], metavar=("L", "W"),
                     help="robot outer length and width [m] (measured 0.80 x 0.53)")
     ap.add_argument("--half-diag", type=float, help="use the rotation-safe circle of this radius instead")
@@ -523,7 +551,8 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--csv", help="write samples + ideal pose to this CSV")
     a = ap.parse_args(list(argv) if argv is not None else None)
 
-    common = {"v": a.v}
+    lim = Limits(lag_straight_s=a.lag_straight, lag_turn_s=a.lag_turn)
+    common = {"v": a.v, "limits": lim}
     if a.path == "straight":
         p = straight(a.length, **common)
     elif a.path == "circle":
@@ -531,7 +560,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     elif a.path == "square":
         p = square(a.side, corner=a.corner, turn_w=a.turn_w, direction=a.direction, **common)
     elif a.path == "spot":
-        p = spot(a.angle_deg, turn_w=a.turn_w)
+        p = spot(a.angle_deg, turn_w=a.turn_w, limits=lim)
     else:
         p = s_curve(a.radius, arc_deg=a.arc_deg, first=a.first, join=a.join, sides=a.sides,
                     turn_w=a.turn_w, **common)

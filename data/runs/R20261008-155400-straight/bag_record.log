@@ -1,0 +1,31 @@
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1791442444.889163078] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1791442444.889188466] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1791442444.898006111] [rosbag2_recorder]: Starting recording to '/home/oroha/oroha_claude/data/runs/R20261008-155400-straight/bag'
+[INFO] [1791442444.902210786] [rosbag2_recorder]: Subscribed to topic '/rosout'
+[INFO] [1791442444.902558729] [rosbag2_recorder]: Listening for topics...
+[INFO] [1791442444.902672914] [rosbag2_recorder]: Recording...
+[INFO] [1791442444.902586933] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1791442444.995589737] [rosbag2_recorder]: Subscribed to topic '/diagnostics'
+[INFO] [1791442445.001114797] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel_out'
+[INFO] [1791442445.005732452] [rosbag2_recorder]: Subscribed to topic '/diff_cont/odom'
+[INFO] [1791442445.008272668] [rosbag2_recorder]: Subscribed to topic '/robot_description'
+[INFO] [1791442445.013022138] [rosbag2_recorder]: Subscribed to topic '/tf_static'
+[WARN] [1791442445.013800340] [rosbag2_storage]: Some, but not all, publishers on topic "/tf" are offering RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL. Falling back to RMW_QOS_POLICY_DURABILITY_VOLATILE as it will connect to all publishers. Previously-published latched messages will not be retrieved.
+[INFO] [1791442445.015280447] [rosbag2_recorder]: Subscribed to topic '/tf'
+[INFO] [1791442445.097835148] [rosbag2_recorder]: Subscribed to topic '/joint_states'
+[INFO] [1791442445.107820456] [rosbag2_recorder]: Subscribed to topic '/dynamic_joint_states'
+[INFO] [1791442445.114597606] [rosbag2_recorder]: Subscribed to topic '/imu/data'
+[INFO] [1791442445.116610453] [rosbag2_recorder]: Subscribed to topic '/imu/mag'
+[INFO] [1791442445.120946979] [rosbag2_recorder]: Subscribed to topic '/imu/temperature'
+[INFO] [1791442445.685799417] [rosbag2_recorder]: Subscribed to topic '/oroha_power/sample'
+[INFO] [1791442445.688890502] [rosbag2_recorder]: Subscribed to topic '/oroha_power/battery'
+[INFO] [1791442445.691095718] [rosbag2_recorder]: Subscribed to topic '/oroha_power/calibration_event'
+[INFO] [1791442446.249002766] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel'
+[INFO] [1791442446.252508368] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/status'
+[INFO] [1791442446.257195671] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/event'
+[INFO] [1791442446.257447004] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[INFO] [1791442446.257617948] [rosbag2_recorder]: Topics discovery stopped.
+[INFO] [1791442461.508563880] [rosbag2_recorder]: Pausing recording.
+[INFO] [1791442461.508775287] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1791442461.534017908] [rosbag2_recorder]: Recording stopped
+[INFO] [1791442461.535906293] [rosbag2_recorder]: Event publisher thread: Exited

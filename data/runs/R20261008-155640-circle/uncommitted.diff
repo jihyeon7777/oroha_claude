@@ -1,0 +1,10 @@
+diff --git a/records/conditions_latest.yaml b/records/conditions_latest.yaml
+index 37a373a..fab9a38 100644
+--- a/records/conditions_latest.yaml
++++ b/records/conditions_latest.yaml
+@@ -1,4 +1,4 @@
+-updated_utc: '2026-10-08T06:48:29Z'
++updated_utc: '2026-10-08T06:56:39Z'
+ rig_state: on_ground
+ surface: 미끄러운 바닥 (넓은 방, 재질 미상)
+ note: ''

@@ -1,0 +1,30 @@
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1791442604.997581388] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1791442604.997604369] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1791442605.010081708] [rosbag2_recorder]: Starting recording to '/home/oroha/oroha_claude/data/runs/R20261008-155640-circle/bag'
+[INFO] [1791442605.018307169] [rosbag2_recorder]: Subscribed to topic '/rosout'
+[INFO] [1791442605.018790964] [rosbag2_recorder]: Listening for topics...
+[INFO] [1791442605.018912779] [rosbag2_recorder]: Recording...
+[INFO] [1791442605.018886353] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1791442605.103715104] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/status'
+[INFO] [1791442605.109523941] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel'
+[INFO] [1791442605.112010620] [rosbag2_recorder]: Subscribed to topic '/oroha_experiment/event'
+[INFO] [1791442605.117767198] [rosbag2_recorder]: Subscribed to topic '/tf'
+[INFO] [1791442605.119842341] [rosbag2_recorder]: Subscribed to topic '/tf_static'
+[INFO] [1791442605.123474369] [rosbag2_recorder]: Subscribed to topic '/robot_description'
+[INFO] [1791442605.229710510] [rosbag2_recorder]: Subscribed to topic '/diagnostics'
+[INFO] [1791442605.234209555] [rosbag2_recorder]: Subscribed to topic '/imu/data'
+[INFO] [1791442605.236713456] [rosbag2_recorder]: Subscribed to topic '/imu/mag'
+[INFO] [1791442605.239014635] [rosbag2_recorder]: Subscribed to topic '/imu/temperature'
+[INFO] [1791442605.246975782] [rosbag2_recorder]: Subscribed to topic '/dynamic_joint_states'
+[INFO] [1791442605.251745511] [rosbag2_recorder]: Subscribed to topic '/diff_cont/odom'
+[INFO] [1791442605.253440229] [rosbag2_recorder]: Subscribed to topic '/diff_cont/cmd_vel_out'
+[INFO] [1791442605.255694279] [rosbag2_recorder]: Subscribed to topic '/joint_states'
+[INFO] [1791442605.258286809] [rosbag2_recorder]: Subscribed to topic '/oroha_power/battery'
+[INFO] [1791442605.260297063] [rosbag2_recorder]: Subscribed to topic '/oroha_power/calibration_event'
+[INFO] [1791442605.263210371] [rosbag2_recorder]: Subscribed to topic '/oroha_power/sample'
+[INFO] [1791442605.263376074] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[INFO] [1791442605.263455444] [rosbag2_recorder]: Topics discovery stopped.
+[INFO] [1791442674.708375205] [rosbag2_recorder]: Pausing recording.
+[INFO] [1791442674.708574298] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1791442674.726595012] [rosbag2_recorder]: Recording stopped
+[INFO] [1791442674.741803492] [rosbag2_recorder]: Event publisher thread: Exited

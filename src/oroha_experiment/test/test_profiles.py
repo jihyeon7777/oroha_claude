@@ -174,3 +174,20 @@ def test_polygon_arcs_close_like_the_true_arcs():
     assert P.footprint(P.s_curve(0.38, 0.15, sides=12)).placement(3.0, 0.3) == "wall"
     with pytest.raises(ValueError):
         P.circle(0.75, 0.15, sides=2)
+
+
+def test_lag_compensation_lengthens_commands_not_the_ideal_path():
+    """D-20: each straight/spot segment commands |rate| x lag more; the ideal path is unchanged."""
+    lim = P.Limits(lag_straight_s=0.035, lag_turn_s=0.091)
+    for build in (lambda L: P.circle(0.75, 0.2, sides=12, limits=L), lambda L: P.square(1.5, 0.2, limits=L),
+                  lambda L: P.spot(360.0, limits=L), lambda L: P.straight(1.5, 0.2, limits=L)):
+        a, b = build(P.Limits()), build(lim)
+        ea, eb = a.ideal_path(0.01)[-1], b.ideal_path(0.01)[-1]
+        assert (eb.x, eb.y, eb.yaw) == pytest.approx((ea.x, ea.y, ea.yaw), abs=2e-3)
+        assert b.path_length(0.01) == pytest.approx(a.path_length(0.01), abs=2e-3)
+        assert b.duration > a.duration
+    turn = [s for s in P.spot(90.0, limits=lim).segments if s.kind == "spot"][0]
+    commanded = P._shape_area(turn.duration, turn.ramp) * abs(turn.w_peak)
+    assert commanded == pytest.approx(math.pi / 2 + 0.5 * 0.091, rel=1e-6)    # +2.6 deg at 0.5 rad/s
+    chord = [s for s in P.straight(1.5, 0.2, limits=lim).segments if s.kind == "straight"][0]
+    assert P._shape_area(chord.duration, chord.ramp) * chord.v_peak == pytest.approx(1.5 + 0.2 * 0.035, rel=1e-6)

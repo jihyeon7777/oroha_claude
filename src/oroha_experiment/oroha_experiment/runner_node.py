@@ -118,6 +118,8 @@ class ExperimentRunner(Node):
         d("direct_stop_on_fail", True)      # Modbus stop of both MD400 after a FAIL (hardware link lost)
         d("md_port", "/dev/oroha_md400")
         # first ground sessions (plan review C5): diff_cont keeps its own hard caps (0.8 / 2.0)
+        d("lag_straight_s", P.LAG_STRAIGHT_S)   # D-20 start-lag compensation (0 = off)
+        d("lag_turn_s", P.LAG_TURN_S)
         d("v_max", 0.35)
         d("w_max", 1.2)
         d("arena_m", 5.0)               # square room side; 2026-10-08 larger room, size not measured (D-19)
@@ -371,7 +373,9 @@ class ExperimentRunner(Node):
                 path = cfg["path"]
                 params = dict(cfg.get("params", {}))
                 limits = P.Limits(v_max=float(self.get_parameter("v_max").value),
-                                  w_max=float(self.get_parameter("w_max").value))
+                                  w_max=float(self.get_parameter("w_max").value),
+                                  lag_straight_s=float(self.get_parameter("lag_straight_s").value),
+                                  lag_turn_s=float(self.get_parameter("lag_turn_s").value))
                 profile = P.build(path, limits=limits, **params)
             except Exception as e:  # noqa: BLE001
                 res.ok, res.message = False, "bad run config: %s" % e
