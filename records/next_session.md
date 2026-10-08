@@ -16,7 +16,7 @@
 
 ## 남은 일
 
-1. **백업**: git은 GitHub `jihyeon7777/oroha_claude`(public, `origin`)에 push 완료. 녹화·논문 묶음 압축은 `data/backup/20261008/` — **GitHub 릴리스 업로드는 사용자가 실행**(`setup/release_upload.py`, `records/backup.md`). 이후 커밋은 `git push`로 올린다.
+1. **백업**: git은 GitHub `jihyeon7777/oroha_claude`(public, `origin`)에 push 완료. 녹화·논문 묶음은 GitHub 릴리스 `data-20261008`에 올림(다시 받아 체크섬 OK, `records/backup.md`). 새 녹화가 쌓이면 `setup/release_upload.py`(태그만 바꿔)로 추가 백업. 이후 커밋은 `git push`로 올린다.
 2. (선택) 반복 수 늘리기(경로별 3~5회), 속도 다르게(0.1/0.3 m/s), 공기압 변경 시 B4·D-18·D-20 재측정.
 3. (선택) 바퀴별 가드 FAIL 실물 확인(띄운 상태에서 한쪽 손으로 잡기), MDROBOT에 MD400 회생 제동 설정 문의, DMM 버스 전압 1점, 외부 GT(카메라/모캡) 연동.
 4. 세션 끝마다: `oroha_ledger --check`, `paper_summary.md` 갱신, 필요 시 `oroha_paper_export --runs usable` 재생성.
