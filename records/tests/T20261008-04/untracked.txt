@@ -1,0 +1,4 @@
+records/tests/T20261008-04/CHECK.md
+records/tests/T20261008-04/MANIFEST.sha256
+records/tests/T20261008-04/uncommitted.diff
+records/tests/T20261008-04/versions.yaml

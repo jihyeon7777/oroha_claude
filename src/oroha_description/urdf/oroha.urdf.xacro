@@ -114,7 +114,10 @@
     <axis xyz="0 1 0"/>
   </joint>
 
-  <!-- UM7 IMU: PLACEHOLDER pose, fixed after mounting (Phase 2) -->
+  <!-- UM7 IMU, mounted by the user 2026-10-08. ORIENTATION verified from data (T20261008-04):
+       x forward (accel +0.17 m/s^2 starting forward, -0.19 backward), y left (~0), z up
+       (+9.84 at rest), +gz for a CCW turn -> rpy 0 0 0. POSITION not measured (placeholder top
+       centre); the IMU is read only (D-19), so the offset is not used anywhere. -->
   <link name="imu_link"/>
   <joint name="imu_joint" type="fixed">
     <parent link="base_link"/>

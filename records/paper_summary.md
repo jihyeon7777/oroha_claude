@@ -7,13 +7,13 @@ _HardwareX의 Software description / Operation instructions / Validation & chara
 | 구성 | 역할 | 근거 |
 |---|---|---|
 | ROS 2 Jazzy 워크스페이스 (`oroha_*` 7 패키지) | 기본 운용·계측·실험·기록 | 이 저장소 |
-| `mdrobot_ros2_control` v1.4.0 (twin) + 로컬 패치 0001·0002 | MD400 ×2 Modbus RTU 하드웨어 인터페이스, `diff_drive_controller`로 skid-steer 주행, 10 Hz(주기 ≈64 ms); 패치: 상태 비트·읽기 순번 노출, 실패 장치 즉시 재시도 | 외부, `oroha.repos`; T20260929-02·07 |
+| `mdrobot_ros2_control` v1.4.0 (twin) + 로컬 패치 0001~0003 | MD400 ×2 Modbus RTU 하드웨어 인터페이스, `diff_drive_controller`로 skid-steer 주행, 10 Hz(주기 ≈64 ms); 패치: 상태 비트·읽기 순번 노출, 실패 장치 즉시 재시도, CTRL 입력(DI) 기록 | 외부, `oroha.repos`; T20260929-02·07 |
 | `oroha_description`·`oroha_bringup` | 4륜 모델(조인트 2), 실측 설정값, 런치(종료·크래시 시 MD400 정지 안전망) | T20260928-01·02, T20260929-02 |
 | `oroha_power` + Pico 펌웨어 `oroha-bench-1.2` | ACS37030 전류 ×2·버스전압 50 Hz, raw+환산+교정 ID 기록 | T20260922-03/04/05 |
-| `um7_driver` | UM7 IMU (ENU) | T20261001-02(통신, 미고정) |
-| `oroha_experiment` | 시간 기반 개방루프 경로(직선·원·사각·S), 실행기(이벤트·rosbag), CLI | T20260922-06 |
+| `um7_driver` | UM7 IMU (ENU), 읽기만(보정·융합 없음). 축: x 앞·y 왼쪽·z 위 | T20261001-02, T20261008-04 |
+| `oroha_experiment` | 시간 기반 개방루프 경로(직진·제자리·사각, 원·S는 내접 다각형), 구간 시작 지연 보상, 실행기(이벤트·rosbag·바퀴별 감시·파라미터 기록), CLI | T20260922-06, T20261008-03 |
 | `oroha_tools` | preflight, 버전 스냅샷, bag→CSV(실행별 전류 기준·에너지), 실행/시험 목록, 논문 묶음·검증, RS485 진단(`oroha_bus_probe`) | T20260922-03/06/07, T20261001-03 |
-| `oroha_teleop` | 데드맨 키보드 주행(누르는 동안만) | T20261001-01 |
+| `oroha_teleop` | 데드맨 키보드 주행(누르는 동안만), `setup/drive.sh` 한 줄 실행 | T20261001-01 |
 
 ## 2. 운용 방법
 
