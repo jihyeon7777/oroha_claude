@@ -1,0 +1,5 @@
+R20261008-154654-spot cmd +360 DONE: gyro +358.4 deg (bias 0.0105 rad/s, post-rest bias 0.0106), wheel@0.451 +501.6 deg, eff 0.715
+R20261008-154728-spot cmd -360 DONE: gyro -355.7 deg (bias 0.0105 rad/s, post-rest bias 0.0106), wheel@0.451 -500.9 deg, eff 0.710
+R20261008-154758-spot cmd +360 DONE: gyro +357.1 deg (bias 0.0105 rad/s, post-rest bias 0.0101), wheel@0.451 +500.9 deg, eff 0.713
+R20261008-154830-spot cmd -360 DONE: gyro -357.0 deg (bias 0.0104 rad/s, post-rest bias 0.0108), wheel@0.451 -500.8 deg, eff 0.713
+mean eff 0.7126 sd 0.0018 (n=4) -> B_eff = 0.451/eff = 0.6329 m  (previous floor: 0.7144 -> 0.631)

@@ -1,0 +1,237 @@
+nodes:
+  /controller_manager:
+    defaults.allow_controller_activation_with_inactive_hardware: false
+    defaults.deactivate_controllers_on_hardware_self_deactivate: true
+    defaults.switch_controller.strictness: best_effort
+    diagnostic_updater.period: 1.0
+    diagnostic_updater.use_fqn: false
+    diagnostics.threshold.controller_manager.periodicity.mean_error.error: 10.0
+    diagnostics.threshold.controller_manager.periodicity.mean_error.warn: 5.0
+    diagnostics.threshold.controller_manager.periodicity.standard_deviation.error: 10.0
+    diagnostics.threshold.controller_manager.periodicity.standard_deviation.warn: 5.0
+    diagnostics.threshold.controllers.execution_time.mean_error.error: 2000.0
+    diagnostics.threshold.controllers.execution_time.mean_error.warn: 1000.0
+    diagnostics.threshold.controllers.execution_time.standard_deviation.error: 200.0
+    diagnostics.threshold.controllers.execution_time.standard_deviation.warn: 100.0
+    diagnostics.threshold.controllers.periodicity.mean_error.error: 10.0
+    diagnostics.threshold.controllers.periodicity.mean_error.warn: 5.0
+    diagnostics.threshold.controllers.periodicity.standard_deviation.error: 10.0
+    diagnostics.threshold.controllers.periodicity.standard_deviation.warn: 5.0
+    diagnostics.threshold.hardware_components.execution_time.mean_error.error: 2000.0
+    diagnostics.threshold.hardware_components.execution_time.mean_error.warn: 1000.0
+    diagnostics.threshold.hardware_components.execution_time.standard_deviation.error: 200.0
+    diagnostics.threshold.hardware_components.execution_time.standard_deviation.warn: 100.0
+    diagnostics.threshold.hardware_components.periodicity.mean_error.error: 10.0
+    diagnostics.threshold.hardware_components.periodicity.mean_error.warn: 5.0
+    diagnostics.threshold.hardware_components.periodicity.standard_deviation.error: 10.0
+    diagnostics.threshold.hardware_components.periodicity.standard_deviation.warn: 5.0
+    diff_cont.fallback_controllers: []
+    diff_cont.node_options_args: []
+    diff_cont.type: diff_drive_controller/DiffDriveController
+    enforce_command_limits: false
+    handle_exceptions: true
+    hardware_components_initial_state.inactive: []
+    hardware_components_initial_state.shutdown_on_initial_state_failure: true
+    hardware_components_initial_state.unconfigured: []
+    joint_state_broadcaster.fallback_controllers: []
+    joint_state_broadcaster.node_options_args: []
+    joint_state_broadcaster.type: joint_state_broadcaster/JointStateBroadcaster
+    overruns.print_warnings: true
+    qos_overrides./parameter_events.publisher.depth: 1000
+    qos_overrides./parameter_events.publisher.durability: volatile
+    qos_overrides./parameter_events.publisher.history: keep_last
+    qos_overrides./parameter_events.publisher.reliability: reliable
+    start_type_description_service: true
+    update_rate: 10
+    use_sim_time: false
+  /diff_cont:
+    angular.z.has_acceleration_limits: true
+    angular.z.has_jerk_limits: true
+    angular.z.has_velocity_limits: true
+    angular.z.max_acceleration: 1.0
+    angular.z.max_acceleration_reverse: .nan
+    angular.z.max_deceleration: -1.0
+    angular.z.max_deceleration_reverse: .nan
+    angular.z.max_jerk: .nan
+    angular.z.max_velocity: 2.0
+    angular.z.min_acceleration: .nan
+    angular.z.min_jerk: .nan
+    angular.z.min_velocity: -2.0
+    base_frame_id: base_footprint
+    cmd_vel_timeout: 0.5
+    enable_odom_tf: true
+    is_async: false
+    left_wheel_names:
+    - motor_L
+    left_wheel_radius_multiplier: 1.0
+    linear.x.has_acceleration_limits: true
+    linear.x.has_jerk_limits: true
+    linear.x.has_velocity_limits: true
+    linear.x.max_acceleration: 0.3
+    linear.x.max_acceleration_reverse: .nan
+    linear.x.max_deceleration: -0.3
+    linear.x.max_deceleration_reverse: .nan
+    linear.x.max_jerk: .nan
+    linear.x.max_velocity: 0.8
+    linear.x.min_acceleration: .nan
+    linear.x.min_jerk: .nan
+    linear.x.min_velocity: -0.8
+    odom_frame_id: odom
+    open_loop: false
+    pose_covariance_diagonal:
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    position_feedback: true
+    publish_limited_velocity: true
+    publish_rate: 10.0
+    right_wheel_names:
+    - motor_R
+    right_wheel_radius_multiplier: 1.0
+    start_type_description_service: true
+    tf_frame_prefix: ''
+    tf_frame_prefix_enable: true
+    thread_priority: -100
+    twist_covariance_diagonal:
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    update_rate: 10
+    use_sim_time: false
+    velocity_rolling_window_size: 10
+    wheel_radius: 0.00358
+    wheel_separation: 0.631
+    wheel_separation_multiplier: 1.0
+  /joint_state_broadcaster:
+    extra_joints: []
+    frame_id: base_link
+    interfaces: []
+    is_async: false
+    joints: []
+    map_interface_to_joint_state.effort: effort
+    map_interface_to_joint_state.position: position
+    map_interface_to_joint_state.velocity: velocity
+    publish_dynamic_joint_states: true
+    start_type_description_service: true
+    thread_priority: -100
+    update_rate: 10
+    use_local_topics: false
+    use_sim_time: false
+    use_urdf_to_filter: true
+  /robot_state_publisher:
+    frame_prefix: ''
+    ignore_timestamp: false
+    publish_frequency: 20.0
+    qos_overrides./joint_states.subscription.depth: 5
+    qos_overrides./joint_states.subscription.history: keep_last
+    qos_overrides./joint_states.subscription.reliability: best_effort
+    qos_overrides./parameter_events.publisher.depth: 1000
+    qos_overrides./parameter_events.publisher.durability: volatile
+    qos_overrides./parameter_events.publisher.history: keep_last
+    qos_overrides./parameter_events.publisher.reliability: reliable
+    qos_overrides./tf.publisher.depth: 100
+    qos_overrides./tf.publisher.durability: volatile
+    qos_overrides./tf.publisher.history: keep_last
+    qos_overrides./tf.publisher.reliability: reliable
+    qos_overrides./tf_static.publisher.depth: 1
+    qos_overrides./tf_static.publisher.history: keep_last
+    qos_overrides./tf_static.publisher.reliability: reliable
+    robot_description: "<?xml version=\"1.0\" ?>\n<!-- =================================================================================== -->\n<!-- |    This document was autogenerated by xacro from /home/oroha/oroha_claude/install/oroha_description/share/oroha_description/urdf/oroha.urdf.xacro\
+      \ | -->\n<!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->\n<!-- =================================================================================== -->\n\
+      <!-- OROHA: 4-wheel skid-steer base. Each side's two wheels are belt-locked to one\n     motor, so the model has TWO driven joints (motor_L / motor_R) and each wheel\n     link carries two cylinder\
+      \ visuals. Geometry that diff_drive_controller uses\n     (wheel_separation, effective wheel_radius) lives in\n     oroha_bringup/config/oroha_controllers.yaml, not here; the values below are\n  \
+      \   for visualization/TF only.\n\n     TODO (Phase 1, measure on the robot and fix): wheelbase, body box, IMU and\n     marker mount offsets. Values marked PLACEHOLDER are guesses. -->\n<robot name=\"\
+      oroha\">\n  <!-- body center above axle height -->\n  <material name=\"oroha_body\">\n    <color rgba=\"0.85 0.45 0.10 1.0\"/>\n  </material>\n  <material name=\"oroha_tyre\">\n    <color rgba=\"\
+      0.12 0.12 0.12 1.0\"/>\n  </material>\n  <!-- ground projection: origin = center of the four contact points, x forward, z up -->\n  <link name=\"base_footprint\"/>\n  <!-- body frame at axle height\
+      \ (diff_cont base_frame_id) -->\n  <link name=\"base_link\">\n    <visual>\n      <origin xyz=\"0 0 0.1\"/>\n      <geometry>\n        <box size=\"0.6 0.35 0.2\"/>\n      </geometry>\n      <material\
+      \ name=\"oroha_body\"/>\n    </visual>\n    <collision>\n      <origin xyz=\"0 0 0.1\"/>\n      <geometry>\n        <box size=\"0.6 0.35 0.2\"/>\n      </geometry>\n    </collision>\n    <inertial>\n\
+      \      <mass value=\"20.0\"/>\n      <inertia ixx=\"0.2708333333333333\" ixy=\"0\" ixz=\"0\" iyy=\"0.6666666666666666\" iyz=\"0\" izz=\"0.8041666666666667\"/>\n    </inertial>\n  </link>\n  <joint\
+      \ name=\"base_joint\" type=\"fixed\">\n    <parent link=\"base_footprint\"/>\n    <child link=\"base_link\"/>\n    <origin rpy=\"0 0 0\" xyz=\"0 0 0.1258\"/>\n  </joint>\n  <link name=\"left_wheels\"\
+      >\n    <visual>\n      <origin rpy=\"1.5707963267948966 0 0\" xyz=\"0.2 0 0\"/>\n      <geometry>\n        <cylinder length=\"0.08\" radius=\"0.1258\"/>\n      </geometry>\n      <material name=\"\
+      oroha_tyre\"/>\n    </visual>\n    <visual>\n      <origin rpy=\"1.5707963267948966 0 0\" xyz=\"-0.2 0 0\"/>\n      <geometry>\n        <cylinder length=\"0.08\" radius=\"0.1258\"/>\n      </geometry>\n\
+      \      <material name=\"oroha_tyre\"/>\n    </visual>\n    <collision>\n      <origin rpy=\"1.5707963267948966 0 0\" xyz=\"0.2 0 0\"/>\n      <geometry>\n        <cylinder length=\"0.08\" radius=\"\
+      0.1258\"/>\n      </geometry>\n    </collision>\n    <collision>\n      <origin rpy=\"1.5707963267948966 0 0\" xyz=\"-0.2 0 0\"/>\n      <geometry>\n        <cylinder length=\"0.08\" radius=\"0.1258\"\
+      />\n      </geometry>\n    </collision>\n    <inertial>\n      <mass value=\"2.0\"/>\n      <inertia ixx=\"0.02\" ixy=\"0\" ixz=\"0\" iyy=\"0.02\" iyz=\"0\" izz=\"0.02\"/>\n    </inertial>\n  </link>\n\
+      \  <link name=\"right_wheels\">\n    <visual>\n      <origin rpy=\"1.5707963267948966 0 0\" xyz=\"0.2 0 0\"/>\n      <geometry>\n        <cylinder length=\"0.08\" radius=\"0.1258\"/>\n      </geometry>\n\
+      \      <material name=\"oroha_tyre\"/>\n    </visual>\n    <visual>\n      <origin rpy=\"1.5707963267948966 0 0\" xyz=\"-0.2 0 0\"/>\n      <geometry>\n        <cylinder length=\"0.08\" radius=\"\
+      0.1258\"/>\n      </geometry>\n      <material name=\"oroha_tyre\"/>\n    </visual>\n    <collision>\n      <origin rpy=\"1.5707963267948966 0 0\" xyz=\"0.2 0 0\"/>\n      <geometry>\n        <cylinder\
+      \ length=\"0.08\" radius=\"0.1258\"/>\n      </geometry>\n    </collision>\n    <collision>\n      <origin rpy=\"1.5707963267948966 0 0\" xyz=\"-0.2 0 0\"/>\n      <geometry>\n        <cylinder length=\"\
+      0.08\" radius=\"0.1258\"/>\n      </geometry>\n    </collision>\n    <inertial>\n      <mass value=\"2.0\"/>\n      <inertia ixx=\"0.02\" ixy=\"0\" ixz=\"0\" iyy=\"0.02\" iyz=\"0\" izz=\"0.02\"/>\n\
+      \    </inertial>\n  </link>\n  <!-- joint names are the ros2_control joint names used in oroha_controllers.yaml -->\n  <joint name=\"motor_L\" type=\"continuous\">\n    <parent link=\"base_link\"\
+      />\n    <child link=\"left_wheels\"/>\n    <origin rpy=\"0 0 0\" xyz=\"0 0.2255 0\"/>\n    <axis xyz=\"0 1 0\"/>\n  </joint>\n  <joint name=\"motor_R\" type=\"continuous\">\n    <parent link=\"base_link\"\
+      />\n    <child link=\"right_wheels\"/>\n    <origin rpy=\"0 0 0\" xyz=\"0 -0.2255 0\"/>\n    <axis xyz=\"0 1 0\"/>\n  </joint>\n  <!-- UM7 IMU: PLACEHOLDER pose, fixed after mounting (Phase 2) -->\n\
+      \  <link name=\"imu_link\"/>\n  <joint name=\"imu_joint\" type=\"fixed\">\n    <parent link=\"base_link\"/>\n    <child link=\"imu_link\"/>\n    <origin rpy=\"0 0 0\" xyz=\"0 0 0.2\"/>\n  </joint>\n\
+      \  <!-- GT marker mount: PLACEHOLDER, defined together with the GT program -->\n  <link name=\"marker_link\"/>\n  <joint name=\"marker_joint\" type=\"fixed\">\n    <parent link=\"base_link\"/>\n \
+      \   <child link=\"marker_link\"/>\n    <origin rpy=\"0 0 0\" xyz=\"0 0 0.25\"/>\n  </joint>\n  <ros2_control name=\"oroha_base\" type=\"system\">\n    <hardware>\n      <plugin>mdrobot_ros2_control/MdrobotSystemHardware</plugin>\n\
+      \      <param name=\"device_type\">twin</param>\n      <param name=\"port\">/dev/oroha_md400</param>\n      <param name=\"baudrate\">19200</param>\n      <!-- MUST be 1 on OROHA: the E-stop acts only\
+      \ through the CTRL stop gates\n               (pins 6+8), which the MD400 ignores with 0 (T20260928-06, T20260929-01) -->\n      <param name=\"use_limit_sw\">1</param>\n      <param name=\"auto_enable\"\
+      >true</param>\n      <param name=\"position_max_rpm\">100</param>\n      <!-- MD400 replies in 14-24 ms at 19200; 0.1 s timeout + patch 0002 immediate\n               same-driver retry recovers a\
+      \ \"stuck receiver\" MD400 within one cycle (T20260929-07) -->\n      <param name=\"timeout\">0.1</param>\n      <param name=\"resync_retry\">true</param>\n    </hardware>\n    <joint name=\"motor_L\"\
+      >\n      <command_interface name=\"velocity\"/>\n      <state_interface name=\"position\"/>\n      <state_interface name=\"velocity\"/>\n      <state_interface name=\"effort\"/>\n      <!-- MD400\
+      \ internal current, A, unsigned, 0.1 A steps -->\n      <!-- patches/external/mdrobot_motor_driver/0001: raw MD400 status bytes and a\n             successful-read counter (unchanged = repeated/stale\
+      \ value); /dynamic_joint_states -->\n      <state_interface name=\"status\"/>\n      <state_interface name=\"status2\"/>\n      <state_interface name=\"read_seq\"/>\n      <state_interface name=\"\
+      di\"/>\n      <!-- patch 0003: PID_DI (CTRL gates), each side every 2nd cycle -->\n      <param name=\"motor_id\">2</param>\n      <param name=\"reverse\">true</param>\n      <param name=\"counts_per_rev\"\
+      >30.0</param>\n    </joint>\n    <joint name=\"motor_R\">\n      <command_interface name=\"velocity\"/>\n      <state_interface name=\"position\"/>\n      <state_interface name=\"velocity\"/>\n  \
+      \    <state_interface name=\"effort\"/>\n      <state_interface name=\"status\"/>\n      <state_interface name=\"status2\"/>\n      <state_interface name=\"read_seq\"/>\n      <state_interface name=\"\
+      di\"/>\n      <param name=\"motor_id\">1</param>\n      <param name=\"reverse\">false</param>\n      <param name=\"counts_per_rev\">30.0</param>\n    </joint>\n  </ros2_control>\n</robot>\n"
+    start_type_description_service: true
+    use_sim_time: false
+  /oroha_power:
+    use_sim_time: false
+    start_type_description_service: true
+    port: /dev/oroha_pico
+    baud: 115200
+    frame_id: oroha_power
+    rate: 50
+    auto_start: true
+    zero_on_start: false
+    calibration_file: ''
+    expected_fw: oroha-bench-1.2
+    stale_timeout: 0.5
+    sync_window: 500
+    battery_rate: 10.0
+    diag_rate: 1.0
+    design_capacity: 20.0
+    legacy_topics: false
+    simulate: false
+  /um7_node:
+    use_sim_time: false
+    start_type_description_service: true
+    port: /dev/oroha_um7
+    baud: 115200
+    frame_id: imu_link
+    frame_convention: enu
+    publish_tf: false
+    publish_health: true
+    publish_diagnostics: true
+    diagnostic_updater.period: 1.0
+    diagnostic_updater.use_fqn: false
+absent: []
+hardware_components:
+- name: oroha_base
+  plugin: mdrobot_ros2_control/MdrobotSystemHardware
+  state: active
+  command_interfaces:
+  - motor_R/velocity
+  - motor_L/velocity
+  state_interfaces:
+  - motor_R/read_seq
+  - motor_L/status2
+  - motor_R/position
+  - motor_L/status
+  - motor_R/status2
+  - motor_L/effort
+  - motor_L/position
+  - motor_L/velocity
+  - motor_L/di
+  - motor_L/read_seq
+  - motor_R/velocity
+  - motor_R/di
+  - motor_R/effort
+  - motor_R/status

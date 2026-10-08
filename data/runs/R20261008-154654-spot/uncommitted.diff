@@ -1,0 +1,19 @@
+diff --git a/records/conditions_latest.yaml b/records/conditions_latest.yaml
+index 41539d1..e4197ac 100644
+--- a/records/conditions_latest.yaml
++++ b/records/conditions_latest.yaml
+@@ -1,11 +1,11 @@
+-updated_utc: '2026-10-06T09:06:48Z'
++updated_utc: '2026-10-08T06:46:51Z'
+ rig_state: on_ground
+-surface: 실내 방 바닥 (재질 미기록)
++surface: 미끄러운 바닥 (넓은 방, 재질 미상)
+ note: ''
+ robot_mass_kg: 50 (약, 사용자 보고 2026-10-06)
+ payload_kg: '0'
+ tyre_pressure_kpa: 69 (10 psi, 사용자 보고)
+-floor_slope_deg: 평평 (사용자 보고, 수치 없음)
++floor_slope_deg: 미측정
+ ambient_c: 미측정
+ battery_note: ''
+ operator: ''

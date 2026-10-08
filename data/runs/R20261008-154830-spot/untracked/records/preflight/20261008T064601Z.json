@@ -1,0 +1,267 @@
+{
+ "timestamp_utc": "2026-10-08T06:45:51Z",
+ "timezone": "KST",
+ "args": {
+  "md_port": "/dev/oroha_md400",
+  "pico_port": "/dev/oroha_pico",
+  "sec": 5.0,
+  "polls": 10,
+  "rate": 50,
+  "no_zero": false,
+  "skip_md400": false,
+  "skip_pico": false,
+  "out_dir": "/home/oroha/oroha_claude/records/preflight"
+ },
+ "host": {
+  "ntp_synchronized": "yes",
+  "timezone": "Asia/Seoul",
+  "ftdi_latency_timer_ms": 1
+ },
+ "md400": {
+  "1": {
+   "n": 10,
+   "volt": [
+    27.8,
+    27.8,
+    27.8,
+    27.8,
+    27.8,
+    27.8,
+    27.8,
+    27.8,
+    27.8,
+    27.8
+   ],
+   "rpm": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "alarm": 0,
+   "pos": 37277,
+   "ver": 86,
+   "err": "",
+   "status": [],
+   "use_limit_sw": 1,
+   "enc_ppr": 1000,
+   "use_eposi": 0,
+   "v": 27.8
+  },
+  "2": {
+   "n": 10,
+   "volt": [
+    28.4,
+    28.4,
+    28.4,
+    28.4,
+    28.4,
+    28.4,
+    28.4,
+    28.5,
+    28.4,
+    28.4
+   ],
+   "rpm": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "alarm": 0,
+   "pos": -30655,
+   "ver": 86,
+   "err": "",
+   "status": [],
+   "use_limit_sw": 1,
+   "enc_ppr": 1000,
+   "use_eposi": 0,
+   "v": 28.409999999999997
+  }
+ },
+ "calib_id": "sensing-20260828",
+ "pico": {
+  "fw": "oroha-bench-1.2",
+  "zero": "#ZERO gp28=2033.688 gp27=2036.533 rail=3.2992 rail_corr=1.003206 n=1024",
+  "samples": 249,
+  "dt_ms": 19.993693548386663,
+  "seq_gaps": 0,
+  "overrun_pct": 0.40160642570281124,
+  "stats": {
+   "gp26": {
+    "mean": 3203.9522891566266,
+    "sd": 1.7418364900746282,
+    "min": 3194.53,
+    "max": 3206.5,
+    "v_bus": 28.723499853253013
+   },
+   "gp27": {
+    "mean": 2035.7483132530122,
+    "sd": 1.578761259571553,
+    "min": 2028.41,
+    "max": 2038.44
+   },
+   "gp28": {
+    "mean": 2033.4927710843374,
+    "sd": 1.6497143332506259,
+    "min": 2024.97,
+    "max": 2036.63
+   }
+  }
+ },
+ "checks": [
+  {
+   "ok": true,
+   "msg": "clock NTP-synchronized: yes (timezone Asia/Seoul)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "FTDI latency_timer 1 ms (want 1: twin cycle ~66 ms instead of ~96 ms at 10 Hz)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "MD400: /dev/oroha_md400 -> /dev/ttyUSB1 writable",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "MD400: not open by another process",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "Pico: /dev/oroha_pico -> /dev/ttyACM0 writable",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "Pico: not open by another process",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1 (RIGHT): answered 10/10, fw v86, 27.800 V, pos=37277",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: status alarms 0",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: at rest (max |rpm| 0)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: bus voltage in range (27.800 V)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=1: USE_EPOSI 0 (hall position counter, counts_per_rev 30 valid)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2 (LEFT): answered 10/10, fw v86, 28.410 V, pos=-30655",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: status alarms 0",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: at rest (max |rpm| 0)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: bus voltage in range (28.410 V)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "id=2: USE_EPOSI 0 (hall position counter, counts_per_rev 30 valid)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "controller voltmeter gap id2-id1 +0.610 V (reference +0.600 V, measurement offset)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "firmware oroha-bench-1.2 (expected oroha-bench-1.2)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "sample interval 19.994 ms (rate 50 Hz)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "seq gaps 0 / 249 samples",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "overrun 1/249 (0.40 %)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "all channels inside the linear range (raw 410..3686)",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "zero_valid set",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "GP26 bus voltage 28.723 V in range",
+   "blocking": true
+  },
+  {
+   "ok": true,
+   "msg": "gp27 rest raw 2035.75 within 2042.2..2043.3 (+6.5 LSB)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "gp27 noise 18.1 mA (target < 30 mA)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "gp28 rest raw 2033.49 within 2039.6..2040.7 (+6.1 LSB)",
+   "blocking": false
+  },
+  {
+   "ok": true,
+   "msg": "gp28 noise 18.9 mA (target < 30 mA)",
+   "blocking": false
+  }
+ ],
+ "ok": true
+}

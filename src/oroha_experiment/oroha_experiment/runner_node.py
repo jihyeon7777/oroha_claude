@@ -120,7 +120,7 @@ class ExperimentRunner(Node):
         # first ground sessions (plan review C5): diff_cont keeps its own hard caps (0.8 / 2.0)
         d("v_max", 0.35)
         d("w_max", 1.2)
-        d("arena_m", 3.0)               # square room side
+        d("arena_m", 5.0)               # square room side; 2026-10-08 larger room, size not measured (D-19)
         d("arena_margin_m", 0.3)        # drift allowance at every wall
         d("robot_length_m", P.BODY_LENGTH)   # outer footprint incl. tyres, measured (T20261006-05)
         d("robot_width_m", P.BODY_WIDTH)

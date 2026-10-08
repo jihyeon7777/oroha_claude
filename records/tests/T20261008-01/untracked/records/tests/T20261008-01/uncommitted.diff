@@ -1,0 +1,45 @@
+diff --git a/records/conditions_latest.yaml b/records/conditions_latest.yaml
+index 41539d1..37a373a 100644
+--- a/records/conditions_latest.yaml
++++ b/records/conditions_latest.yaml
+@@ -1,11 +1,11 @@
+-updated_utc: '2026-10-06T09:06:48Z'
++updated_utc: '2026-10-08T06:48:29Z'
+ rig_state: on_ground
+-surface: 실내 방 바닥 (재질 미기록)
++surface: 미끄러운 바닥 (넓은 방, 재질 미상)
+ note: ''
+ robot_mass_kg: 50 (약, 사용자 보고 2026-10-06)
+ payload_kg: '0'
+ tyre_pressure_kpa: 69 (10 psi, 사용자 보고)
+-floor_slope_deg: 평평 (사용자 보고, 수치 없음)
++floor_slope_deg: 미측정
+ ambient_c: 미측정
+ battery_note: ''
+ operator: ''
+diff --git a/src/oroha_experiment/oroha_experiment/profiles.py b/src/oroha_experiment/oroha_experiment/profiles.py
+index 41c65d7..db2d2e6 100644
+--- a/src/oroha_experiment/oroha_experiment/profiles.py
++++ b/src/oroha_experiment/oroha_experiment/profiles.py
+@@ -517,7 +517,7 @@ def main(argv: Iterable[str] | None = None) -> int:
+     ap.add_argument("--body", type=float, nargs=2, default=[BODY_LENGTH, BODY_WIDTH], metavar=("L", "W"),
+                     help="robot outer length and width [m] (measured 0.80 x 0.53)")
+     ap.add_argument("--half-diag", type=float, help="use the rotation-safe circle of this radius instead")
+-    ap.add_argument("--arena", type=float, default=3.0)
++    ap.add_argument("--arena", type=float, default=5.0, help="room side [m] (D-19: assumed 5 m)")
+     ap.add_argument("--margin", type=float, default=0.3)
+     ap.add_argument("--dt", type=float, default=DT_DEFAULT)
+     ap.add_argument("--csv", help="write samples + ideal pose to this CSV")
+diff --git a/src/oroha_experiment/oroha_experiment/runner_node.py b/src/oroha_experiment/oroha_experiment/runner_node.py
+index 284d281..59b64aa 100644
+--- a/src/oroha_experiment/oroha_experiment/runner_node.py
++++ b/src/oroha_experiment/oroha_experiment/runner_node.py
+@@ -120,7 +120,7 @@ class ExperimentRunner(Node):
+         # first ground sessions (plan review C5): diff_cont keeps its own hard caps (0.8 / 2.0)
+         d("v_max", 0.35)
+         d("w_max", 1.2)
+-        d("arena_m", 3.0)               # square room side
++        d("arena_m", 5.0)               # square room side; 2026-10-08 larger room, size not measured (D-19)
+         d("arena_margin_m", 0.3)        # drift allowance at every wall
+         d("robot_length_m", P.BODY_LENGTH)   # outer footprint incl. tyres, measured (T20261006-05)
+         d("robot_width_m", P.BODY_WIDTH)

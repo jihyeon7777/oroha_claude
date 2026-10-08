@@ -517,7 +517,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--body", type=float, nargs=2, default=[BODY_LENGTH, BODY_WIDTH], metavar=("L", "W"),
                     help="robot outer length and width [m] (measured 0.80 x 0.53)")
     ap.add_argument("--half-diag", type=float, help="use the rotation-safe circle of this radius instead")
-    ap.add_argument("--arena", type=float, default=3.0)
+    ap.add_argument("--arena", type=float, default=5.0, help="room side [m] (D-19: assumed 5 m)")
     ap.add_argument("--margin", type=float, default=0.3)
     ap.add_argument("--dt", type=float, default=DT_DEFAULT)
     ap.add_argument("--csv", help="write samples + ideal pose to this CSV")
